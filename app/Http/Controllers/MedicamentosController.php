@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Medicamento;
+use App\Http\Requests\MedicamentoRequest;
+use Illuminate\Routing\Controller;
+
 
 class MedicamentosController extends Controller
 {
@@ -11,15 +15,8 @@ class MedicamentosController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $listaMedicamentos = Medicamento::all();
+        return view('/medicamentos.medicamentos')->with('listaMedicamentos', $listaMedicamentos);
     }
 
     /**
@@ -27,38 +24,35 @@ class MedicamentosController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $medicamento = new Medicamento();
+        $medicamento->nombre = $request->get('nombre');
+        $medicamento->stock = $request->get('stock');
+        $medicamento->save();
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        return redirect('/medicamentos');
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $medicamento = Medicamento::findOrFail($id);
+        $medicamento->nombre = $request->get('nombreEditar');
+        $medicamento->stock = $request->get('stockEditar');
+        $medicamento->save();
+
+        return redirect('/medicamentos');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $medicamento = Medicamento::findOrFail($id);
+        $medicamento->delete();
+
+        return redirect('/medicamentos');
     }
 }

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\HistorialClinico;
+use App\Models\Paciente;
 
 class HistorialClinicoController extends Controller
 {
@@ -11,7 +13,18 @@ class HistorialClinicoController extends Controller
      */
     public function index()
     {
-        //
+        $historiales = HistorialClinico::join('pacientes', 'historialclinico.idPaciente', '=', 'pacientes.idPaciente')
+            ->join('usuarios', 'pacientes.idPaciente', '=', 'usuarios.idUsuario')
+            ->select(
+                'historialClinico.*',
+                'usuarios.nombre as nombrePaciente'
+            )->get();
+
+        $pacientes = Paciente::join('usuarios', 'pacientes.idPaciente', '=', 'usuarios.idUsuario')
+            ->select('pacientes.idPaciente', 'usuarios.nombre')
+            ->get();
+
+        return view('vistas.historialClinico', compact('historiales', 'pacientes'));
     }
 
     /**
@@ -27,7 +40,12 @@ class HistorialClinicoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $historial = new HistorialClinico();
+        $historial->idPaciente = $request->get('idPaciente');
+        $historial->fechaActualizacion = now();
+        $historial->resumen = $request->get('resumen');
+        $historial->save();
+        return redirect('/historialClinico');
     }
 
     /**
@@ -35,7 +53,7 @@ class HistorialClinicoController extends Controller
      */
     public function show(string $id)
     {
-        //
+        
     }
 
     /**
@@ -49,9 +67,13 @@ class HistorialClinicoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
-        //
+        $historial = HistorialClinico::findOrFail($request->get('idHistorial'));
+        $historial->resumen = $request->get('resumen');
+        $historial->fechaActualizacion = now();
+        $historial->save();
+        return redirect('/historialClinico');
     }
 
     /**
@@ -59,6 +81,8 @@ class HistorialClinicoController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $historial = HistorialClinico::findOrFail($request->get('idHistorial'));
+        $historial->delete();
+        return redirect('/historialClinico');
     }
 }

@@ -44,6 +44,18 @@ Route::post('/usuarios/guardar', 'App\Http\Controllers\UsuariosController@store'
 Route::post('/usuarios/editar', 'App\Http\Controllers\UsuariosController@update');
 Route::post('/usuarios/eliminar', 'App\Http\Controllers\UsuariosController@destroy');
 
+// doctores
+Route::resource('/doctores', 'App\Http\Controllers\DoctoresController');
+Route::post('/doctores/guardar', 'App\Http\Controllers\DoctoresController@store');
+Route::post('/doctores/editar', 'App\Http\Controllers\DoctoresController@update');
+Route::post('/doctores/eliminar', 'App\Http\Controllers\DoctoresController@destroy');
+
+// pacientes
+Route::resource('/pacientes', 'App\Http\Controllers\PacientesController');
+Route::post('/pacientes/guardar', 'App\Http\Controllers\PacientesController@store');
+Route::post('/pacientes/editar', 'App\Http\Controllers\PacientesController@update');
+Route::post('/pacientes/eliminar', 'App\Http\Controllers\PacientesController@destroy');
+
 //citas
 Route::resource('/citas', 'App\Http\Controllers\CitasController');
 Route::post('/citas/guardar', 'App\Http\Controllers\CitasController@store');

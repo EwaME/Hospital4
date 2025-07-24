@@ -60,7 +60,7 @@ class PacientesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
         $paciente = Paciente::findOrFail($request->get('idPaciente'));
         $paciente->fechaNacimiento = $request->get('fechaNacimiento');

@@ -59,7 +59,7 @@ class DoctoresController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
         $doctor = Doctor::findOrFail($request->get('idDoctor'));
         $doctor->especialidad = $request->get('especialidad');

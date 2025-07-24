@@ -3,62 +3,41 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Enfermedad;
 
 class EnfermedadesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $listaEnfermedades = Enfermedad::all();
+        return view('enfermedades.Enfermedad')->with('listaEnfermedades', $listaEnfermedades);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $enfermedad = new Enfermedad();
+        $enfermedad->nombre = $request->get('nombre');
+        $enfermedad->descripcion = $request->get('descripcion');
+        $enfermedad->save();
+
+        return redirect('/enfermedades');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $enfermedad = Enfermedad::find($id);
+        $enfermedad->nombre = $request->get('nombreU');
+        $enfermedad->descripcion = $request->get('descripcionU');
+        $enfermedad->save();
+
+        return redirect('/enfermedades');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function destroy($id)
     {
-        //
-    }
+        $enfermedad = Enfermedad::find($id);
+        $enfermedad->delete();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return redirect('/enfermedades');
     }
 }

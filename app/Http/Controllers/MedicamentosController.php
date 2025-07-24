@@ -3,62 +3,42 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Medicamento;
 
 class MedicamentosController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $listaMedicamentos = Medicamento::all();
+        return view('medicamentos.Medicamentos')->with('listaMedicamentos', $listaMedicamentos);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $medicamento = new Medicamento();
+        $medicamento->nombre = $request->get('nombre');
+        $medicamento->stock = $request->get('stock');
+        $medicamento->save();
+
+        return redirect('/medicamentos');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $medicamento = Medicamento::findOrFail($id);
+        $medicamento->nombre = $request->get('nombreU');
+        $medicamento->stock = $request->get('stockU');
+        $medicamento->save();
+
+        return redirect('/medicamentos');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function destroy($id)
     {
-        //
-    }
+        $medicamento = Medicamento::findOrFail($id);
+        $medicamento->delete();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return redirect('/medicamentos');
     }
 }
+    

@@ -3,62 +3,43 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\ConsultaMedicamento;
 
 class ConsultaMedicamentosController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $listaConsultaMedicamentos = ConsultaMedicamento::all();
+        return view('consultaMedicamentos.consulta')->with('listaConsultaMedicamentos', $listaConsultaMedicamentos);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $registro = new ConsultaMedicamento();
+        $registro->idConsulta = $request->get('idConsulta');
+        $registro->idMedicamento = $request->get('idMedicamento');
+        $registro->cantidad = $request->get('cantidad');
+        $registro->save();
+
+        return redirect('/consultaMedicamentos');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $registro = ConsultaMedicamento::findOrFail($id);
+        $registro->idConsulta = $request->get('idConsultaU');
+        $registro->idMedicamento = $request->get('idMedicamentoU');
+        $registro->cantidad = $request->get('cantidadU');
+        $registro->save();
+
+        return redirect('/consultaMedicamentos');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function destroy($id)
     {
-        //
-    }
+        $registro = ConsultaMedicamento::findOrFail($id);
+        $registro->delete();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return redirect('/consultaMedicamentos');
     }
 }

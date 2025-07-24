@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Rol;
 
 class RolesController extends Controller
 {
@@ -11,7 +12,8 @@ class RolesController extends Controller
      */
     public function index()
     {
-        //
+        $roles = Rol::all();
+        return view('vistas.roles', compact('roles'));
     }
 
     /**
@@ -27,7 +29,10 @@ class RolesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $rol = new Rol();
+        $rol->nombreRol = $request->get('nombreRol');
+        $rol->save();
+        return redirect('/roles');
     }
 
     /**
@@ -35,7 +40,7 @@ class RolesController extends Controller
      */
     public function show(string $id)
     {
-        //
+        
     }
 
     /**
@@ -49,9 +54,12 @@ class RolesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
-        //
+        $rol = Rol::findOrFail($request->get('idRol'));
+        $rol->nombreRol = $request->get('nombreRol');
+        $rol->save();
+        return redirect('/roles');
     }
 
     /**
@@ -59,6 +67,8 @@ class RolesController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $rol = Rol::findOrFail($request->get('idRol'));
+        $rol->delete();
+        return redirect('/roles');
     }
 }

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Doctor;
+use App\Models\Usuario;
 
 class DoctoresController extends Controller
 {
@@ -11,7 +13,10 @@ class DoctoresController extends Controller
      */
     public function index()
     {
-        //
+        $doctores = Doctor::with('usuario')->get();
+        $usuarios = Usuario::all();
+
+        return view('vistas.doctores', compact('doctores', 'usuarios'));
     }
 
     /**
@@ -27,7 +32,12 @@ class DoctoresController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $doctor = new Doctor();
+        $doctor->idDoctor = $request->get('idDoctor');
+        $doctor->especialidad = $request->get('especialidad');
+        $doctor->save();
+
+        return redirect('/doctores');
     }
 
     /**
@@ -51,7 +61,11 @@ class DoctoresController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $doctor = Doctor::findOrFail($request->get('idDoctor'));
+        $doctor->especialidad = $request->get('especialidad');
+        $doctor->save();
+
+        return redirect('/doctores');
     }
 
     /**
@@ -59,6 +73,9 @@ class DoctoresController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $doctor = Doctor::findOrFail($request->get('idDoctor'));
+        $doctor->delete();
+
+        return redirect('/doctores');
     }
 }

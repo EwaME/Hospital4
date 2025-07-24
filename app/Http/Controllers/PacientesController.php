@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Paciente;
+use App\Models\Usuario;
 
 class PacientesController extends Controller
 {
@@ -11,7 +13,10 @@ class PacientesController extends Controller
      */
     public function index()
     {
-        //
+        $pacientes = Paciente::with('usuario')->get();
+        $usuarios = Usuario::all();
+
+        return view('vistas.pacientes', compact('pacientes', 'usuarios'));
     }
 
     /**
@@ -27,7 +32,13 @@ class PacientesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $paciente = new Paciente();
+        $paciente->idPaciente = $request->get('idPaciente');
+        $paciente->fechaNacimiento = $request->get('fechaNacimiento');
+        $paciente->genero = $request->get('genero');
+        $paciente->save();
+
+        return redirect('/pacientes');
     }
 
     /**
@@ -51,7 +62,12 @@ class PacientesController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $paciente = Paciente::findOrFail($request->get('idPaciente'));
+        $paciente->fechaNacimiento = $request->get('fechaNacimiento');
+        $paciente->genero = $request->get('genero');
+        $paciente->save();
+
+        return redirect('/pacientes');
     }
 
     /**
@@ -59,6 +75,9 @@ class PacientesController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $paciente = Paciente::findOrFail($request->get('idPaciente'));
+        $paciente->delete();
+
+        return redirect('/pacientes');
     }
 }

@@ -4,13 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Medicamento;
+use App\Http\Requests\MedicamentoRequest;
+use Illuminate\Routing\Controller;
+
 
 class MedicamentosController extends Controller
 {
     public function index()
     {
         $listaMedicamentos = Medicamento::all();
-        return view('medicamentos.Medicamentos')->with('listaMedicamentos', $listaMedicamentos);
+        return view('/medicamentos.Medicamentos')->with('listaMedicamentos', $listaMedicamentos);
     }
 
     public function store(Request $request)
@@ -23,16 +26,22 @@ class MedicamentosController extends Controller
         return redirect('/medicamentos');
     }
 
+    /**
+     * Update the specified resource in storage.
+     */
     public function update(Request $request, $id)
     {
         $medicamento = Medicamento::findOrFail($id);
-        $medicamento->nombre = $request->get('nombreU');
-        $medicamento->stock = $request->get('stockU');
+        $medicamento->nombre = $request->get('nombreEditar');
+        $medicamento->stock = $request->get('stockEditar');
         $medicamento->save();
 
         return redirect('/medicamentos');
     }
 
+    /**
+     * Remove the specified resource from storage.
+     */
     public function destroy($id)
     {
         $medicamento = Medicamento::findOrFail($id);
@@ -41,4 +50,3 @@ class MedicamentosController extends Controller
         return redirect('/medicamentos');
     }
 }
-    

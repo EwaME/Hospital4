@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Cita;
+use App\Models\Paciente;
+use App\Models\Doctor;
 
 class CitasController extends Controller
 {
@@ -11,7 +14,15 @@ class CitasController extends Controller
      */
     public function index()
     {
-        //
+        $citas = Cita::with([
+            'paciente.usuario',
+            'doctor.usuario'
+        ])->get();
+
+        $pacientes = Paciente::with('usuario')->get();
+        $doctores = Doctor::with('usuario')->get();
+
+        return view('vistas.citas', compact('citas', 'pacientes', 'doctores'));
     }
 
     /**
@@ -27,7 +38,14 @@ class CitasController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $cita = new Cita();
+        $cita->idPaciente = $request->get('idPaciente');
+        $cita->idDoctor = $request->get('idDoctor');
+        $cita->fechaCita = $request->get('fechaCita');
+        $cita->horaCita = $request->get('horaCita');
+        $cita->estadoCita = $request->get('estadoCita');
+        $cita->save();
+        return redirect('/citas');
     }
 
     /**
@@ -49,9 +67,16 @@ class CitasController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
-        //
+        $cita = Cita::findOrFail($request->get('idCita'));
+        $cita->idPaciente = $request->get('idPaciente');
+        $cita->idDoctor = $request->get('idDoctor');
+        $cita->fechaCita = $request->get('fechaCita');
+        $cita->horaCita = $request->get('horaCita');
+        $cita->estadoCita = $request->get('estadoCita');
+        $cita->save();
+        return redirect('/citas');
     }
 
     /**
@@ -59,6 +84,8 @@ class CitasController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $cita = Cita::findOrFail($request->get('idCita'));
+        $cita->delete();
+        return redirect('/citas');
     }
 }

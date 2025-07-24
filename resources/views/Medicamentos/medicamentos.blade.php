@@ -101,9 +101,6 @@
                   <div class="error-message" id="errorNombreCrear">
                     Solo se permiten letras y espacios Gracias mi bro :=)
                   </div>
-                  <div class="error-message" id="warnNombreCrear">
-                    No se permiten números en el nombre.
-                  </div>
                 </div>
                 <div class="form-floating mb-3">
                   <input
@@ -117,9 +114,6 @@
                   <label for="stock">Stock</label>
                   <div class="error-message" id="errorStockCrear">
                     Solo se permiten números
-                  </div>
-                  <div class="error-message" id="warnStockCrear">
-                    No se permiten letras en el stock.
                   </div>
                 </div>
             </div>
@@ -171,9 +165,6 @@
                   <div class="error-message" id="errorNombreEditar">
                     Solo se permiten letras y espacios Gracias mi bro :=)
                   </div>
-                  <div class="error-message" id="warnNombreEditar">
-                    No se permiten números en el nombre.
-                  </div>
                 </div>
                 <div class="form-floating mb-3">
                   <input
@@ -187,9 +178,6 @@
                   <label for="stockU">Stock</label>
                   <div class="error-message" id="errorStockEditar">
                     Solo se permiten números Gracias mi bro :=)
-                  </div>
-                  <div class="error-message" id="warnStockEditar">
-                    No se permiten letras en el stock.
                   </div>
                 </div>
             </div>
@@ -263,8 +251,6 @@
       $('#miFormU').attr('action', '/medicamentos/edit/' + id);
       $('#errorNombreEditar').hide();
       $('#errorStockEditar').hide();
-      $('#warnNombreEditar').hide();
-      $('#warnStockEditar').hide();
     });
 
     $('.eli').on('click', function () {
@@ -273,90 +259,6 @@
       $('#idMedicamentoE').val(ideli);
       $('#nombreE').val(nombreeli);
       $('#miFormE').attr('action', '/medicamentos/delete/' + ideli);
-    });
-
-    // Bloquear números en nombre (crear)
-    $('#nombre').on('keydown', function (e) {
-      const tecla = e.key;
-      if (
-        tecla === "Backspace" ||
-        tecla === "Delete" ||
-        tecla === "ArrowLeft" ||
-        tecla === "ArrowRight" ||
-        tecla === "Tab"
-      ) {
-        $('#warnNombreCrear').fadeOut(200);
-        return;
-      }
-      if (/\d/.test(tecla)) {
-        e.preventDefault();
-        $('#warnNombreCrear').fadeIn(200);
-      } else {
-        $('#warnNombreCrear').fadeOut(200);
-      }
-    });
-
-    // Bloquear letras en stock (crear)
-    $('#stock').on('keydown', function (e) {
-      const tecla = e.key;
-      if (
-        tecla === "Backspace" ||
-        tecla === "Delete" ||
-        tecla === "ArrowLeft" ||
-        tecla === "ArrowRight" ||
-        tecla === "Tab"
-      ) {
-        $('#warnStockCrear').fadeOut(200);
-        return;
-      }
-      if (/[a-zA-Z]/.test(tecla)) {
-        e.preventDefault();
-        $('#warnStockCrear').fadeIn(200);
-      } else {
-        $('#warnStockCrear').fadeOut(200);
-      }
-    });
-
-    // Bloquear números en nombre (editar)
-    $('#nombreU').on('keydown', function (e) {
-      const tecla = e.key;
-      if (
-        tecla === "Backspace" ||
-        tecla === "Delete" ||
-        tecla === "ArrowLeft" ||
-        tecla === "ArrowRight" ||
-        tecla === "Tab"
-      ) {
-        $('#warnNombreEditar').fadeOut(200);
-        return;
-      }
-      if (/\d/.test(tecla)) {
-        e.preventDefault();
-        $('#warnNombreEditar').fadeIn(200);
-      } else {
-        $('#warnNombreEditar').fadeOut(200);
-      }
-    });
-
-    // Bloquear letras en stock (editar)
-    $('#stockU').on('keydown', function (e) {
-      const tecla = e.key;
-      if (
-        tecla === "Backspace" ||
-        tecla === "Delete" ||
-        tecla === "ArrowLeft" ||
-        tecla === "ArrowRight" ||
-        tecla === "Tab"
-      ) {
-        $('#warnStockEditar').fadeOut(200);
-        return;
-      }
-      if (/[a-zA-Z]/.test(tecla)) {
-        e.preventDefault();
-        $('#warnStockEditar').fadeIn(200);
-      } else {
-        $('#warnStockEditar').fadeOut(200);
-      }
     });
 
     // Validación tiempo real crear
@@ -393,7 +295,6 @@
       }
     });
 
-    // Validación submit editar
     $('#miFormU').on('submit', function (e) {
       let nombreOk = /^[A-Za-z\s]+$/.test($('#nombreU').val());
       let stockOk = /^[0-9]+$/.test($('#stockU').val());
@@ -403,7 +304,6 @@
       }
     });
 
-    // Confirmación eliminar
     $('#miFormE').on('submit', function(e) {
       if (!confirm('¿Estás seguro de que deseas eliminar este medicamento, bro?')) {
         e.preventDefault();

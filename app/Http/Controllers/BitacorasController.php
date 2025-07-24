@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Bitacora;
+use App\Models\Usuario;
 
 class BitacorasController extends Controller
 {
@@ -11,7 +13,8 @@ class BitacorasController extends Controller
      */
     public function index()
     {
-        //
+        $bitacoras = Bitacora::with('usuario')->orderBy('fechaRegistro', 'desc')->get();
+        return view('vistas.bitacoras', compact('bitacoras'));
     }
 
     /**
@@ -27,7 +30,7 @@ class BitacorasController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
     }
 
     /**
@@ -60,5 +63,14 @@ class BitacorasController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public static function registrar($idUsuario, $accion, $descripcion)
+    {
+        Bitacora::create([
+            'idUsuario' => $idUsuario,
+            'accion' => $accion,
+            'descripcion' => $descripcion,
+        ]);
     }
 }

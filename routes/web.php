@@ -89,3 +89,8 @@ Route::resource('/historialClinico', 'App\Http\Controllers\HistorialClinicoContr
 Route::post('/historialClinico/guardar', 'App\Http\Controllers\HistorialClinicoController@store');
 Route::post('/historialClinico/editar', 'App\Http\Controllers\HistorialClinicoController@update');
 Route::post('/historialClinico/eliminar', 'App\Http\Controllers\HistorialClinicoController@destroy');
+
+// Bitácoras
+Route::resource('/bitacoras', 'App\Http\Controllers\BitacorasController')->only(['index']);
+
+

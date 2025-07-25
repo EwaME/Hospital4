@@ -130,7 +130,7 @@
     </div>
 </div>
 
-<!-- Modal Editar -->
+
 <div class="modal fade" id="modalEditarCita" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <form action="/citas/editar" method="POST" class="modal-content p-3">
@@ -177,7 +177,7 @@
     </div>
 </div>
 
-<!-- Modal Eliminar -->
+
 <div class="modal fade" id="modalEliminarCita" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <form action="/citas/eliminar" method="POST" class="modal-content p-3">

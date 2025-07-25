@@ -77,7 +77,7 @@
         </tbody>
       </table>
 
-     
+      <!-- Modal Crear -->
       <div class="modal" id="mCrearMedicamento">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -94,8 +94,6 @@
                     name="nombre"
                     class="form-control"
                     required
-                    pattern="[A-Za-z\s]+"
-                    title="Solo letras, Gracias mi bro :=)"
                   />
                   <label for="nombre">Nombre</label>
                   <div class="error-message" id="errorNombreCrear">
@@ -104,12 +102,11 @@
                 </div>
                 <div class="form-floating mb-3">
                   <input
-                    type="number"
+                    type="text"
                     id="stock"
                     name="stock"
                     class="form-control"
                     required
-                    min="0"
                   />
                   <label for="stock">Stock</label>
                   <div class="error-message" id="errorStockCrear">
@@ -124,13 +121,13 @@
               <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">
                 Cancelar
               </button>
-            </div>
               </form>
+            </div>
           </div>
         </div>
       </div>
 
-    
+      <!-- Modal Editar -->
       <div class="modal" id="mEditarMedicamento">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -158,8 +155,6 @@
                     name="nombreU"
                     class="form-control"
                     required
-                    pattern="[A-Za-z\s]+"
-                    title="Solo letras, Gracias mi bro :=)"
                   />
                   <label for="nombreU">Nombre</label>
                   <div class="error-message" id="errorNombreEditar">
@@ -168,12 +163,11 @@
                 </div>
                 <div class="form-floating mb-3">
                   <input
-                    type="number"
+                    type="text"
                     id="stockU"
                     name="stockU"
                     class="form-control"
                     required
-                    min="0"
                   />
                   <label for="stockU">Stock</label>
                   <div class="error-message" id="errorStockEditar">
@@ -188,13 +182,13 @@
               <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">
                 Cancelar
               </button>
-            </div>
               </form>
+            </div>
           </div>
         </div>
       </div>
 
-     
+      <!-- Modal Eliminar -->
       <div class="modal" id="mEliminarMedicamento">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -232,14 +226,66 @@
               <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">
                 Cancelar
               </button>
-            </div>
               </form>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
 <script>
+  function configurarValidacionTexto(selector, errorSelector) {
+    $(selector).on('keypress', function(e) {
+      var char = String.fromCharCode(e.which);
+      if (e.which === 8 || e.which === 0 || e.which === 46) return true;
+      if (!/[A-Za-zÁÉÍÓÚáéíóúÑñ\s]/.test(char)) {
+        e.preventDefault();
+        $(errorSelector).show();
+        setTimeout(function() {
+          $(errorSelector).hide();
+        }, 3000);
+        return false;
+      }
+    });
+    $(selector).on('input paste', function() {
+      var val = $(this).val();
+      var limpio = val.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, '');
+      if (val !== limpio) {
+        $(this).val(limpio);
+        $(errorSelector).show();
+        setTimeout(function() {
+          $(errorSelector).hide();
+        }, 3000);
+      }
+    });
+  }
+
+  function configurarValidacionNumerica(selector, errorSelector) {
+    $(selector).on('keypress', function(e) {
+      var char = String.fromCharCode(e.which);
+      if (e.which === 8 || e.which === 0 || e.which === 46) return true;
+      if (!/[0-9]/.test(char)) {
+        e.preventDefault();
+        $(errorSelector).show();
+        setTimeout(function() {
+          $(errorSelector).hide();
+        }, 3000);
+        return false;
+      }
+    });
+    $(selector).on('input paste', function() {
+      var val = $(this).val();
+      var limpio = val.replace(/[^0-9]/g, '');
+      if (val !== limpio) {
+        $(this).val(limpio);
+        $(errorSelector).show();
+        setTimeout(function() {
+          $(errorSelector).hide();
+        }, 3000);
+      }
+    });
+  }
+
   $(document).ready(function () {
     $('.ejecutar').on('click', function () {
       let id = $(this).data('id');
@@ -261,48 +307,10 @@
       $('#miFormE').attr('action', '/medicamentos/delete/' + ideli);
     });
 
-    // Validación tiempo real crear
-    $('#nombre').on('input', function () {
-      const val = $(this).val();
-      const regex = /^[A-Za-z\s]+$/;
-      $('#errorNombreCrear').toggle(!regex.test(val));
-    });
-    $('#stock').on('input', function () {
-      const val = $(this).val();
-      const regex = /^[0-9]+$/;
-      $('#errorStockCrear').toggle(!regex.test(val));
-    });
-
-    // Validación tiempo real editar
-    $('#nombreU').on('input', function () {
-      const val = $(this).val();
-      const regex = /^[A-Za-z\s]+$/;
-      $('#errorNombreEditar').toggle(!regex.test(val));
-    });
-    $('#stockU').on('input', function () {
-      const val = $(this).val();
-      const regex = /^[0-9]+$/;
-      $('#errorStockEditar').toggle(!regex.test(val));
-    });
-
-    // Validación submit crear
-    $('#miForm').on('submit', function (e) {
-      let nombreOk = /^[A-Za-z\s]+$/.test($('#nombre').val());
-      let stockOk = /^[0-9]+$/.test($('#stock').val());
-      if (!nombreOk || !stockOk) {
-        e.preventDefault();
-        alert('Por favor ingresa solo letras en Nombre y solo números en Stock. Gracias mi bro :=)');
-      }
-    });
-
-    $('#miFormU').on('submit', function (e) {
-      let nombreOk = /^[A-Za-z\s]+$/.test($('#nombreU').val());
-      let stockOk = /^[0-9]+$/.test($('#stockU').val());
-      if (!nombreOk || !stockOk) {
-        e.preventDefault();
-        alert('Por favor ingresa solo letras en Nombre y solo números en Stock. Gracias mi bro :=)');
-      }
-    });
+    configurarValidacionTexto('#nombre', '#errorNombreCrear');
+    configurarValidacionNumerica('#stock', '#errorStockCrear');
+    configurarValidacionTexto('#nombreU', '#errorNombreEditar');
+    configurarValidacionNumerica('#stockU', '#errorStockEditar');
 
     $('#miFormE').on('submit', function(e) {
       if (!confirm('¿Estás seguro de que deseas eliminar este medicamento, bro?')) {
@@ -312,9 +320,9 @@
   });
 </script>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
-      crossorigin="anonymous"
-    ></script>
-  </body>
+<script
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
+  crossorigin="anonymous"
+></script>
+</body>
 </html>

@@ -32,8 +32,8 @@ class MedicamentosController extends Controller
     public function update(Request $request, $id)
     {
         $medicamento = Medicamento::findOrFail($id);
-        $medicamento->nombre = $request->get('nombreEditar');
-        $medicamento->stock = $request->get('stockEditar');
+        $medicamento->nombre = $request->get('nombreU');
+        $medicamento->stock = $request->get('stockU');
         $medicamento->save();
 
         return redirect('/medicamentos');

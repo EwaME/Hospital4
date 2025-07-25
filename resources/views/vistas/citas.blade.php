@@ -23,10 +23,15 @@
         <ul class="navbar-nav ms-auto">
             <li class="nav-item"><a class="nav-link" href="/">Inicio</a></li>
             <li class="nav-item"><a class="nav-link" href="/roles">Roles</a></li>
+            <li class="nav-item"><a class="nav-link" href="/pacientes">Pacientes</a></li>
+            <li class="nav-item"><a class="nav-link" href="/doctores">Doctores</a></li>
             <li class="nav-item"><a class="nav-link" href="/usuarios">Usuarios</a></li>
+            <li class="nav-item"><a class="nav-link" href="/medicamentos">Medicamentos</a></li>
+            <li class="nav-item"><a class="nav-link" href="/enfermedades">Enfermedades</a></li>
             <li class="nav-item"><a class="nav-link active" href="/citas">Citas</a></li>
             <li class="nav-item"><a class="nav-link" href="/consultas">Consultas</a></li>
             <li class="nav-item"><a class="nav-link" href="/historialClinico">Historial Clínico</a></li>
+            <li class="nav-item"><a class="nav-link" href="/bitacoras">Bitácoras</a></li>
         </ul>
         </div>
     </div>
@@ -130,7 +135,6 @@
     </div>
 </div>
 
-
 <div class="modal fade" id="modalEditarCita" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <form action="/citas/editar" method="POST" class="modal-content p-3">
@@ -176,7 +180,6 @@
         </form>
     </div>
 </div>
-
 
 <div class="modal fade" id="modalEliminarCita" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">

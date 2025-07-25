@@ -31,8 +31,9 @@
     <table class="table table-bordered w-100 mt-4">
         <thead>
         <tr>
-            <th>Usuario</th>
+            <th>ID Usuario</th>
             <th>Nombre</th>
+            <th>Usuario</th>
             <th>Correo</th>
             <th>Teléfono</th>
             <th>Rol</th>
@@ -42,11 +43,12 @@
         <tbody>
         @foreach($usuarios as $usuario)
             <tr>
-                <td>{{ $usuario->usuario }}</td>
+                <td>{{ $usuario->id }}</td>
                 <td>{{ $usuario->nombre }}</td>
-                <td>{{ $usuario->correo }}</td>
+                <td>{{ $usuario->usuario }}</td>
+                <td>{{ $usuario->email }}</td>
                 <td>{{ $usuario->telefono }}</td>
-                <td>{{ $usuario->rol->nombreRol ?? 'Sin rol' }}</td>
+                <td>{{ $usuario->rol->name ?? 'Sin rol' }}</td>
                 <td>
                     <button class="btn btn-secondary editar" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario"
                             data-id="{{ $usuario->idUsuario }}"
@@ -69,7 +71,6 @@
     </table>
 </div>
 
-{{-- Modal Crear --}}
 <div class="modal fade" id="modalCrearUsuario" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <form action="/usuarios/guardar" method="POST" class="modal-content p-3" id="formCrear">
@@ -118,7 +119,6 @@
     </div>
 </div>
 
-{{-- Modal Editar --}}
 <div class="modal fade" id="modalEditarUsuario" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <form action="/usuarios/editar" method="POST" class="modal-content p-3" id="formEditar">
@@ -163,7 +163,6 @@
     </div>
 </div>
 
-{{-- Modal Eliminar --}}
 <div class="modal fade" id="modalEliminarUsuario" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <form action="/usuarios/eliminar" method="POST" class="modal-content p-3" id="formEliminar">
@@ -265,18 +264,25 @@
 <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">Gestión de Datos</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+        data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+        aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link" href="/">Inicio</a></li>
-                <li class="nav-item"><a class="nav-link" href="/roles">Roles</a></li>
-                <li class="nav-item"><a class="nav-link" href="/usuarios">Usuarios</a></li>
-                <li class="nav-item"><a class="nav-link" href="/citas">Citas</a></li>
-                <li class="nav-item"><a class="nav-link" href="/consultas">Consultas</a></li>
-                <li class="nav-item"><a class="nav-link" href="/historialClinico">Historial Clínico</a></li>
-            </ul>
+        <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="/">Inicio</a></li>
+            <li class="nav-item"><a class="nav-link" href="/roles">Roles</a></li>
+            <li class="nav-item"><a class="nav-link" href="/pacientes">Pacientes</a></li>
+            <li class="nav-item"><a class="nav-link" href="/doctores">Doctores</a></li>
+            <li class="nav-item"><a class="nav-link active" href="/usuarios">Usuarios</a></li>
+            <li class="nav-item"><a class="nav-link" href="/medicamentos">Medicamentos</a></li>
+            <li class="nav-item"><a class="nav-link" href="/enfermedades">Enfermedades</a></li>
+            <li class="nav-item"><a class="nav-link" href="/citas">Citas</a></li>
+            <li class="nav-item"><a class="nav-link" href="/consultas">Consultas</a></li>
+            <li class="nav-item"><a class="nav-link" href="/historialClinico">Historial Clínico</a></li>
+            <li class="nav-item"><a class="nav-link" href="/bitacoras">Bitácoras</a></li>
+        </ul>
         </div>
     </div>
 </nav>

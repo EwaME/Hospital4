@@ -16,9 +16,9 @@ class ConsultasController extends Controller
     {
         $consultas = Consulta::join('citas', 'consultas.idCita', '=', 'citas.idCita')
             ->join('pacientes', 'citas.idPaciente', '=', 'pacientes.idPaciente')
-            ->join('usuarios as usuarios_paciente', 'pacientes.idPaciente', '=', 'usuarios_paciente.idUsuario')
+            ->join('users as usuarios_paciente', 'pacientes.idPaciente', '=', 'usuarios_paciente.id')
             ->join('doctores', 'citas.idDoctor', '=', 'doctores.idDoctor')
-            ->join('usuarios as usuarios_doctor', 'doctores.idDoctor', '=', 'usuarios_doctor.idUsuario')
+            ->join('users as usuarios_doctor', 'doctores.idDoctor', '=', 'usuarios_doctor.id')
             ->join('enfermedades', 'consultas.idEnfermedad', '=', 'enfermedades.idEnfermedad')
             ->select(
                 'consultas.idConsulta',

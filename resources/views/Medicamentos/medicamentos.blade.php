@@ -77,7 +77,7 @@
         </tbody>
       </table>
 
-      <!-- Modal Crear -->
+
       <div class="modal" id="mCrearMedicamento">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -127,7 +127,10 @@
         </div>
       </div>
 
+
       <!-- Modal Editar -->
+
+
       <div class="modal" id="mEditarMedicamento">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -320,9 +323,36 @@
   });
 </script>
 
-<script
-  src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
-  crossorigin="anonymous"
-></script>
-</body>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Gestión de Datos</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+        data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+        aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="/">Inicio</a></li>
+            <li class="nav-item"><a class="nav-link" href="/roles">Roles</a></li>
+            <li class="nav-item"><a class="nav-link" href="/pacientes">Pacientes</a></li>
+            <li class="nav-item"><a class="nav-link" href="/doctores">Doctores</a></li>
+            <li class="nav-item"><a class="nav-link" href="/usuarios">Usuarios</a></li>
+            <li class="nav-item"><a class="nav-link active" href="/medicamentos">Medicamentos</a></li>
+            <li class="nav-item"><a class="nav-link" href="/enfermedades">Enfermedades</a></li>
+            <li class="nav-item"><a class="nav-link" href="/citas">Citas</a></li>
+            <li class="nav-item"><a class="nav-link" href="/consultas">Consultas</a></li>
+            <li class="nav-item"><a class="nav-link" href="/historialClinico">Historial Clínico</a></li>
+            <li class="nav-item"><a class="nav-link" href="/bitacoras">Bitácoras</a></li>
+        </ul>
+        </div>
+    </div>
+</nav>
+  </body>
 </html>

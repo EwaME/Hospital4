@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('bitacoras', function (Blueprint $table) {
             $table->id('idBitacora'); // Llave primaria
             $table->foreignId('idUsuario')
-                ->constrained('usuarios', 'idUsuario')
+                ->constrained('users', 'id')
                 ->onDelete('cascade');
             $table->string('accion', 50);
             $table->string('descripcion', 255);

@@ -14,14 +14,14 @@ class HistorialClinicoController extends Controller
     public function index()
     {
         $historiales = HistorialClinico::join('pacientes', 'historialclinico.idPaciente', '=', 'pacientes.idPaciente')
-            ->join('usuarios', 'pacientes.idPaciente', '=', 'usuarios.idUsuario')
+            ->join('users', 'pacientes.idPaciente', '=', 'users.id')
             ->select(
                 'historialClinico.*',
-                'usuarios.nombre as nombrePaciente'
+                'users.nombre as nombrePaciente'
             )->get();
 
-        $pacientes = Paciente::join('usuarios', 'pacientes.idPaciente', '=', 'usuarios.idUsuario')
-            ->select('pacientes.idPaciente', 'usuarios.nombre')
+        $pacientes = Paciente::join('users', 'pacientes.idPaciente', '=', 'users.id')
+            ->select('pacientes.idPaciente', 'users.nombre')
             ->get();
 
         return view('vistas.historialClinico', compact('historiales', 'pacientes'));

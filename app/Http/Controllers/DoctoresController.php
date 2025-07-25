@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Doctor;
-use App\Models\Usuario;
+use App\Models\User;
 
 class DoctoresController extends Controller
 {
@@ -14,7 +14,7 @@ class DoctoresController extends Controller
     public function index()
     {
         $doctores = Doctor::with('usuario')->get();
-        $usuarios = Usuario::all();
+        $usuarios = User::all();
 
         return view('vistas.doctores', compact('doctores', 'usuarios'));
     }
@@ -59,7 +59,7 @@ class DoctoresController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
         $doctor = Doctor::findOrFail($request->get('idDoctor'));
         $doctor->especialidad = $request->get('especialidad');

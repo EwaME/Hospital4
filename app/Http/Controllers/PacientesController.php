@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Paciente;
-use App\Models\Usuario;
+use App\Models\User;
 
 class PacientesController extends Controller
 {
@@ -14,7 +14,7 @@ class PacientesController extends Controller
     public function index()
     {
         $pacientes = Paciente::with('usuario')->get();
-        $usuarios = Usuario::all();
+        $usuarios = User::all();
 
         return view('vistas.pacientes', compact('pacientes', 'usuarios'));
     }

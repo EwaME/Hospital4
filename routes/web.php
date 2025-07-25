@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 use App\Http\Controllers\MedicamentosController;
 use App\Http\Controllers\RolController;
-use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\UsuariosController;
 use App\Http\Controllers\CitaController;
 use App\Http\Controllers\ConsultaController;
 use App\Http\Controllers\HistorialClinicoController;
@@ -50,9 +50,6 @@ Route::delete('/consultaMedicamentos/delete/{id}', 'App\Http\Controllers\Consult
 
 //roles
 Route::resource('/roles', 'App\Http\Controllers\RolesController');
-Route::post('/roles/guardar', 'App\Http\Controllers\RolesController@store');
-Route::post('/roles/editar', 'App\Http\Controllers\RolesController@update');
-Route::post('/roles/eliminar', 'App\Http\Controllers\RolesController@destroy');
 
 //usuarios
 Route::resource('/usuarios', 'App\Http\Controllers\UsuariosController');

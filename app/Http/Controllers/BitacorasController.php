@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Bitacora;
-use App\Models\Usuario;
+use App\Models\User;
 
 class BitacorasController extends Controller
 {

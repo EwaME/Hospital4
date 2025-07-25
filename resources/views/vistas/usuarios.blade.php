@@ -24,8 +24,9 @@
     <table class="table table-bordered w-100 mt-4">
         <thead>
         <tr>
-            <th>Usuario</th>
+            <th>ID Usuario</th>
             <th>Nombre</th>
+            <th>Usuario</th>
             <th>Correo</th>
             <th>Teléfono</th>
             <th>Rol</th>
@@ -35,11 +36,12 @@
         <tbody>
         @foreach($usuarios as $usuario)
             <tr>
-                <td>{{ $usuario->usuario }}</td>
+                <td>{{ $usuario->id }}</td>
                 <td>{{ $usuario->nombre }}</td>
-                <td>{{ $usuario->correo }}</td>
+                <td>{{ $usuario->usuario }}</td>
+                <td>{{ $usuario->email }}</td>
                 <td>{{ $usuario->telefono }}</td>
-                <td>{{ $usuario->rol->nombreRol ?? 'Sin rol' }}</td>
+                <td>{{ $usuario->rol->name ?? 'Sin rol' }}</td>
                 <td>
                     <button class="btn btn-secondary editar"
                             data-bs-toggle="modal" data-bs-target="#modalEditarUsuario"

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Usuario;
+use App\Models\User;
 use App\Models\Rol;
 
 class UsuariosController extends Controller
@@ -13,7 +13,7 @@ class UsuariosController extends Controller
      */
     public function index()
     {
-        $usuarios = Usuario::with('rol')->get();
+        $usuarios = User::with('rol')->get();
         $roles = Rol::all();
         return view('vistas.usuarios', compact('usuarios', 'roles'));
     }
@@ -31,7 +31,7 @@ class UsuariosController extends Controller
      */
     public function store(Request $request)
     {
-        $usuario = new Usuario();
+        $usuario = new User();
         $usuario->usuario = $request->get('usuario');
         $usuario->nombre = $request->get('nombre');
         $usuario->correo = $request->get('correo');
@@ -63,7 +63,7 @@ class UsuariosController extends Controller
      */
     public function update(Request $request)
     {
-        $usuario = Usuario::findOrFail($request->get('idUsuario'));
+        $usuario = User::findOrFail($request->get('idUsuario'));
         $usuario->nombre = $request->get('nombre');
         $usuario->correo = $request->get('correo');
         if ($request->filled('contrasena')) {
@@ -80,7 +80,7 @@ class UsuariosController extends Controller
      */
     public function destroy(string $id)
     {
-        $usuario = Usuario::findOrFail($request->get('idUsuario'));
+        $usuario = User::findOrFail($request->get('idUsuario'));
         $usuario->delete();
         return redirect('/usuarios');
     }

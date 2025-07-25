@@ -32,7 +32,7 @@
         <tbody>
             @foreach($roles as $rol)
             <tr>
-                <td>{{ $rol->nombreRol }}</td>
+                <td>{{ $rol->name }}</td>
                 <td>
                 <button class="btn btn-secondary editar"
                     data-bs-toggle="modal" data-bs-target="#modalEditarRol"

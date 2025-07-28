@@ -13,7 +13,7 @@ class MedicamentosController extends Controller
     public function index()
     {
         $listaMedicamentos = Medicamento::all();
-        return view('/medicamentos.Medicamentos')->with('listaMedicamentos', $listaMedicamentos);
+        return view('/vistas.Medicamentos')->with('listaMedicamentos', $listaMedicamentos);
     }
 
     public function store(Request $request)

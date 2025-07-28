@@ -10,7 +10,7 @@ class ConsultaMedicamentosController extends Controller
     public function index()
     {
         $listaConsultaMedicamentos = ConsultaMedicamento::all();
-        return view('consultaMedicamentos.consulta')->with('listaConsultaMedicamentos', $listaConsultaMedicamentos);
+        return view('vistas.consultam')->with('listaConsultaMedicamentos', $listaConsultaMedicamentos);
     }
 
     public function store(Request $request)

@@ -80,57 +80,61 @@
     </table>
 </div>
 
+<!-- Modal Crear Doctor -->
 <div class="modal fade" id="modalCrearDoctor" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-        <form action="/doctores/guardar" method="POST" class="modal-content p-3">
+        <form action="/doctores/guardar" method="POST" class="modal-content p-3" id="formCrearDoctor">
         @csrf
         <div class="modal-header">
-            <h5 class="modal-title">Crear Doctor</h5>
+            <h5 class="modal-title">Asignar Especialidad</h5>
         </div>
         <div class="modal-body">
             <div class="mb-3">
-            <label>Usuario</label>
-            <select name="idDoctor" class="form-control" required>
-                @foreach($usuarios as $usuario)
-                <option value="{{ $usuario->idUsuario }}">{{ $usuario->nombre }}</option>
-                @endforeach
-            </select>
+                <label>Usuario</label>
+                <select name="idDoctor" class="form-control" required>
+                    <option value="">Seleccione un usuario</option>
+                    @foreach($usuarios as $usuario)
+                    <option value="{{ $usuario->id }}">{{ $usuario->nombre }}</option>
+                    @endforeach
+                </select>
             </div>
             <div class="mb-3">
-            <label>Especialidad</label>
-            <input type="text" name="especialidad" class="form-control" required>
+                <label>Especialidad</label>
+                <input type="text" name="especialidad" class="form-control" required>
             </div>
         </div>
         <div class="modal-footer">
             <button class="btn btn-success" type="submit">Guardar</button>
-            <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancelar</button>
+            <button class="btn btn-secondary cancelar" type="button" data-bs-dismiss="modal">Cancelar</button>
         </div>
         </form>
     </div>
 </div>
 
+<!-- Modal Editar Doctor -->
 <div class="modal fade" id="modalEditarDoctor" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-        <form action="/doctores/editar" method="POST" class="modal-content p-3">
+        <form action="/doctores/editar" method="POST" class="modal-content p-3" id="formEditarDoctor">
         @csrf
         <input type="hidden" name="idDoctor" id="edit_idDoctor">
         <div class="modal-header">
-            <h5 class="modal-title">Editar Doctor</h5>
+            <h5 class="modal-title">Editar Especialidad</h5>
         </div>
         <div class="modal-body">
             <div class="mb-3">
-            <label>Especialidad</label>
-            <input type="text" name="especialidad" id="edit_especialidad" class="form-control" required>
+                <label>Especialidad</label>
+                <input type="text" name="especialidad" id="edit_especialidad" class="form-control" required>
             </div>
         </div>
         <div class="modal-footer">
             <button class="btn btn-primary" type="submit">Actualizar</button>
-            <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancelar</button>
+            <button class="btn btn-secondary cancelar" type="button" data-bs-dismiss="modal">Cancelar</button>
         </div>
         </form>
     </div>
 </div>
 
+<!-- Modal Eliminar Doctor -->
 <div class="modal fade" id="modalEliminarDoctor" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <form action="/doctores/eliminar" method="POST" class="modal-content p-3">
@@ -144,7 +148,7 @@
         </div>
         <div class="modal-footer">
             <button class="btn btn-danger" type="submit">Eliminar</button>
-            <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancelar</button>
+            <button class="btn btn-secondary cancelar" type="button" data-bs-dismiss="modal">Cancelar</button>
         </div>
         </form>
     </div>
@@ -154,12 +158,18 @@
 <script>
     $(document).ready(function () {
         $('.editar').on('click', function () {
-        $('#edit_idDoctor').val($(this).data('id'));
-        $('#edit_especialidad').val($(this).data('especialidad'));
+            $('#edit_idDoctor').val($(this).data('id'));
+            $('#edit_especialidad').val($(this).data('especialidad'));
         });
 
         $('.eliminar').on('click', function () {
-        $('#delete_idDoctor').val($(this).data('id'));
+            $('#delete_idDoctor').val($(this).data('id'));
+        });
+
+        // Limpieza de formularios al cancelar
+        $('.cancelar').on('click', function () {
+            $('#formCrearDoctor')[0].reset();
+            $('#formEditarDoctor')[0].reset();
         });
     });
 </script>

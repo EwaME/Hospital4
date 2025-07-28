@@ -85,7 +85,7 @@
 
 <div class="modal fade" id="modalCrearPaciente" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-        <form action="/pacientes/guardar" method="POST" class="modal-content p-3">
+        <form action="/pacientes/guardar" method="POST" class="modal-content p-3" id="formCrearPaciente">
             @csrf
             <div class="modal-header">
                 <h5 class="modal-title">Crear Paciente</h5>
@@ -95,7 +95,7 @@
                     <label>Usuario</label>
                     <select name="idPaciente" class="form-control" required>
                         @foreach($usuarios as $usuario)
-                            <option value="{{ $usuario->idUsuario }}">{{ $usuario->nombre }}</option>
+                            <option value="{{ $usuario->id }}">{{ $usuario->nombre }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -114,7 +114,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-success" type="submit">Guardar</button>
-                <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancelar</button>
+                <button class="btn btn-secondary" type="button" data-bs-dismiss="modal" id="cancelarCrearPaciente">Cancelar</button>
             </div>
         </form>
     </div>
@@ -180,6 +180,10 @@
 
         $('.eliminar').on('click', function () {
             $('#delete_idPaciente').val($(this).data('id'));
+        });
+
+        $('#cancelarCrearPaciente').on('click', function () {
+            $('#formCrearPaciente')[0].reset();
         });
     });
 </script>

@@ -10,7 +10,7 @@ class EnfermedadesController extends Controller
     public function index()
     {
         $listaEnfermedades = Enfermedad::all();
-        return view('enfermedades.Enfermedad')->with('listaEnfermedades', $listaEnfermedades);
+        return view('vistas.Enfermedad')->with('listaEnfermedades', $listaEnfermedades);
     }
 
     public function store(Request $request)

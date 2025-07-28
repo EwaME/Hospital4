@@ -48,19 +48,23 @@
                 <td>{{ $usuario->usuario }}</td>
                 <td>{{ $usuario->email }}</td>
                 <td>{{ $usuario->telefono }}</td>
-                <td>{{ $usuario->rol->name ?? 'Sin rol' }}</td>
+                <td>
+                  
+                        {{ $usuario->rol->name }} 
+                  
+                </td>
                 <td>
                     <button class="btn btn-secondary editar" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario"
-                            data-id="{{ $usuario->idUsuario }}"
+                            data-id="{{ $usuario->id }}"
                             data-usuario="{{ $usuario->usuario }}"
                             data-nombre="{{ $usuario->nombre }}"
-                            data-correo="{{ $usuario->correo }}"
+                            data-email="{{ $usuario->email }}"
                             data-telefono="{{ $usuario->telefono }}"
                             data-idrol="{{ $usuario->idRol }}">
                         <i class="fas fa-edit"></i> Editar
                     </button>
                     <button class="btn btn-danger eliminar" data-bs-toggle="modal" data-bs-target="#modalEliminarUsuario"
-                            data-id="{{ $usuario->idUsuario }}"
+                            data-id="{{ $usuario->id }}"
                             data-nombre="{{ $usuario->nombre }}">
                         <i class="fas fa-trash"></i> Eliminar
                     </button>
@@ -71,6 +75,7 @@
     </table>
 </div>
 
+{{-- Modal Crear Usuario --}}
 <div class="modal fade" id="modalCrearUsuario" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <form action="/usuarios/guardar" method="POST" class="modal-content p-3" id="formCrear">
@@ -90,7 +95,7 @@
                 </div>
                 <div class="mb-3">
                     <label>Correo</label>
-                    <input type="email" name="correo" class="form-control" required>
+                    <input type="email" name="email" class="form-control" required>
                 </div>
                 <div class="mb-3">
                     <label>Teléfono</label>
@@ -106,7 +111,7 @@
                     <select name="idRol" class="form-select" required>
                         <option value="" disabled selected>Seleccione un rol</option>
                         @foreach($roles as $rol)
-                            <option value="{{ $rol->idRol }}">{{ $rol->nombreRol }}</option>
+                            <option value="{{ $rol->id }}">{{ $rol->name }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -119,11 +124,12 @@
     </div>
 </div>
 
+{{-- Modal Editar Usuario --}}
 <div class="modal fade" id="modalEditarUsuario" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <form action="/usuarios/editar" method="POST" class="modal-content p-3" id="formEditar">
             @csrf
-            <input type="hidden" name="idUsuario" id="edit_idUsuario">
+            <input type="hidden" name="id" id="edit_id">
             <div class="modal-header">
                 <h5 class="modal-title">Editar Usuario</h5>
             </div>
@@ -139,7 +145,7 @@
                 </div>
                 <div class="mb-3">
                     <label>Correo</label>
-                    <input type="email" name="correo" id="edit_correo" class="form-control" required>
+                    <input type="email" name="email" id="edit_email" class="form-control" required>
                 </div>
                 <div class="mb-3">
                     <label>Teléfono</label>
@@ -150,7 +156,7 @@
                     <label>Rol</label>
                     <select name="idRol" id="edit_idRol" class="form-select" required>
                         @foreach($roles as $rol)
-                            <option value="{{ $rol->idRol }}">{{ $rol->nombreRol }}</option>
+                            <option value="{{ $rol->id }}">{{ $rol->name }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -163,16 +169,17 @@
     </div>
 </div>
 
+{{-- Modal Eliminar Usuario --}}
 <div class="modal fade" id="modalEliminarUsuario" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <form action="/usuarios/eliminar" method="POST" class="modal-content p-3" id="formEliminar">
             @csrf @method('DELETE')
-            <input type="hidden" name="idUsuario" id="delete_idUsuario">
+            <input type="hidden" name="id" id="delete_id">
             <div class="modal-header">
                 <h5 class="modal-title">Eliminar Usuario</h5>
             </div>
             <div class="modal-body">
-                <p><strong>ID del usuario:</strong> <span id="delete_idUsuario_text"></span></p>
+                <p><strong>ID del usuario:</strong> <span id="delete_id_text"></span></p>
                 <p>¿Desea eliminar al usuario "<strong id="delete_nombreUsuario_text"></strong>"?</p>
             </div>
             <div class="modal-footer">
@@ -243,17 +250,17 @@
         configurarValidacionNumero('#edit_telefono', '#errorTelefonoEditar');
 
         $('.editar').on('click', function() {
-            $('#edit_idUsuario').val($(this).data('id'));
+            $('#edit_id').val($(this).data('id'));
             $('#edit_usuario').val($(this).data('usuario'));
             $('#edit_nombre').val($(this).data('nombre'));
-            $('#edit_correo').val($(this).data('correo'));
+            $('#edit_email').val($(this).data('email'));
             $('#edit_telefono').val($(this).data('telefono'));
             $('#edit_idRol').val($(this).data('idrol'));
         });
 
         $('.eliminar').on('click', function() {
-            $('#delete_idUsuario').val($(this).data('id'));
-            $('#delete_idUsuario_text').text($(this).data('id'));
+            $('#delete_id').val($(this).data('id'));
+            $('#delete_id_text').text($(this).data('id'));
             $('#delete_nombreUsuario_text').text($(this).data('nombre'));
         });
     });

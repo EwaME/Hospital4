@@ -23,13 +23,14 @@ class UsuariosController extends Controller
     public function store(Request $request)
     {
         $usuario = new User();
-        $usuario->usuario = $request->get('usuario');
-        $usuario->nombre = $request->get('nombre');
-        $usuario->correo = $request->get('correo');
-        $usuario->contrasena = bcrypt($request->get('contrasena'));
-        $usuario->telefono = $request->get('telefono');
-        $usuario->idRol = $request->get('idRol');
+        $usuario->nombre = $request->nombre;
+        $usuario->usuario = $request->usuario;
+        $usuario->email = $request->email;
+        $usuario->password = bcrypt($request->contrasena);
+        $usuario->telefono = $request->telefono;
+        $usuario->idRol = $request->idRol;
         $usuario->save();
+
         return redirect('/usuarios');
     }
 
@@ -45,15 +46,17 @@ class UsuariosController extends Controller
 
     public function update(Request $request)
     {
-        $usuario = User::findOrFail($request->get('idUsuario'));
-        $usuario->nombre = $request->get('nombre');
-        $usuario->correo = $request->get('correo');
+        $usuario = User::findOrFail($request->idUsuario);
+        $usuario->nombre = $request->nombre;
+        $usuario->usuario = $request->usuario;
+        $usuario->email = $request->email;
         if ($request->filled('contrasena')) {
-            $usuario->contrasena = bcrypt($request->get('contrasena'));
+            $usuario->password = bcrypt($request->contrasena);
         }
-        $usuario->telefono = $request->get('telefono');
-        $usuario->idRol = $request->get('idRol');
+        $usuario->telefono = $request->telefono;
+        $usuario->idRol = $request->idRol;
         $usuario->save();
+
         return redirect('/usuarios');
     }
 

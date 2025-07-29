@@ -16,12 +16,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        // User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
         $roleAdmin = Role::create(['name' => 'Admin']);
         $rolePaciente = Role::create(['name' => 'Paciente']);
         $roleDoctor = Role::create(['name' => 'Doctor']);

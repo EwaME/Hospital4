@@ -42,7 +42,6 @@ class HistorialClinicoController extends Controller
     {
         $historial = new HistorialClinico();
         $historial->idPaciente = $request->get('idPaciente');
-        $historial->fechaActualizacion = now();
         $historial->resumen = $request->get('resumen');
         $historial->save();
         return redirect('/historialClinico');
@@ -71,7 +70,6 @@ class HistorialClinicoController extends Controller
     {
         $historial = HistorialClinico::findOrFail($request->get('idHistorial'));
         $historial->resumen = $request->get('resumen');
-        $historial->fechaActualizacion = now();
         $historial->save();
         return redirect('/historialClinico');
     }

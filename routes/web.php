@@ -12,8 +12,12 @@ use App\Http\Controllers\HistorialClinicoController;
 
 // Rutas del sistema
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 })->name('home');
+
+Route::get('/wel', function () {
+    return view('welcome');
+})->name('logeo');
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
@@ -30,7 +34,6 @@ Route::middleware(['auth'])->group(function () {
 require __DIR__.'/auth.php';
 
 // Rutas de Medicamentos
-
 Route::get('/medicamentos', 'App\Http\Controllers\MedicamentosController@index');
 Route::post('/medicamentos', 'App\Http\Controllers\MedicamentosController@store');
 Route::put('/medicamentos/edit/{U}', 'App\Http\Controllers\MedicamentosController@update');
@@ -49,7 +52,12 @@ Route::put('/consultaMedicamentos/edit/{id}', 'App\Http\Controllers\ConsultaMedi
 Route::delete('/consultaMedicamentos/delete/{id}', 'App\Http\Controllers\ConsultaMedicamentosController@destroy');
 
 //roles
-Route::resource('/roles', 'App\Http\Controllers\RolesController');
+Route::get('/roles', 'App\Http\Controllers\RolesController@index');
+Route::post('/roles/guardar', 'App\Http\Controllers\RolesController@store');
+Route::post('/roles/editar', 'App\Http\Controllers\RolesController@update');
+Route::post('/roles/eliminar', 'App\Http\Controllers\RolesController@destroy');
+Route::get('/roles/permisos/{id}', 'App\Http\Controllers\RolesController@obtenerPermisos');
+
 
 //usuarios
 Route::resource('/usuarios', 'App\Http\Controllers\UsuariosController');

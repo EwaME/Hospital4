@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Rol;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class RolesController extends Controller
 {
@@ -12,8 +13,10 @@ class RolesController extends Controller
      */
     public function index()
     {
-        $roles = Rol::all();
-        return view('vistas.roles', compact('roles'));
+        $roles = Role::with('permissions')->get(); 
+        $permisos = Permission::all();
+
+        return view('vistas.roles', compact('roles', 'permisos'));
     }
 
     /**
@@ -29,7 +32,18 @@ class RolesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nombreRol' => 'required|string|max:255',
+            'permisos' => 'required|array',
+        ]);
+
+        // Crear rol con el campo 'name'
+        $rol = Role::create(['name' => $request->nombreRol]);
+
+        // Sincronizar permisos con array de nombres o IDs
+        $rol->syncPermissions($request->permisos);
+
+        return redirect('/roles')->with('success', 'Rol creado correctamente.');
     }
 
     /**
@@ -51,16 +65,37 @@ class RolesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
-        //
+        $request->validate([
+            'idRol' => 'required|exists:roles,id',
+            'nombreRol' => 'required|string|max:255',
+            'permisos' => 'required|array',
+        ]);
+
+        $rol = Role::findOrFail($request->idRol);
+        $rol->name = $request->nombreRol;
+        $rol->save();
+
+        $rol->syncPermissions($request->permisos);
+
+        return redirect('/roles')->with('success', 'Rol actualizado con permisos.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
-        //
+        $rol = Role::findOrFail($request->idRol);
+        $rol->delete();
+
+        return redirect('/roles')->with('success', 'Rol eliminado correctamente.');
+    }
+
+    public function obtenerPermisos($id)
+    {
+        $rol = Role::findOrFail($id);
+        return response()->json($rol->permissions->pluck('name'));
     }
 }

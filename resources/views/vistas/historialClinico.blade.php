@@ -35,7 +35,7 @@
                 <td>{{ $historial->idHistorial }}</td>
                 <td>{{ $historial->nombrePaciente }}</td>
                 <td>{{ $historial->resumen }}</td>
-                <td>{{ $historial->fechaActualizacion ? $historial->fechaActualizacion->format('Y-m-d') : '' }}</td>
+                <td>{{ \Carbon\Carbon::parse($historial->updated_at) }}</td>
                 <td>
                     <button class="btn btn-secondary editar"
                         data-bs-toggle="modal" data-bs-target="#modalEditarHistorial"
@@ -78,10 +78,6 @@
             <label>Resumen</label>
             <textarea name="resumen" class="form-control" rows="4" required></textarea>
             </div>
-            <div class="mb-3">
-            <label>Fecha de Actualización</label>
-            <input type="date" name="fechaActualizacion" class="form-control">
-            </div>
         </div>
         <div class="modal-footer">
             <button class="btn btn-success" type="submit">Guardar</button>
@@ -111,10 +107,6 @@
             <div class="mb-3">
             <label>Resumen</label>
             <textarea name="resumen" id="edit_resumen" class="form-control" rows="4" required></textarea>
-            </div>
-            <div class="mb-3">
-            <label>Fecha de Actualización</label>
-            <input type="date" name="fechaActualizacion" id="edit_fechaActualizacion" class="form-control">
             </div>
         </div>
         <div class="modal-footer">
@@ -172,7 +164,7 @@
 
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
         <ul class="navbar-nav ms-auto">
-            <li class="nav-item"><a class="nav-link" href="/">Inicio</a></li>
+            <li class="nav-item"><a class="nav-link" href="dashboard">Inicio</a></li>
             <li class="nav-item"><a class="nav-link" href="/roles">Roles</a></li>
             <li class="nav-item"><a class="nav-link" href="/pacientes">Pacientes</a></li>
             <li class="nav-item"><a class="nav-link" href="/doctores">Doctores</a></li>
@@ -181,11 +173,13 @@
             <li class="nav-item"><a class="nav-link" href="/enfermedades">Enfermedades</a></li>
             <li class="nav-item"><a class="nav-link" href="/citas">Citas</a></li>
             <li class="nav-item"><a class="nav-link" href="/consultas">Consultas</a></li>
+            <li class="nav-item"><a class="nav-link" href="/consultaMedicamentos">Consulta Medicamentos</a></li>
             <li class="nav-item"><a class="nav-link active" href="/historialClinico">Historial Clínico</a></li>
             <li class="nav-item"><a class="nav-link" href="/bitacoras">Bitácoras</a></li>
         </ul>
         </div>
     </div>
 </nav>
+
 </body>
 </html>

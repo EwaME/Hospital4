@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('idPaciente');
             $table->unsignedBigInteger('idDoctor');
             $table->date('fechaCita');
-            $table->dateTime('horaCita');
+            $table->time('horaCita');
             $table->string('estadoCita', 30);
             $table->foreign('idPaciente')->references('idPaciente')->on('pacientes');
             $table->foreign('idDoctor')->references('idDoctor')->on('doctores');

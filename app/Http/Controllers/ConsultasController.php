@@ -34,12 +34,8 @@ class ConsultasController extends Controller
             $citas = Cita::with([
                 'paciente.usuario',
                 'doctor.usuario'
-            ])->get()->map(function($cita) {
-                return (object)[
-                    'idCita' => $cita->idCita,
-                    'descripcion' => "Cita {$cita->idCita} - Paciente: {$cita->paciente->usuario->nombre} - Fecha: {$cita->fechaCita}"
-                ];
-    });
+            ])->get();
+            
             $enfermedades = Enfermedad::all();
         return view('vistas.consultas', compact('consultas', 'citas', 'enfermedades'));
     }

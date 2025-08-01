@@ -21,7 +21,7 @@
 
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
         <ul class="navbar-nav ms-auto">
-            <li class="nav-item"><a class="nav-link" href="/">Inicio</a></li>
+            <li class="nav-item"><a class="nav-link" href="dashboard">Inicio</a></li>
             <li class="nav-item"><a class="nav-link" href="/roles">Roles</a></li>
             <li class="nav-item"><a class="nav-link" href="/pacientes">Pacientes</a></li>
             <li class="nav-item"><a class="nav-link" href="/doctores">Doctores</a></li>
@@ -30,6 +30,7 @@
             <li class="nav-item"><a class="nav-link" href="/enfermedades">Enfermedades</a></li>
             <li class="nav-item"><a class="nav-link" href="/citas">Citas</a></li>
             <li class="nav-item"><a class="nav-link" href="/consultas">Consultas</a></li>
+            <li class="nav-item"><a class="nav-link" href="/consultaMedicamentos">Consulta Medicamentos</a></li>
             <li class="nav-item"><a class="nav-link" href="/historialClinico">Historial Clínico</a></li>
             <li class="nav-item"><a class="nav-link active" href="/bitacoras">Bitácoras</a></li>
         </ul>

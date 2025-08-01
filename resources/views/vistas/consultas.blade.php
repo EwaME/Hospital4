@@ -75,15 +75,17 @@
         <div class="modal-body">
             <div class="mb-3">
                 <label>Cita</label>
-                <select name="idCita" class="form-control" required>
+                <select name="idCita" id="selectCitaCrear" class="form-control" required>
                     @foreach($citas as $cita)
-                    <option value="{{ $cita->idCita }}">{{ $cita->descripcion }}</option>
+                        <option value="{{ $cita->idCita }}" data-fecha="{{ $cita->fechaCita }}">
+                            Dr. {{ $cita->doctor->usuario->nombre }} (Cita #{{ $cita->idCita }})
+                        </option>
                     @endforeach
                 </select>
             </div>
             <div class="mb-3">
                 <label>Fecha</label>
-                <input type="date" name="fecha" class="form-control" required>
+                <input type="date" name="fecha" id="fechaCitaSeleccionada" class="form-control" readonly required>
             </div>
             <div class="mb-3">
                 <label>Enfermedad</label>
@@ -180,19 +182,30 @@
 <script>
     $(document).ready(function() {
         $('.editar').on('click', function () {
-        $('#edit_idConsulta').val($(this).data('id'));
-        $('#edit_idCita').val($(this).data('idcita'));
-        $('#edit_nombrePaciente').val($(this).data('paciente'));
-        $('#edit_nombreDoctor').val($(this).data('doctor'));
-        $('#edit_fecha').val($(this).data('fecha'));
-        $('#edit_idEnfermedad').val($(this).data('idenfermedad'));
-        $('#edit_diagnostico').val($(this).data('diagnostico'));
+            $('#edit_idConsulta').val($(this).data('id'));
+            $('#edit_idCita').val($(this).data('idcita'));
+            $('#edit_nombrePaciente').val($(this).data('paciente'));
+            $('#edit_nombreDoctor').val($(this).data('doctor'));
+            $('#edit_fecha').val($(this).data('fecha'));
+            $('#edit_idEnfermedad').val($(this).data('idenfermedad'));
+            $('#edit_diagnostico').val($(this).data('diagnostico'));
         });
 
         $('.eliminar').on('click', function () {
-        $('#delete_idConsulta').val($(this).data('id'));
-        $('#delete_nombrePaciente_text').text($(this).data('paciente'));
+            $('#delete_idConsulta').val($(this).data('id'));
+            $('#delete_nombrePaciente_text').text($(this).data('paciente'));
         });
+
+        function actualizarFechaDesdeCita() {
+            var fecha = $('#selectCitaCrear option:selected').data('fecha');
+            $('#fechaCitaSeleccionada').val(fecha);
+        }
+
+        $('#modalCrearConsulta').on('shown.bs.modal', function () {
+            actualizarFechaDesdeCita();
+        });
+
+        $('#selectCitaCrear').on('change', actualizarFechaDesdeCita);
     });
 </script>
 
@@ -207,7 +220,7 @@
 
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
         <ul class="navbar-nav ms-auto">
-            <li class="nav-item"><a class="nav-link" href="/">Inicio</a></li>
+            <li class="nav-item"><a class="nav-link" href="dashboard">Inicio</a></li>
             <li class="nav-item"><a class="nav-link" href="/roles">Roles</a></li>
             <li class="nav-item"><a class="nav-link" href="/pacientes">Pacientes</a></li>
             <li class="nav-item"><a class="nav-link" href="/doctores">Doctores</a></li>
@@ -216,6 +229,7 @@
             <li class="nav-item"><a class="nav-link" href="/enfermedades">Enfermedades</a></li>
             <li class="nav-item"><a class="nav-link" href="/citas">Citas</a></li>
             <li class="nav-item"><a class="nav-link active" href="/consultas">Consultas</a></li>
+            <li class="nav-item"><a class="nav-link" href="/consultaMedicamentos">Consulta Medicamentos</a></li>
             <li class="nav-item"><a class="nav-link" href="/historialClinico">Historial Clínico</a></li>
             <li class="nav-item"><a class="nav-link" href="/bitacoras">Bitácoras</a></li>
         </ul>

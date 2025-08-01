@@ -73,7 +73,7 @@ class PacientesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
         $paciente = Paciente::findOrFail($request->get('idPaciente'));
         $paciente->delete();

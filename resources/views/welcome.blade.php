@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Bienvenido a Hospital EKO</title>
 
-    <!-- Fuentes -->
+    <!-- Fuentes y Tailwind -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.2/dist/tailwind.min.css" rel="stylesheet" />
 
@@ -207,68 +207,153 @@
             font-size: 0.875rem;
         }
         }
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .tab-button {
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            user-select: none;
+            background-color: rgba(255 255 255 / 0.15);
+            color: #94a3b8; /* text-gray-400 */
+        }
+        .tab-button.active {
+            background-color: #06b6d4; /* cyan-500 */
+            color: white;
+            box-shadow: 0 0 10px #06b6d4aa;
+        }
     </style>
-    </head>
-    <body>
+</head>
+<body class="bg-gradient-to-br from-cyan-100 via-indigo-200 to-blue-300">
 
-    <!-- Sparkles -->
-    <span class="sparkle"></span>
-    <span class="sparkle"></span>
-    <span class="sparkle"></span>
-    <span class="sparkle"></span>
-    <span class="sparkle"></span>
+<!-- Sparkles -->
+<span class="sparkle"></span>
+<span class="sparkle"></span>
+<span class="sparkle"></span>
+<span class="sparkle"></span>
+<span class="sparkle"></span>
 
-    <div class="container-glass fade-in" role="main" aria-label="Bienvenida al sistema Hospital EKO">
+<div class="container-glass fade-in max-w-md mx-auto p-8" role="main" aria-label="Bienvenida y login al sistema Hospital EKO">
 
-        {{-- Logo y título --}}
-        <div class="mb-8">
-            <div class="inline-flex items-center justify-center text-6xl mb-4 animate-pulse">🏥</div>
-            <h1 class="text-5xl font-extrabold text-teal-700 mb-3 drop-shadow-lg">
-                ¡Bienvenido a <span class="text-cyan-600">Hospital EKO</span>!
-            </h1>
-            <p class="text-lg text-gray-700 max-w-xl mx-auto leading-relaxed">
-                Tu sistema de gestión hospitalaria confiable, seguro y fácil de usar.
-                <br />
-                Estamos felices de tenerte aquí para comenzar esta aventura juntos.
-            </p>
-        </div>
-
-        {{-- Botones --}}
-        <div class="mt-10 flex flex-col sm:flex-row justify-center gap-10" role="navigation" aria-label="Acciones principales">
-        @if (Route::has('login'))
-            @auth
-            <a href="{{ url('/home') }}" class="btn-primary" tabindex="0">
-                <span class="btn-icon" aria-hidden="true">🏠</span> Ir al Panel
-            </a>
-            @else
-            <a href="{{ route('login') }}" class="btn-primary" tabindex="0">
-                <span class="btn-icon" aria-hidden="true">🔐</span> Iniciar Sesión
-            </a>
-            @if (Route::has('register'))
-                <a href="{{ route('register') }}" class="btn-secondary" tabindex="0">
-                <span class="btn-icon" aria-hidden="true">📝</span> Crear Cuenta
-                </a>
-            @endif
-            @endauth
-        @endif
-        </div>
-
-        {{-- Enlaces externos --}}
-        <nav class="mt-12 flex justify-center gap-10 flex-wrap text-sm text-indigo-200" aria-label="Enlaces externos de Laravel">
-        <a href="https://docs.google.com/document/d/1YSUjjVkKSxcmjw69D_-2UC40uZFFRFD_jJyARNMfGzw/edit?usp=sharing" target="_blank" rel="noopener" tabindex="0">
-            📘 Documentación
-        </a>
-        <a href="https://github.com/EwaME/Hospital4" target="_blank" rel="noopener" tabindex="0">
-            💾 Repositorio
-        </a>
-        </nav>
-
-        {{-- Footer --}}
-        <footer class="mt-14 text-indigo-100 text-xs" aria-label="Versión de software">
-        Laravel v{{ Illuminate\Foundation\Application::VERSION }} &nbsp;&bull;&nbsp; PHP v{{ PHP_VERSION }}
-        </footer>
+    {{-- Logo y título --}}
+    <div class="mb-8 text-center">
+        <div class="inline-flex items-center justify-center text-6xl mb-4 animate-pulse">🏥</div>
+        <h1 class="text-4xl font-extrabold text-teal-700 mb-3 drop-shadow-lg">
+            ¡Bienvenido a <span class="text-cyan-600">Hospital EKO</span>!
+        </h1>
+        <p class="text-lg text-gray-700 max-w-xl mx-auto leading-relaxed">
+            Tu sistema de gestión hospitalaria confiable, seguro y fácil de usar.<br />
+            Estamos felices de tenerte aquí para comenzar esta aventura juntos.
+        </p>
     </div>
 
-    </body>
-    </html>
+    {{-- Pestañas para login --}}
+    <div class="tabs" role="tablist" aria-label="Selecciona tipo de usuario para iniciar sesión">
+        <button id="tab-patient" class="tab-button active" role="tab" aria-selected="true" aria-controls="panel-patient" tabindex="0">Paciente</button>
+        <button id="tab-doctor" class="tab-button" role="tab" aria-selected="false" aria-controls="panel-doctor" tabindex="-1">Doctor</button>
+        <button id="tab-admin" class="tab-button" role="tab" aria-selected="false" aria-controls="panel-admin" tabindex="-1">Administrador</button>
+    </div>
 
+    {{-- Contenedores de formularios --}}
+    <section id="panel-patient" role="tabpanel" aria-labelledby="tab-patient" tabindex="0">
+        <form method="POST" action="{{ route('login.patient') }}" class="space-y-6" novalidate>
+            @csrf
+            <div>
+                <label for="patient-email" class="block text-sm font-medium text-gray-700">Correo electrónico</label>
+                <input id="patient-email" name="email" type="email" autocomplete="email" required
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50" placeholder="paciente@correo.com" />
+            </div>
+            <div>
+                <label for="patient-password" class="block text-sm font-medium text-gray-700">Contraseña</label>
+                <input id="patient-password" name="password" type="password" autocomplete="current-password" required
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50" />
+            </div>
+            <button type="submit" class="btn-primary w-full">Iniciar Sesión como Paciente</button>
+        </form>
+    </section>
+
+    <section id="panel-doctor" role="tabpanel" aria-labelledby="tab-doctor" tabindex="0" hidden>
+        <form method="POST" action="{{ route('login.doctor') }}" class="space-y-6" novalidate>
+            @csrf
+            <div>
+                <label for="doctor-email" class="block text-sm font-medium text-gray-700">Correo electrónico</label>
+                <input id="doctor-email" name="email" type="email" autocomplete="email" required
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50" placeholder="doctor@hospital.com" />
+            </div>
+            <div>
+                <label for="doctor-password" class="block text-sm font-medium text-gray-700">Contraseña</label>
+                <input id="doctor-password" name="password" type="password" autocomplete="current-password" required
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50" />
+            </div>
+            <button type="submit" class="btn-primary w-full">Iniciar Sesión como Doctor</button>
+        </form>
+    </section>
+
+    <section id="panel-admin" role="tabpanel" aria-labelledby="tab-admin" tabindex="0" hidden>
+        <form method="POST" action="{{ route('login.admin') }}" class="space-y-6" novalidate>
+            @csrf
+            <div>
+                <label for="admin-email" class="block text-sm font-medium text-gray-700">Correo electrónico</label>
+                <input id="admin-email" name="email" type="email" autocomplete="email" required
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50" placeholder="admin@hospital.com" />
+            </div>
+            <div>
+                <label for="admin-password" class="block text-sm font-medium text-gray-700">Contraseña</label>
+                <input id="admin-password" name="password" type="password" autocomplete="current-password" required
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50" />
+            </div>
+            <button type="submit" class="btn-primary w-full">Iniciar Sesión como Administrador</button>
+        </form>
+    </section>
+
+    {{-- Links adicionales --}}
+    <nav class="mt-10 flex justify-center gap-6 text-sm text-indigo-200" aria-label="Enlaces de navegación">
+        <a href="{{ route('register') }}" class="btn-secondary px-5 py-2 rounded-full hover:underline focus:outline-none focus:ring-2 focus:ring-cyan-400" tabindex="0">
+            Crear Cuenta
+        </a>
+        <a href="{{ url('/') }}" class="btn-secondary px-5 py-2 rounded-full hover:underline focus:outline-none focus:ring-2 focus:ring-cyan-400" tabindex="0">
+            Volver al Inicio
+        </a>
+    </nav>
+
+    {{-- Footer --}}
+    <footer class="mt-14 text-indigo-100 text-xs text-center" aria-label="Versión de software">
+        Laravel v{{ Illuminate\Foundation\Application::VERSION }} &nbsp;&bull;&nbsp; PHP v{{ PHP_VERSION }}
+    </footer>
+</div>
+
+<script>
+    // Funcionalidad tabs accesible y simple
+    const tabs = document.querySelectorAll('.tab-button');
+    const panels = document.querySelectorAll('[role="tabpanel"]');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            // Quitar activo y aria-selected a todos
+            tabs.forEach(t => {
+                t.classList.remove('active');
+                t.setAttribute('aria-selected', 'false');
+                t.setAttribute('tabindex', '-1');
+            });
+            // Esconder todos los paneles
+            panels.forEach(p => p.hidden = true);
+
+            // Activar clicked tab y panel relacionado
+            tab.classList.add('active');
+            tab.setAttribute('aria-selected', 'true');
+            tab.setAttribute('tabindex', '0');
+            const panel = document.getElementById('panel-' + tab.id.split('-')[1]);
+            panel.hidden = false;
+            panel.focus();
+        });
+    });
+</script>
+
+</body>
+</html>

@@ -9,6 +9,7 @@ class Paciente extends Model
 {
     protected $table = 'pacientes'; 
     protected $primaryKey = 'idPaciente';
+    protected $fillable = ['idPaciente', 'fechaNacimiento', 'genero'];
 
     public function usuario()
     {

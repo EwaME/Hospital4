@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('historialClinico', function (Blueprint $table) {
             $table->id('idHistorial');
             $table->unsignedBigInteger('idPaciente');
-            $table->dateTime('fechaActualizacion')->nullable();
             $table->string('resumen', 1000);
             $table->foreign('idPaciente')->references('idPaciente')->on('pacientes');
             $table->timestamps();

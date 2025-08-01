@@ -71,11 +71,11 @@ class DoctoresController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
         $doctor = Doctor::findOrFail($request->get('idDoctor'));
         $doctor->delete();
 
-        return redirect('/doctores');
+        return redirect('/doctores')->with('success', 'Doctor eliminado correctamente.');
     }
 }

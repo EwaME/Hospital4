@@ -15,7 +15,7 @@
         <p class="mb-4 font-semibold">👤 {{ Auth::user()->name }}</p>
 
         <ul class="space-y-2 font-semibold">
-            <li><a href="/" class="block hover:text-blue-500">Inicio</a></li>
+            <li><a href="dashboard" class="block hover:text-blue-500">Inicio</a></li>
             <li><a href="/roles" class="block hover:text-blue-500">Roles</a></li>
             <li><a href="/pacientes" class="block hover:text-blue-500">Pacientes</a></li>
             <li><a href="/doctores" class="block hover:text-blue-500">Doctores</a></li>
@@ -24,6 +24,7 @@
             <li><a href="/enfermedades" class="block hover:text-blue-500">Enfermedades</a></li>
             <li><a href="/citas" class="block hover:text-blue-500">Citas</a></li>
             <li><a href="/consultas" class="block hover:text-blue-500">Consultas</a></li>
+            <li><a href="/consultaMedicamentos" class="block hover:text-blue-500">Consulta Medicamentos</a></li>
             <li><a href="/historialClinico" class="block hover:text-blue-500">Historial Clínico</a></li>
             <li><a href="/bitacoras" class="block hover:text-blue-500">Bitácoras</a></li>
         </ul>
@@ -51,7 +52,7 @@
             </div>
             <div id="menu" class="hidden px-4 pb-4">
                 <ul class="flex flex-col gap-2 font-semibold text-neutral-700 dark:text-neutral-300">
-                    <li><a href="/">Inicio</a></li>
+                    <li><a href="dashboard">Inicio</a></li>
                     <li><a href="/roles">Roles</a></li>
                     <li><a href="/pacientes">Pacientes</a></li>
                     <li><a href="/doctores">Doctores</a></li>
@@ -77,29 +78,31 @@
 
             @php
                 $modulos = [
-                    ['permiso' => 'Ver Bitacoras', 'titulo' => 'Bitácoras', 'emoji' => '📘', 'color' => 'bg-blue-100 dark:bg-blue-900'],
-                    ['permiso' => 'Ver Citas', 'titulo' => 'Citas', 'emoji' => '📅', 'color' => 'bg-yellow-100 dark:bg-yellow-900'],
-                    ['permiso' => 'Ver Consultas', 'titulo' => 'Consultas', 'emoji' => '🩺', 'color' => 'bg-green-100 dark:bg-green-900'],
-                    ['permiso' => 'Ver Doctores', 'titulo' => 'Doctores', 'emoji' => '👨‍⚕️', 'color' => 'bg-purple-100 dark:bg-purple-900'],
-                    ['permiso' => 'Ver Historiales', 'titulo' => 'Historiales', 'emoji' => '📄', 'color' => 'bg-indigo-100 dark:bg-indigo-900'],
-                    ['permiso' => 'Ver Pacientes', 'titulo' => 'Pacientes', 'emoji' => '🧑‍🤝‍🧑', 'color' => 'bg-pink-100 dark:bg-pink-900'],
-                    ['permiso' => 'Ver Roles', 'titulo' => 'Roles', 'emoji' => '🛡️', 'color' => 'bg-red-100 dark:bg-red-900'],
-                    ['permiso' => 'Ver Usuarios', 'titulo' => 'Usuarios', 'emoji' => '👥', 'color' => 'bg-teal-100 dark:bg-teal-900'],
-                    ['permiso' => 'Ver Enfermedades', 'titulo' => 'Enfermedades', 'emoji' => '🦠', 'color' => 'bg-orange-100 dark:bg-orange-900'],
-                    ['permiso' => 'Ver Medicamentos', 'titulo' => 'Medicamentos', 'emoji' => '💊', 'color' => 'bg-fuchsia-100 dark:bg-fuchsia-900'],
-                    ['permiso' => 'Ver ConsultaMedicamentos', 'titulo' => 'Consulta Medicamentos', 'emoji' => '📋', 'color' => 'bg-cyan-100 dark:bg-cyan-900'],
+                    ['permiso' => 'Ver Bitacoras', 'titulo' => 'Bitácoras', 'emoji' => '📘', 'color' => 'bg-blue-100 dark:bg-blue-900', 'ruta' => '/bitacoras'],
+                    ['permiso' => 'Ver Citas', 'titulo' => 'Citas', 'emoji' => '📅', 'color' => 'bg-yellow-100 dark:bg-yellow-900', 'ruta' => '/citas'],
+                    ['permiso' => 'Ver Consultas', 'titulo' => 'Consultas', 'emoji' => '🩺', 'color' => 'bg-green-100 dark:bg-green-900', 'ruta' => '/consultas'],
+                    ['permiso' => 'Ver Doctores', 'titulo' => 'Doctores', 'emoji' => '👨‍⚕️', 'color' => 'bg-purple-100 dark:bg-purple-900', 'ruta' => '/doctores'],
+                    ['permiso' => 'Ver Historiales', 'titulo' => 'Historiales', 'emoji' => '📄', 'color' => 'bg-indigo-100 dark:bg-indigo-900', 'ruta' => '/historialClinico'],
+                    ['permiso' => 'Ver Pacientes', 'titulo' => 'Pacientes', 'emoji' => '🧑‍🤝‍🧑', 'color' => 'bg-pink-100 dark:bg-pink-900', 'ruta' => '/pacientes'],
+                    ['permiso' => 'Ver Roles', 'titulo' => 'Roles', 'emoji' => '🛡️', 'color' => 'bg-red-100 dark:bg-red-900', 'ruta' => '/roles'],
+                    ['permiso' => 'Ver Usuarios', 'titulo' => 'Usuarios', 'emoji' => '👥', 'color' => 'bg-teal-100 dark:bg-teal-900', 'ruta' => '/usuarios'],
+                    ['permiso' => 'Ver Enfermedades', 'titulo' => 'Enfermedades', 'emoji' => '🦠', 'color' => 'bg-orange-100 dark:bg-orange-900', 'ruta' => '/enfermedades'],
+                    ['permiso' => 'Ver Medicamentos', 'titulo' => 'Medicamentos', 'emoji' => '💊', 'color' => 'bg-fuchsia-100 dark:bg-fuchsia-900', 'ruta' => '/medicamentos'],
+                    ['permiso' => 'Ver ConsultaMedicamentos', 'titulo' => 'Consulta Medicamentos', 'emoji' => '📋', 'color' => 'bg-cyan-100 dark:bg-cyan-900', 'ruta' => '/consultaMedicamentos'],
                 ];
             @endphp
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 @foreach ($modulos as $modulo)
                     @can($modulo['permiso'])
-                        <div class="rounded-2xl {{ $modulo['color'] }} p-6 shadow-xl hover:scale-105 transition-all duration-300 ease-in-out cursor-pointer">
-                            <div class="flex flex-col items-center justify-center gap-4 text-center">
-                                <div class="text-7xl">{{ $modulo['emoji'] }}</div>
-                                <div class="text-2xl font-bold">{{ $modulo['titulo'] }}</div>
+                        <a href="{{ $modulo['ruta'] }}">
+                            <div class="rounded-2xl {{ $modulo['color'] }} p-6 shadow-xl hover:scale-105 transition-all duration-300 ease-in-out cursor-pointer">
+                                <div class="flex flex-col items-center justify-center gap-4 text-center">
+                                    <div class="text-7xl">{{ $modulo['emoji'] }}</div>
+                                    <div class="text-2xl font-bold">{{ $modulo['titulo'] }}</div>
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     @endcan
                 @endforeach
             </div>

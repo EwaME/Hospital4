@@ -26,6 +26,7 @@
         <thead>
             <tr>
                 <th>Nombre Rol</th>
+                <th>Permisos</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -34,16 +35,23 @@
             <tr>
                 <td>{{ $rol->name }}</td>
                 <td>
-                <button class="btn btn-secondary editar"
-                    data-bs-toggle="modal" data-bs-target="#modalEditarRol"
-                    data-id="{{ $rol->idRol }}"
-                    data-nombrerol="{{ $rol->nombreRol }}">
-                    <i class="fas fa-edit"></i> Editar</button>
-                <button class="btn btn-danger eliminar"
-                    data-bs-toggle="modal" data-bs-target="#modalEliminarRol"
-                    data-id="{{ $rol->idRol }}"
-                    data-nombrerol="{{ $rol->nombreRol }}">
-                    <i class="fas fa-trash"></i> Eliminar</button>
+                    @foreach($rol->permissions as $permiso)
+                        <span class="badge bg-info text-dark">{{ $permiso->name }}</span>
+                    @endforeach
+                </td>
+                <td>
+                    <button class="btn btn-secondary editar"
+                        data-bs-toggle="modal" data-bs-target="#modalEditarRol"
+                        data-id="{{ $rol->id }}"
+                        data-nombrerol="{{ $rol->name }}">
+                        <i class="fas fa-edit"></i> Editar
+                    </button>
+                    <button class="btn btn-danger eliminar"
+                        data-bs-toggle="modal" data-bs-target="#modalEliminarRol"
+                        data-id="{{ $rol->id }}"
+                        data-nombre="{{ $rol->name }}">
+                        <i class="fas fa-trash"></i> Eliminar
+                    </button>
                 </td>
             </tr>
             @endforeach
@@ -63,6 +71,14 @@
             <label class="form-label">Nombre del Rol</label>
             <input type="text" name="nombreRol" class="form-control" required>
             </div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Permisos</label>
+            <select name="permisos[]" class="form-select select2" multiple required>
+                @foreach($permisos as $permiso)
+                    <option value="{{ $permiso->name }}">{{ $permiso->name }}</option>
+                @endforeach
+            </select>
         </div>
         <div class="modal-footer">
             <button class="btn btn-success" type="submit">Guardar</button>
@@ -85,6 +101,14 @@
             <label class="form-label">Nombre del Rol</label>
             <input type="text" name="nombreRol" id="edit_nombreRol" class="form-control" required>
             </div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Permisos</label>
+            <select name="permisos[]" id="edit_permisos" class="form-select select2" multiple required>
+                @foreach($permisos as $permiso)
+                    <option value="{{ $permiso->name }}">{{ $permiso->name }}</option>
+                @endforeach
+            </select>
         </div>
         <div class="modal-footer">
             <button class="btn btn-primary" type="submit">Actualizar</button>
@@ -114,24 +138,31 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         $('.editar').on('click', function () {
-        let id = $(this).data('id');
-        let nombrerol = $(this).data('nombrerol');
-
-        $('#edit_idRol').val(id);
-        $('#edit_nombreRol').val(nombrerol);
-
-        document.getElementById('modalEditarRol').action = '/roles/editar';
-    });
-
-    $('.eliminar').on('click', function () {
-        let id = $(this).data('id');
-        let nombrerol = $(this).data('nombrerol');
-
-        $('#delete_idRol').val(id);
-        $('#delete_nombreRol_text').text(nombrerol);
+            let id = $(this).data('id');
+            let nombrerol = $(this).data('nombrerol');
+            $('#edit_idRol').val(id);
+            $('#edit_nombreRol').val(nombrerol);
+            $.get('/roles/permisos/' + id, function (data) {
+            $('#edit_permisos').val(data).trigger('change');
+            });
+        });
+        $('.eliminar').on('click', function () {
+            const idRol = $(this).data('id');
+            const nombreRol = $(this).data('nombre');
+            $('#delete_idRol').val(idRol);
+            $('#delete_nombreRol_text').text(nombreRol); 
+        });
+        $('.select2').select2({
+            width: '100%',
+            dropdownParent: $('#modalCrearRol')
+        });
+        $('#edit_permisos').select2({
+            width: '100%',
+            dropdownParent: $('#modalEditarRol')
         });
     });
 </script>
@@ -147,7 +178,7 @@
 
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
         <ul class="navbar-nav ms-auto">
-            <li class="nav-item"><a class="nav-link" href="/">Inicio</a></li>
+            <li class="nav-item"><a class="nav-link" href="dashboard">Inicio</a></li>
             <li class="nav-item"><a class="nav-link active" href="/roles">Roles</a></li>
             <li class="nav-item"><a class="nav-link" href="/pacientes">Pacientes</a></li>
             <li class="nav-item"><a class="nav-link" href="/doctores">Doctores</a></li>
@@ -156,6 +187,7 @@
             <li class="nav-item"><a class="nav-link" href="/enfermedades">Enfermedades</a></li>
             <li class="nav-item"><a class="nav-link" href="/citas">Citas</a></li>
             <li class="nav-item"><a class="nav-link" href="/consultas">Consultas</a></li>
+            <li class="nav-item"><a class="nav-link" href="/consultaMedicamentos">Consulta Medicamentos</a></li>
             <li class="nav-item"><a class="nav-link" href="/historialClinico">Historial Clínico</a></li>
             <li class="nav-item"><a class="nav-link" href="/bitacoras">Bitácoras</a></li>
         </ul>

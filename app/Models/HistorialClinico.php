@@ -13,4 +13,5 @@ class HistorialClinico extends Model
     protected $casts = [
     'fechaActualizacion' => 'datetime',
     ];
+    public $timestamps = true;
 }

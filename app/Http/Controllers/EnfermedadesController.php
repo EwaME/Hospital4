@@ -10,7 +10,7 @@ class EnfermedadesController extends Controller
     public function index()
     {
         $listaEnfermedades = Enfermedad::all();
-        return view('vistas.Enfermedad')->with('listaEnfermedades', $listaEnfermedades);
+        return view('vistas.enfermedad')->with('listaEnfermedades', $listaEnfermedades);
     }
 
     public function store(Request $request)
@@ -26,8 +26,8 @@ class EnfermedadesController extends Controller
     public function update(Request $request, $id)
     {
         $enfermedad = Enfermedad::find($id);
-        $enfermedad->nombre = $request->get('nombreU');
-        $enfermedad->descripcion = $request->get('descripcionU');
+        $enfermedad->nombre = $request->get('nombreEditar');
+        $enfermedad->descripcion = $request->get('descripcionEditar');
         $enfermedad->save();
 
         return redirect('/enfermedades');

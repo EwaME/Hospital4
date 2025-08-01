@@ -16,33 +16,6 @@
     </style>
   </head>
   <body>
-    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#">Gestión de Datos</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-          data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
-          aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item"><a class="nav-link" href="/">Inicio</a></li>
-            <li class="nav-item"><a class="nav-link" href="/roles">Roles</a></li>
-            <li class="nav-item"><a class="nav-link" href="/pacientes">Pacientes</a></li>
-            <li class="nav-item"><a class="nav-link" href="/doctores">Doctores</a></li>
-            <li class="nav-item"><a class="nav-link" href="/usuarios">Usuarios</a></li>
-            <li class="nav-item"><a class="nav-link" href="/medicamentos">Medicamentos</a></li>
-            <li class="nav-item"><a class="nav-link active" href="/enfermedades">Enfermedades</a></li>
-            <li class="nav-item"><a class="nav-link" href="/citas">Citas</a></li>
-            <li class="nav-item"><a class="nav-link" href="/consultas">Consultas</a></li>
-            <li class="nav-item"><a class="nav-link" href="/historialClinico">Historial Clínico</a></li>
-            <li class="nav-item"><a class="nav-link" href="/bitacoras">Bitácoras</a></li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-
     <div class="container mt-5 pt-5">
       <h1>Lista de Enfermedades</h1>
 
@@ -88,7 +61,7 @@
     <!-- Modal CREAR -->
     <div class="modal fade" id="mCrearEnfermedad" tabindex="-1">
       <div class="modal-dialog">
-        <form id="formCrear" action="/enfermedades/create" method="POST">
+        <form id="formCrear" action="/enfermedades" method="POST">
           @csrf
           <div class="modal-content">
             <div class="modal-header">
@@ -218,5 +191,34 @@
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+  
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Gestión de Datos</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+          data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+          aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="dashboard">Inicio</a></li>
+            <li class="nav-item"><a class="nav-link" href="/roles">Roles</a></li>
+            <li class="nav-item"><a class="nav-link" href="/pacientes">Pacientes</a></li>
+            <li class="nav-item"><a class="nav-link" href="/doctores">Doctores</a></li>
+            <li class="nav-item"><a class="nav-link" href="/usuarios">Usuarios</a></li>
+            <li class="nav-item"><a class="nav-link" href="/medicamentos">Medicamentos</a></li>
+            <li class="nav-item"><a class="nav-link active" href="/enfermedades">Enfermedades</a></li>
+            <li class="nav-item"><a class="nav-link" href="/citas">Citas</a></li>
+            <li class="nav-item"><a class="nav-link" href="/consultas">Consultas</a></li>
+            <li class="nav-item"><a class="nav-link" href="/consultaMedicamentos">Consulta Medicamentos</a></li>
+            <li class="nav-item"><a class="nav-link" href="/historialClinico">Historial Clínico</a></li>
+            <li class="nav-item"><a class="nav-link" href="/bitacoras">Bitácoras</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
   </body>
 </html>

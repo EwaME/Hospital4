@@ -4,14 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\Rol;
+use Spatie\Permission\Models\Role;
 
 class UsuariosController extends Controller
 {
     public function index()
     {
         $usuarios = User::with('rol')->get();
-        $roles = Rol::all();
+        $roles = Role::all();
         return view('vistas.usuarios', compact('usuarios', 'roles'));
     }
 
@@ -31,6 +31,20 @@ class UsuariosController extends Controller
         $usuario->idRol = $request->idRol;
         $usuario->save();
 
+        $rolNombre = \Spatie\Permission\Models\Role::find($usuario->idRol)->name;
+        if ($rolNombre === 'Paciente') {
+            \App\Models\Paciente::create([
+                'idPaciente' => $usuario->id,
+                'fechaNacimiento' => $request->fechaNacimiento ?? '2000-01-01',
+                'genero' => $request->genero ?? 'No especificado',
+            ]);
+        } elseif ($rolNombre === 'Doctor') {
+            \App\Models\Doctor::create([
+                'idDoctor' => $usuario->id,
+                'especialidad' => $request->especialidad ?? 'General',
+            ]);
+        }
+
         return redirect('/usuarios');
     }
 
@@ -46,7 +60,7 @@ class UsuariosController extends Controller
 
     public function update(Request $request)
     {
-        $usuario = User::findOrFail($request->idUsuario);
+        $usuario = User::findOrFail($request->id);
         $usuario->nombre = $request->nombre;
         $usuario->usuario = $request->usuario;
         $usuario->email = $request->email;
@@ -62,7 +76,7 @@ class UsuariosController extends Controller
 
     public function destroy(Request $request)
     {
-        $usuario = User::findOrFail($request->get('idUsuario'));
+        $usuario = User::findOrFail($request->get('id'));
         $usuario->delete();
         return redirect('/usuarios');
     }

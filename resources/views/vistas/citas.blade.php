@@ -10,33 +10,6 @@
 </head>
 
 <body>
-<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">Gestión de Datos</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-        data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
-        aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-            <li class="nav-item"><a class="nav-link" href="/">Inicio</a></li>
-            <li class="nav-item"><a class="nav-link" href="/roles">Roles</a></li>
-            <li class="nav-item"><a class="nav-link" href="/pacientes">Pacientes</a></li>
-            <li class="nav-item"><a class="nav-link" href="/doctores">Doctores</a></li>
-            <li class="nav-item"><a class="nav-link" href="/usuarios">Usuarios</a></li>
-            <li class="nav-item"><a class="nav-link" href="/medicamentos">Medicamentos</a></li>
-            <li class="nav-item"><a class="nav-link" href="/enfermedades">Enfermedades</a></li>
-            <li class="nav-item"><a class="nav-link active" href="/citas">Citas</a></li>
-            <li class="nav-item"><a class="nav-link" href="/consultas">Consultas</a></li>
-            <li class="nav-item"><a class="nav-link" href="/historialClinico">Historial Clínico</a></li>
-            <li class="nav-item"><a class="nav-link" href="/bitacoras">Bitácoras</a></li>
-        </ul>
-        </div>
-    </div>
-</nav>
-
 <div class="container mt-5 pt-5">
     <h1 class="text-center mb-4">Gestión de Citas</h1>
 
@@ -118,13 +91,34 @@
                     <label>Fecha</label>
                     <input type="date" name="fechaCita" class="form-control" required>
                 </div>
-                <div class="mb-3">
-                    <label>Hora</label>
-                    <input type="time" name="horaCita" class="form-control" required>
-                </div>
+                <select name="horaCita" class="form-control" required>
+                    <option value="">Selecciona una hora</option>
+                    <option value="08:00:00">07:30</option>
+                    <option value="08:00:00">08:00</option>
+                    <option value="08:30:00">08:30</option>
+                    <option value="09:00:00">09:00</option>
+                    <option value="09:30:00">09:30</option>
+                    <option value="10:00:00">10:00</option>
+                    <option value="10:30:00">10:30</option>
+                    <option value="11:00:00">11:00</option>
+                    <option value="11:30:00">11:30</option>
+                    <option value="13:00:00">13:00</option>
+                    <option value="13:30:00">13:30</option>
+                    <option value="14:00:00">14:00</option>
+                    <option value="14:30:00">14:30</option>
+                    <option value="15:00:00">15:00</option>
+                    <option value="15:30:00">15:30</option>
+                    <option value="16:00:00">16:00</option>
+                    <option value="16:30:00">16:30</option>
+                </select>
                 <div class="mb-3">
                     <label>Estado</label>
-                    <input type="text" name="estadoCita" class="form-control" required>
+                    <select name="estadoCita" class="form-control" required>
+                        <option value="Pendiente">Pendiente</option>
+                        <option value="Confirmada">Confirmada</option>
+                        <option value="Cancelada">Cancelada</option>
+                        <option value="Finalizada">Finalizada</option>
+                    </select>
                 </div>
             </div>
             <div class="modal-footer">
@@ -164,13 +158,34 @@
                     <label>Fecha</label>
                     <input type="date" name="fechaCita" id="edit_fechaCita" class="form-control" required>
                 </div>
-                <div class="mb-3">
-                    <label>Hora</label>
-                    <input type="time" name="horaCita" id="edit_horaCita" class="form-control" required>
-                </div>
+                <select name="horaCita" id="edit_horaCita" class="form-control" required>
+                    <option value="">Selecciona una hora</option>
+                    <option value="08:00:00">07:30</option>
+                    <option value="08:00:00">08:00</option>
+                    <option value="08:30:00">08:30</option>
+                    <option value="09:00:00">09:00</option>
+                    <option value="09:30:00">09:30</option>
+                    <option value="10:00:00">10:00</option>
+                    <option value="10:30:00">10:30</option>
+                    <option value="11:00:00">11:00</option>
+                    <option value="11:30:00">11:30</option>
+                    <option value="13:00:00">13:00</option>
+                    <option value="13:30:00">13:30</option>
+                    <option value="14:00:00">14:00</option>
+                    <option value="14:30:00">14:30</option>
+                    <option value="15:00:00">15:00</option>
+                    <option value="15:30:00">15:30</option>
+                    <option value="16:00:00">16:00</option>
+                    <option value="16:30:00">16:30</option>
+                </select>
                 <div class="mb-3">
                     <label>Estado</label>
-                    <input type="text" name="estadoCita" id="edit_estadoCita" class="form-control" required>
+                    <select name="estadoCita" id="edit_estadoCita" class="form-control" required>
+                        <option value="Pendiente">Pendiente</option>
+                        <option value="Confirmada">Confirmada</option>
+                        <option value="Cancelada">Cancelada</option>
+                        <option value="Finalizada">Finalizada</option>
+                    </select>
                 </div>
             </div>
             <div class="modal-footer">
@@ -217,5 +232,34 @@
         });
     });
 </script>
+
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Gestión de Datos</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+        data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+        aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="dashboard">Inicio</a></li>
+            <li class="nav-item"><a class="nav-link" href="/roles">Roles</a></li>
+            <li class="nav-item"><a class="nav-link" href="/pacientes">Pacientes</a></li>
+            <li class="nav-item"><a class="nav-link" href="/doctores">Doctores</a></li>
+            <li class="nav-item"><a class="nav-link" href="/usuarios">Usuarios</a></li>
+            <li class="nav-item"><a class="nav-link" href="/medicamentos">Medicamentos</a></li>
+            <li class="nav-item"><a class="nav-link" href="/enfermedades">Enfermedades</a></li>
+            <li class="nav-item"><a class="nav-link active" href="/citas">Citas</a></li>
+            <li class="nav-item"><a class="nav-link" href="/consultas">Consultas</a></li>
+            <li class="nav-item"><a class="nav-link" href="/consultaMedicamentos">Consulta Medicamentos</a></li>
+            <li class="nav-item"><a class="nav-link" href="/historialClinico">Historial Clínico</a></li>
+            <li class="nav-item"><a class="nav-link" href="/bitacoras">Bitácoras</a></li>
+        </ul>
+        </div>
+    </div>
+</nav>
+
 </body>
 </html>

@@ -81,6 +81,7 @@
 
             <flux:spacer />
 
+            @if(auth()->check())
             <flux:dropdown position="top" align="end">
                 <flux:profile
                     :initials="auth()->user()->initials()"
@@ -123,6 +124,7 @@
                     </form>
                 </flux:menu>
             </flux:dropdown>
+            @endif
         </flux:header>
 
         {{ $slot }}

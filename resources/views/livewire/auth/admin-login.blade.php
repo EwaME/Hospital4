@@ -11,10 +11,7 @@ use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
 use Livewire\Volt\Component;
 
-// NOTA: Si usas Blade y Livewire a la antigua, puedes pasar esto a un componente .php y .blade.php
 new #[Layout('components.layouts.auth')] class extends Component {
-    public string $tipoUsuario = 'paciente'; // paciente por defecto
-
     #[Validate('required|string|email')]
     public string $email = '';
 
@@ -37,14 +34,11 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
         $user = Auth::user();
 
-        // Validamos el tipo de usuario según el rol
-        if (
-            ($this->tipoUsuario === 'paciente' && $user->idRol !== 2) ||
-            ($this->tipoUsuario === 'doctor' && $user->idRol !== 3)
-        ) {
+        // Permitir solo admin (idRol == 1)
+        if ($user->idRol !== 1) {
             Auth::logout();
             throw ValidationException::withMessages([
-                'email' => 'Las credenciales no corresponden al tipo de usuario seleccionado.',
+                'email' => 'Las credenciales no corresponden a un administrador.',
             ]);
         }
 
@@ -74,6 +68,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
     }
 };
 ?>
+
 
 <div class="login-bg min-h-screen flex items-center justify-center">
     <style>
@@ -182,7 +177,6 @@ new #[Layout('components.layouts.auth')] class extends Component {
             border-color: #00509e;
             box-shadow: 0 2px 8px #00509e15;
         }
-        /* Botón principal animado */
         .flux\:button, button[type="submit"] {
             transition: transform 0.18s, box-shadow 0.18s;
         }
@@ -241,51 +235,35 @@ new #[Layout('components.layouts.auth')] class extends Component {
         }
 
         a.button, a.flux\:button {
-            color: #fff !important;
+            color: #ffffff !important;
         }
 
-        .custom-tab-button-active {
+        .custom-tab-button-active,.flux\:button, button[type="submit"]  {
             color: #ffffffff !important;
+        }
+        .flux\:button, button[type="submit"] {
+            color: #ffffff !important;
         }
 
     </style>
     <div class="login-glass w-full max-w-md mx-auto rounded-2xl shadow-2xl p-8 flex flex-col gap-8 animate-fade-in-up">
         <div class="flex flex-col items-center gap-2 mb-6 animate-pop">
-            <div class="w-16 h-16 rounded-full bg-gradient-to-br from-blue-400 to-blue-900 flex items-center justify-center shadow-lg mb-1 animate-bounce">
+            <div class="w-16 h-16 rounded-full bg-gradient-to-br from-red-400 to-red-900 flex items-center justify-center shadow-lg mb-1 animate-bounce">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" viewBox="0 0 20 20" fill="currentColor">
                     <path d="M9 2a7 7 0 017 7v1h1a1 1 0 110 2h-1v1a7 7 0 11-14 0v-1H1a1 1 0 110-2h1V9a7 7 0 017-7z" />
                 </svg>
             </div>
-            <h1 class="text-3xl font-extrabold tracking-tight text-[#003366] drop-shadow animate-fade-in">Hospital EKO</h1>
+            <h1 class="text-3xl font-extrabold tracking-tight text-[#c92a2a] drop-shadow animate-fade-in">Panel Admin</h1>
         </div>
         
-    <x-auth-header :title="__('Iniciar sesión')" :description="__('Selecciona tu tipo de usuario.')" />
-    
-    <div class="flex justify-center gap-6 mb-4"></div>
-    <div x-data="{ tipo: 'paciente' }" x-init="$watch('tipo', value => $wire.tipoUsuario = value)">
-        <div class="flex justify-center gap-6 mb-4">
-            <button type="button" @click="tipo = 'paciente'"
-                :class="tipo === 'paciente' ? 'custom-tab-button custom-tab-button-active' : 'custom-tab-button'">
-                Paciente
-            </button>
-            <button type="button" @click="tipo = 'doctor'"
-                :class="tipo === 'doctor' ? 'custom-tab-button custom-tab-button-active' : 'custom-tab-button'">
-                Doctor
-            </button>
+        <!-- Mensaje de bienvenida solo para admins -->
+        <div class="mb-2 text-center animate-fade-in" style="color:#c92a2a;">
+            ¡Bienvenido, administrador! Ingresa con tus credenciales para acceder al panel de gestión del sistema.
         </div>
 
-        <div class="mb-2 text-center animate-fade-in" x-show="tipo === 'paciente'">
-            ¡Bienvenido, paciente! Por favor, inicia sesión para gestionar tus citas y consultar tus resultados.
-        </div>
-        <div class="mb-2 text-center animate-fade-in" x-show="tipo === 'doctor'">
-            ¡Bienvenido, doctor! Accede a tu panel para atender a tus pacientes y ver tu agenda médica.
-        </div>
-
-        <!-- Session Status -->
         <x-auth-session-status class="text-center" :status="session('status')" />
 
         <form wire:submit.prevent="login" class="flex flex-col gap-6">
-            <!-- Email Address -->
             <flux:input
                 wire:model.defer="email"
                 :label="__('Correo electrónico')"
@@ -293,12 +271,11 @@ new #[Layout('components.layouts.auth')] class extends Component {
                 required
                 autofocus
                 autocomplete="email"
-                placeholder="email@example.com"
-                label-classes="!text-[#003366] !font-semibold"
-                input-classes="!text-[#003366]"
+                placeholder="admin@example.com"
+                label-classes="!text-[#c92a2a] !font-semibold"
+                input-classes="!text-[#c92a2a]"
             />
 
-            <!-- Password -->
             <div class="relative">
                 <flux:input
                     wire:model.defer="password"
@@ -317,7 +294,6 @@ new #[Layout('components.layouts.auth')] class extends Component {
                 @endif
             </div>
 
-            <!-- Remember Me -->
             <flux:checkbox wire:model.defer="remember" :label="__('Recordarme')" />
 
             <div class="flex items-center justify-end">
@@ -325,13 +301,4 @@ new #[Layout('components.layouts.auth')] class extends Component {
             </div>
         </form>
     </div>
-
-    @if (Route::has('register'))
-        <div class="space-x-1 rtl:space-x-reverse text-center text-sm text-zinc-600 dark:text-zinc-400">
-            <span>{{ __('¿No tienes cuenta?') }}</span>
-            <flux:link :href="route('register')" wire:navigate>{{ __('Registrarse') }}</flux:link>
-        </div>
-    @endif
 </div>
-
-

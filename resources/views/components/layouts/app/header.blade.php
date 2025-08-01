@@ -43,7 +43,7 @@
                 </flux:tooltip>
             </flux:navbar>
 
-            <!-- Desktop User Menu -->
+            @if(auth()->check())
             <flux:dropdown position="top" align="end">
                 <flux:profile
                     class="cursor-pointer"
@@ -86,6 +86,7 @@
                     </form>
                 </flux:menu>
             </flux:dropdown>
+            @endif
         </flux:header>
 
         <!-- Mobile Menu -->

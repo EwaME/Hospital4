@@ -117,7 +117,7 @@
                     <li class="nav-item"><a class="nav-link" href="#servicios"><i class="fas fa-stethoscope"></i>Servicios</a></li>
                     <li class="nav-item"><a class="nav-link" href="#testimonios"><i class="fas fa-users"></i>Testimonios</a></li>
                     <li class="nav-item"><a class="nav-link" href="#contacto"><i class="fas fa-envelope"></i>Contacto</a></li>
-                    <li class="nav-item"><a class="nav-link btn btn-outline-light ms-2" href="/login"><i class="fas fa-sign-in-alt"></i> Iniciar Sesión</a></li>
+                    <li class="nav-item"><a class="nav-link btn btn-outline-light ms-2" href="/login"><i class="fas fa-sign-in-alt"></i>Iniciar Sesión</a></li>
                 </ul>
             </div>
         </div>
@@ -127,7 +127,7 @@
         <div class="container text-center" data-sr>
             <h1>Bienvenido al Hospital Central EKO</h1>
             <p>Un lugar donde el cuidado médico y la calidez humana se encuentran para sanar vidas, grandes y pequeñas.</p>
-            <a href="/login" class="btn btn-lg">Iniciar Sesión</a>
+            <a href="/login" class="btn btn-lg">Agendar una cita</a>
         </div>
     </header>
 
@@ -293,5 +293,6 @@
             reset: false
         });
     </script>
+
 </body>
 </html>

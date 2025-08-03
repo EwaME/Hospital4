@@ -38,7 +38,7 @@ class RolesController extends Controller
         ]);
 
         // Crear rol con el campo 'name'
-        $rol = Role::create(['name' => $request->nombreRol]);
+        $rol = Role::create(['name' => strtoupper($request->nombreRol)]); // <-- validación aplicada
 
         // Sincronizar permisos con array de nombres o IDs
         $rol->syncPermissions($request->permisos);
@@ -74,7 +74,7 @@ class RolesController extends Controller
         ]);
 
         $rol = Role::findOrFail($request->idRol);
-        $rol->name = $request->nombreRol;
+        $rol->name = strtoupper($request->nombreRol); // <-- validación aplicada
         $rol->save();
 
         $rol->syncPermissions($request->permisos);

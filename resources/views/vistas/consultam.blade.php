@@ -6,12 +6,27 @@
     <title>Sistema de Consulta Medicamentos</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <style>
       .error-message {
         color: red;
         font-size: 0.875em;
         margin-top: 0.25rem;
         display: none;
+      }
+      .alert-custom {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+        min-width: 300px;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        animation: slideIn 0.3s ease-out;
+      }
+      @keyframes slideIn {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
       }
     </style>
   </head>
@@ -160,6 +175,37 @@
 
 <script>
   $(document).ready(function () {
+    // Función para mostrar alertas bonitas
+    function showAlert(message, type = 'warning') {
+      const alertTypes = {
+        'warning': 'alert-warning',
+        'success': 'alert-success',
+        'danger': 'alert-danger',
+        'info': 'alert-info'
+      };
+      
+      const icons = {
+        'warning': 'fa-exclamation-triangle',
+        'success': 'fa-check-circle',
+        'danger': 'fa-times-circle',
+        'info': 'fa-info-circle'
+      };
+      
+      const alert = $(`
+        <div class="alert ${alertTypes[type]} alert-dismissible fade show alert-custom" role="alert">
+          <i class="fas ${icons[type]} me-2"></i>
+          ${message}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      `);
+      
+      $('body').append(alert);
+      
+      setTimeout(() => {
+        alert.alert('close');
+      }, 4000);
+    }
+
     // Cuando presionas "Editar", llena el modal con los datos de la fila
     $('.ejecutar').on('click', function () {
       let id = $(this).data('id');
@@ -210,7 +256,7 @@
                   /^[0-9]+$/.test($('#cantidad').val()) && $('#cantidad').val() > 0;
       if (!valid) {
         e.preventDefault();
-        alert('Por favor llena todos los campos con números válidos. Gracias mi bro :=)');
+        showAlert('⚠️ Por favor completa todos los campos con valores válidos antes de continuar.', 'warning');
       }
     });
 
@@ -221,13 +267,13 @@
                   /^[0-9]+$/.test($('#cantidadU').val()) && $('#cantidadU').val() > 0;
       if (!valid) {
         e.preventDefault();
-        alert('Por favor llena todos los campos con números válidos. Gracias mi bro :=)');
+        showAlert('⚠️ Por favor completa todos los campos con valores válidos antes de continuar.', 'warning');
       }
     });
 
     // Confirmación al eliminar
     $('#miFormE').on('submit', function (e) {
-      if (!confirm('¿Estás seguro de que deseas eliminar este registro, bro?')) {
+      if (!confirm('¿Estás seguro de que deseas eliminar este registro?')) {
         e.preventDefault();
       }
     });

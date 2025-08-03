@@ -62,7 +62,7 @@ class BitacorasController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        // 
     }
 
     public static function registrar($idUsuario, $accion, $descripcion)

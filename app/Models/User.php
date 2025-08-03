@@ -42,9 +42,18 @@ class User extends Authenticatable
             ->implode('');
     }
 
-    // ✅ RELACIÓN CORRECTA
     public function rol()
     {
         return $this->belongsTo(Rol::class, 'idRol');
+    }
+
+    public function paciente()
+    {
+        return $this->hasOne(Paciente::class, 'idPaciente', 'id');
+    }
+
+    public function doctor()
+    {
+        return $this->hasOne(Doctor::class, 'idDoctor', 'id');
     }
 }

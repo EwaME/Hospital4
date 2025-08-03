@@ -13,8 +13,29 @@ class PacientesController extends Controller
      */
     public function index()
     {
-        $pacientes = Paciente::with('usuario')->get();
-        $usuarios = User::all();
+        $user = auth()->user();
+
+        if ($user->hasRole('Doctor')) {
+            $doctor = $user->doctor;
+            if ($doctor) {
+                $pacientes = \App\Models\Paciente::whereIn('idPaciente', function($query) use ($doctor) {
+                    $query->select('idPaciente')
+                        ->from('citas')
+                        ->where('idDoctor', $doctor->idDoctor);
+                })->with('usuario')->get();
+            } else {
+                $pacientes = collect();
+            }
+            $usuarios = collect();
+        }
+        elseif ($user->hasRole('Admin')) {
+            $pacientes = \App\Models\Paciente::with('usuario')->get();
+            $usuarios = \App\Models\User::all();
+        }
+        else {
+            $pacientes = collect();
+            $usuarios = collect();
+        }
 
         return view('vistas.pacientes', compact('pacientes', 'usuarios'));
     }
@@ -35,7 +56,7 @@ class PacientesController extends Controller
         $paciente = new Paciente();
         $paciente->idPaciente = $request->get('idPaciente');
         $paciente->fechaNacimiento = $request->get('fechaNacimiento');
-        $paciente->genero = $request->get('genero');
+        $paciente->genero = strtoupper ($request->get('genero'));
         $paciente->save();
 
         return redirect('/pacientes');
@@ -64,7 +85,7 @@ class PacientesController extends Controller
     {
         $paciente = Paciente::findOrFail($request->get('idPaciente'));
         $paciente->fechaNacimiento = $request->get('fechaNacimiento');
-        $paciente->genero = $request->get('genero');
+        $paciente->genero = strtoupper ($request->get('genero'));
         $paciente->save();
 
         return redirect('/pacientes');

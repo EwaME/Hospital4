@@ -18,7 +18,7 @@ class ConsultaMedicamentosController extends Controller
         $registro = new ConsultaMedicamento();
         $registro->idConsulta = $request->get('idConsulta');
         $registro->idMedicamento = $request->get('idMedicamento');
-        $registro->cantidad = $request->get('cantidad');
+        $registro->cantidad = strtoupper($request->get('cantidad')); // <-- validación aplicada aquí
         $registro->save();
 
         return redirect('/consultaMedicamentos');
@@ -29,7 +29,7 @@ class ConsultaMedicamentosController extends Controller
         $registro = ConsultaMedicamento::findOrFail($id);
         $registro->idConsulta = $request->get('idConsultaU');
         $registro->idMedicamento = $request->get('idMedicamentoU');
-        $registro->cantidad = $request->get('cantidadU');
+        $registro->cantidad =strtoupper ($request->get('cantidadU'));
         $registro->save();
 
         return redirect('/consultaMedicamentos');

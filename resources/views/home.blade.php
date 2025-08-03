@@ -9,106 +9,187 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background: linear-gradient(to bottom right, #f0f8ff, #e6f2ff);
-            color: #333;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(130deg, #f4fafe 0%, #e9f1fa 100%);
+            color: #20334a;
         }
         .navbar {
-            background-color: #003366;
+            background: linear-gradient(90deg, #00509e 80%, #18b981 100%);
+            box-shadow: 0 3px 16px #00509e22;
         }
         .navbar-brand, .nav-link {
             color: #fff !important;
-            font-weight: 500;
+            font-weight: 600;
+            letter-spacing: .02em;
         }
-        .nav-link i {
-            margin-right: 5px;
+        .navbar-brand i {
+            color: #18b981;
+            margin-right: 8px;
+            font-size: 1.3em;
+        }
+        .nav-link.btn {
+            padding: 0.45em 1.1em !important;
+            border-radius: 2em !important;
+            font-size: 1em;
         }
         .hero {
-            background-color: #fce4ec;
-            height: 60vh;
+            background: linear-gradient(115deg, #f5fafd 65%, #e6f2ff 100%);
+            min-height: 67vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            text-align: center;
-            color: #333;
             position: relative;
+            padding: 0;
+            margin-bottom: 0;
+        }
+        .hero-bg-img {
+            position: absolute;
+            right: 3vw;
+            top: 0;
+            height: 100%;
+            max-width: 54vw;
+            opacity: 0.16;
+            z-index: 1;
+            pointer-events: none;
         }
         .hero > .container {
-            max-width: 500px;
-            background-color: #ffffffcc;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            z-index: 2;
+            background: rgba(255,255,255,0.93);
+            border-radius: 22px;
+            padding: 2.6rem 2.7rem 2.2rem 2.7rem;
+            box-shadow: 0 10px 36px 0 rgba(0, 80, 158, 0.13), 0 2px 12px #00509e13;
+            max-width: 530px;
         }
         .hero h1 {
-            font-size: 2.2rem;
-            font-weight: bold;
-            color: #d81b60;
+            font-size: 2.3rem;
+            font-weight: 800;
+            color: #00509e;
+            letter-spacing: .01em;
         }
-        .hero p {
-            font-size: 1.1rem;
-            color: #555;
+        .hero .lead {
+            font-size: 1.19rem;
+            color: #34506a;
+            font-weight: 500;
         }
-        .hero .btn {
-            margin-top: 15px;
-            background-color: #d81b60;
-            color: white;
+        .hero .btn-main {
+            margin-top: 25px;
+            font-size: 1.17rem;
+            font-weight: 600;
+            background: linear-gradient(92deg, #14996b 40%, #18B981 100%);
+            color: #fff;
             border: none;
+            border-radius: 2em;
+            box-shadow: 0 2px 12px #00509e18;
+            padding: .7em 2.2em;
+            transition: background 0.18s, transform .18s, box-shadow .18s;
         }
-        .hero .btn:hover {
-            background-color: #ad1457;
+        .hero .btn-main:hover {
+            background: linear-gradient(92deg, #0eab78 30%, #16e59d 100%);
+            box-shadow: 0 8px 18px #00509e21;
+            transform: scale(1.045);
         }
         .section-title {
-            color: #003366;
-            font-weight: bold;
+            color: #00509e;
+            font-weight: 800;
+            margin-bottom: 2.2rem;
+            letter-spacing: .02em;
         }
-        .card-icon {
-            font-size: 3rem;
-            color: #007bff;
+        .card-service {
+            border: none;
+            border-radius: 16px;
+            background: #fff;
+            box-shadow: 0 5px 16px #00509e18;
+            transition: transform .22s, box-shadow .22s;
+            padding: 2.2em 1.3em 1.2em 1.3em;
+            min-height: 295px;
+        }
+        .card-service:hover {
+            transform: translateY(-7px) scale(1.025);
+            box-shadow: 0 12px 32px #00509e1c;
+        }
+        .card-service .card-icon {
+            font-size: 2.8rem;
+            color: #18b981;
+            margin-bottom: .7em;
+            text-shadow: 0 2px 14px #18b98123;
+        }
+        .card-service h5 {
+            font-weight: 700;
+            color: #00509e;
         }
         .testimonial {
-            background: linear-gradient(145deg, #e6f2ff, #ffffff);
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
+            background: linear-gradient(120deg, #e6f2ff 70%, #f5fafd 100%);
+            border-radius: 14px;
+            box-shadow: 0 1px 8px #00509e14;
+            padding: 1.6em 1.2em 1.2em 1.4em;
+            font-size: 1.1em;
+            font-style: italic;
+            color: #1976d2;
+            position: relative;
+            margin-bottom: 1.7em;
+            min-height: 120px;
         }
-        .testimonial:hover {
-            transform: scale(1.05);
+        .testimonial strong {
+            color: #14996b;
+            font-style: normal;
         }
-        footer {
-            background-color: #003366;
-            color: white;
-            padding: 2rem 0;
-            text-align: center;
+        .testimonial:before {
+            content: "\f10d";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            top: 20px; left: 14px;
+            color: #14996b34;
+            font-size: 2.3em;
+            z-index: 0;
+        }
+        .carousel-inner img {
+            height: 350px;
+            object-fit: cover;
+            border-radius: 13px;
+        }
+        .contact-section {
+            background: linear-gradient(120deg,#f6fafe 75%, #e6f2ff 100%);
+        }
+        .contact-section h2 {
+            color: #00509e;
+            font-weight: 700;
+        }
+        .contact-section ul li, .contact-section p {
+            color: #34506a;
+        }
+        .list-group-item {
+            border: none;
+            background: transparent;
         }
         .map-container iframe {
             width: 100%;
-            height: 300px;
-            border: none;
-        }
-        .card {
-            transition: transform 0.3s, box-shadow 0.3s;
+            height: 290px;
             border: none;
             border-radius: 15px;
-            background: #ffffff;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 12px #00509e16;
         }
-        .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        footer {
+            background: #003366;
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            letter-spacing: .02em;
+            font-weight: 400;
+            margin-top: 2.8em;
+            box-shadow: 0 -2px 16px #00509e11;
         }
-        .carousel-inner img {
-            height: 400px;
-            object-fit: cover;
-            border-radius: 10px;
+        @media (max-width: 767px) {
+            .hero > .container { padding: 1.3rem 0.7rem; }
+            .carousel-inner img { height: 180px;}
+            .section-title { font-size: 1.4em; }
         }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="#"><i class="fas fa-hospital-symbol me-2"></i>Centro Médico</a>
+            <a class="navbar-brand" href="#"><i class="fas fa-hospital-symbol"></i>Hospital Central EKO</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -124,10 +205,11 @@
     </nav>
 
     <header class="hero py-4">
+        <img src="{{ asset('images/hospital-fachada.jpg') }}" alt="Hospital" class="hero-bg-img d-none d-lg-block">
         <div class="container text-center" data-sr>
             <h1>Bienvenido al Hospital Central EKO</h1>
-            <p>Un lugar donde el cuidado médico y la calidez humana se encuentran para sanar vidas, grandes y pequeñas.</p>
-            <a href="/login" class="btn btn-lg">Agendar una cita</a>
+            <p class="lead">Cuidando la salud de tu familia con tecnología, humanidad y profesionales certificados.</p>
+            <a href="/login" class="btn btn-main shadow">Agendar una cita</a>
         </div>
     </header>
 
@@ -153,82 +235,77 @@
         </button>
     </div>
 
-    <!-- Servicios -->
     <div class="container my-5" id="servicios">
         <h2 class="text-center section-title mb-4">Nuestros Servicios</h2>
         <div class="row text-center">
             <div class="col-md-4 mb-4">
-                <div class="card p-3">
-                    <div class="card-icon mb-2">🩺</div>
+                <div class="card-service">
+                    <div class="card-icon"><i class="fas fa-user-md"></i></div>
                     <h5>Consultas Médicas</h5>
-                    <p>Consulta general y especializada con nuestros médicos certificados.</p>
+                    <p>Consulta general y especializada con médicos certificados y trato humano.</p>
                 </div>
             </div>
             <div class="col-md-4 mb-4">
-                <div class="card p-3">
-                    <div class="card-icon mb-2">💊</div>
-                    <h5>Farmacia</h5>
-                    <p>Medicamentos a precios accesibles con recetas digitales integradas.</p>
+                <div class="card-service">
+                    <div class="card-icon"><i class="fas fa-capsules"></i></div>
+                    <h5>Farmacia Integral</h5>
+                    <p>Medicamentos a precios accesibles, recetas digitales y entrega rápida en hospital.</p>
                 </div>
             </div>
             <div class="col-md-4 mb-4">
-                <div class="card p-3">
-                    <div class="card-icon mb-2">📝</div>
+                <div class="card-service">
+                    <div class="card-icon"><i class="fas fa-notes-medical"></i></div>
                     <h5>Historial Clínico</h5>
-                    <p>Acceso seguro al historial clínico completo de cada paciente.</p>
+                    <p>Acceso seguro a tu historial clínico completo, exámenes y diagnósticos.</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Testimonios -->
     <div class="container my-5" id="testimonios">
         <h2 class="text-center section-title mb-4">Lo que dicen nuestros pacientes</h2>
         <div class="row">
             <div class="col-md-6">
                 <div class="testimonial">
-                    <p>"La atención fue excelente y el sistema me permitió agendar mis citas fácilmente."</p>
-                    <p><strong>- Ana Martínez</strong></p>
+                    "La atención fue excelente y el sistema me permitió agendar mis citas fácilmente."<br>
+                    <strong>- Ana Martínez</strong>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="testimonial">
-                    <p>"Acceder a mi historial clínico y recetas desde casa me ha facilitado mucho la vida."</p>
-                    <p><strong>- José Hernández</strong></p>
+                    "Acceder a mi historial clínico y recetas desde casa me ha facilitado mucho la vida."<br>
+                    <strong>- José Hernández</strong>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Contacto -->
-    <section class="contact-section py-5 bg-light">
+    <section class="contact-section py-5" id="contacto">
         <div class="container">
             <div class="row">
-            <!-- Columna de contacto -->
-            <div class="col-md-6 mb-4" data-sr>
-                <h2>Contáctanos</h2>
-                <p>¿Tienes alguna duda o necesitas una cita? Estamos disponibles para ayudarte.</p>
-                <ul class="list-unstyled">
-                    <li><strong>Teléfono:</strong> +504 3250-5304</li>
-                    <li><strong>Correo:</strong> contacto@hospitalcentral.hn</li>
-                    <li><strong>Dirección:</strong> Tegucigalpa, Honduras</li>
-                </ul>
-            </div>
-
-            <!-- Columna de horarios -->
-            <div class="col-md-6" data-sr>
-                <h2>Horario de Atención</h2>
-                <ul class="list-group">
-                <li class="list-group-item d-flex justify-content-between">
-                    <span>Lunes a Viernes</span><span>7:30am - 5:00pm</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between">
-                    <span>Sábados</span><span>8:00am - 1:00pm</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between">
-                    <span>Emergencias</span><span>24/7</span>
-                </li>
-                </ul>
+                <div class="col-md-6 mb-4" data-sr>
+                    <h2>Contáctanos</h2>
+                    <p>¿Tienes alguna duda o necesitas una cita? Estamos disponibles para ayudarte.</p>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-phone"></i> <strong>+504 3250-5304</strong></li>
+                        <li><i class="fas fa-envelope"></i> <strong>contacto@hospitalcentral.hn</strong></li>
+                        <li><i class="fas fa-map-marker-alt"></i> <strong>Tegucigalpa, Honduras</strong></li>
+                    </ul>
+                </div>
+                <div class="col-md-6" data-sr>
+                    <h2>Horario de Atención</h2>
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Lunes a Viernes</span><span>7:30am - 5:00pm</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Sábados</span><span>8:00am - 1:00pm</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Emergencias</span><span>24/7</span>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </section>
@@ -239,52 +316,24 @@
             <div class="ratio ratio-16x9">
                 <iframe 
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3876.3283348052975!2d-87.20455868534892!3d14.07227519101442!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f6fdc1417d3a4a7%3A0x6b3e0cb1f7a2b3d4!2sHospital%20Escuela!5e0!3m2!1ses!2shn!4v1627580734213!5m2!1ses!2shn" 
-                    width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy">
+                    loading="lazy">
                 </iframe>
             </div>
         </div>
     </div>
 
-    </div>
-
-    
-
-
-    <!-- Footer -->
     <footer>
         <p>&copy; 2025 Centro Médico Hospitalario. Todos los derechos reservados.</p>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        ScrollReveal().reveal('.section-title', { 
-            delay: 200, 
-            origin: 'bottom', 
-            distance: '50px', 
-            duration: 1000 
+        ScrollReveal().reveal('.section-title', { delay: 200, origin: 'bottom', distance: '50px', duration: 1000 });
+        ScrollReveal().reveal('.card-service', { interval: 200, origin: 'bottom', distance: '30px', duration: 900 });
+        ScrollReveal().reveal('.testimonial', { interval: 300, origin: 'left', distance: '50px', duration: 900 });
+        ScrollReveal().reveal('.hero h1, .hero .lead, .hero .btn-main', {
+            interval: 200, distance: '40px', origin: 'top', duration: 1200
         });
-
-        ScrollReveal().reveal('.card', { 
-            interval: 200, 
-            origin: 'bottom', 
-            distance: '30px', 
-            duration: 800 
-        });
-
-        ScrollReveal().reveal('.testimonial', { 
-            interval: 300, 
-            origin: 'left', 
-            distance: '50px', 
-            duration: 1000 
-        });
-
-        ScrollReveal().reveal('.hero h1, .hero p, .hero .btn', {
-            interval: 300,
-            distance: '40px',
-            origin: 'top',
-            duration: 1200
-        });
-
         ScrollReveal().reveal('[data-sr]', {
             duration: 1000,
             distance: '50px',
@@ -293,6 +342,5 @@
             reset: false
         });
     </script>
-
 </body>
 </html>

@@ -34,7 +34,7 @@ class DoctoresController extends Controller
     {
         $doctor = new Doctor();
         $doctor->idDoctor = $request->get('idDoctor');
-        $doctor->especialidad = $request->get('especialidad');
+        $doctor->especialidad = strtoupper($request->get('especialidad')); // <-- validación aplicada aquí
         $doctor->save();
 
         return redirect('/doctores');
@@ -62,7 +62,7 @@ class DoctoresController extends Controller
     public function update(Request $request)
     {
         $doctor = Doctor::findOrFail($request->get('idDoctor'));
-        $doctor->especialidad = $request->get('especialidad');
+        $doctor->especialidad = strtoupper ($request->get('especialidad'));
         $doctor->save();
 
         return redirect('/doctores');

@@ -16,4 +16,8 @@ class Doctor extends Model
         return $this->belongsTo(User::class, 'idDoctor', 'id');
     }
 
+    public function citas()
+    {
+        return $this->hasMany(Cita::class, 'idDoctor', 'idDoctor');
+    }
 }

@@ -19,8 +19,8 @@ class MedicamentosController extends Controller
     public function store(Request $request)
     {
         $medicamento = new Medicamento();
-        $medicamento->nombre = $request->get('nombre');
-        $medicamento->stock = $request->get('stock');
+        $medicamento->nombre = strtoupper ($request->get('nombre'));
+        $medicamento->stock = strtoupper ($request->get('stock'));
         $medicamento->save();
 
         return redirect('/medicamentos');
@@ -32,8 +32,8 @@ class MedicamentosController extends Controller
     public function update(Request $request, $id)
     {
         $medicamento = Medicamento::findOrFail($id);
-        $medicamento->nombre = $request->get('nombreU');
-        $medicamento->stock = $request->get('stockU');
+        $medicamento->nombre = strtoupper ($request->get('nombreU'));
+        $medicamento->stock = strtoupper ($request->get('stockU'));
         $medicamento->save();
 
         return redirect('/medicamentos');

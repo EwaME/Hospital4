@@ -18,7 +18,7 @@ return new class extends Migration
                 ->onDelete('cascade');
             $table->string('accion', 50);
             $table->string('descripcion', 255);
-            $table->timestamp('fechaRegistro')->useCurrent();
+            $table->timestamps();
         });
     }
 

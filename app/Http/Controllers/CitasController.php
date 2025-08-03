@@ -9,83 +9,107 @@ use App\Models\Doctor;
 
 class CitasController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index() 
     {
-        $citas = Cita::with([
-            'paciente.usuario',
-            'doctor.usuario'
-        ])->get();
+        $user = auth()->user();
 
-        $pacientes = Paciente::with('usuario')->get();
-        $doctores = Doctor::with('usuario')->get();
+        if ($user->hasRole('Paciente')) {
+            $citas = Cita::with(['doctor.usuario'])
+                ->where('idPaciente', $user->id)
+                ->orderByDesc('fechaCita')
+                ->get();
 
-        return view('vistas.citas', compact('citas', 'pacientes', 'doctores'));
+            return view('vistas.citas', compact('citas'));
+        } elseif ($user->hasRole('Doctor')) {
+            $citas = Cita::with(['paciente.usuario'])
+                ->where('idDoctor', $user->id)
+                ->orderByDesc('fechaCita')
+                ->get();
+
+            return view('vistas.citas', compact('citas'));
+        } elseif ($user->hasRole('Admin')) {
+            $citas = Cita::with(['paciente.usuario','doctor.usuario'])->orderByDesc('fechaCita')->get();
+            $pacientes = Paciente::with('usuario')->get();
+            $doctores = Doctor::with('usuario')->get();
+            return view('vistas.citas', compact('citas', 'pacientes', 'doctores'));
+        } else {
+            $citas = collect();
+            return view('vistas.citas', compact('citas'));
+        }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
+        $fecha = $request->get('fechaCita');
+        $hora = $request->get('horaCita');
+
+        if (strlen($hora) == 5) {
+            $hora .= ':00';
+        }
+
+        $existeCita = Cita::where('idDoctor', $request->get('idDoctor'))
+            ->where('fechaCita', $fecha)
+            ->where('horaCita', $hora)
+            ->exists();
+
+        if ($existeCita) {
+            return redirect('/citas')->with('error', 'Ya existe una cita para ese doctor en la misma fecha y hora.');
+        }
+
         $cita = new Cita();
         $cita->idPaciente = $request->get('idPaciente');
         $cita->idDoctor = $request->get('idDoctor');
-        $cita->fechaCita = $request->get('fechaCita');
-        $cita->horaCita = $request->get('horaCita');
-        $cita->estadoCita = $request->get('estadoCita');
+        $cita->fechaCita = $fecha;
+        $cita->horaCita = $hora;
+        $cita->estadoCita = strtoupper($request->get('estadoCita')); // validación aplicada aquí
         $cita->save();
+
         return redirect('/citas');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request)
     {
+        $fecha = $request->get('fechaCita');
+        $hora = $request->get('horaCita');
+
+        if (strlen($hora) == 5) {
+            $hora .= ':00';
+        }
+
+        $existeCita = Cita::where('idDoctor', $request->get('idDoctor'))
+            ->where('fechaCita', $fecha)
+            ->where('horaCita', $hora)
+            ->where('idCita', '<>', $request->get('idCita'))
+            ->exists();
+
+        if ($existeCita) {
+            return redirect('/citas')->with('error', 'Ya existe otra cita para ese doctor en la misma fecha y hora.');
+        }
+
         $cita = Cita::findOrFail($request->get('idCita'));
         $cita->idPaciente = $request->get('idPaciente');
         $cita->idDoctor = $request->get('idDoctor');
-        $cita->fechaCita = $request->get('fechaCita');
-        $cita->horaCita = $request->get('horaCita');
-        $cita->estadoCita = $request->get('estadoCita');
+        $cita->fechaCita = $fecha;
+        $cita->horaCita = $hora;
+        $cita->estadoCita = strtoupper ($request->get('estadoCita'));
         $cita->save();
+
         return redirect('/citas');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
         $cita = Cita::findOrFail($request->get('idCita'));
         $cita->delete();
+
         return redirect('/citas');
+    }
+
+    public function cambiarEstado(Request $request)
+    {
+        $cita = Cita::findOrFail($request->get('idCita'));
+        $cita->estadoCita = $request->get('estadoCita');
+        $cita->save();
+        return redirect('/citas')->with('success', 'Estado de la cita actualizado.');
     }
 }

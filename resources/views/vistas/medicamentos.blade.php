@@ -185,7 +185,10 @@
             </h1>
             <div class="d-flex justify-content-end mb-3">
                 <button class="btn btn-glass" data-bs-toggle="modal" data-bs-target="#mCrearMedicamento">
-                    <i class="fa fa-plus"></i> Crear medicamento
+                    <i class="fa fa-plus"></i> Agregar medicamento
+                </button>
+                <button class="btn btn-glass" data-bs-toggle="modal" data-bs-target="#mCrearMedicamento">
+                    <i class="fa fa-plus"></i> Entregar medicamento
                 </button>
             </div>
             <div class="table-responsive">
@@ -203,8 +206,7 @@
                         @foreach($listaMedicamentos as $medicamento)
                         <tr>
                             <td class="fw-bold">{{ $medicamento->idMedicamento }}</td>
-                         <td>
-   
+                        <td>
     <p><strong></strong> {{ ucwords(strtolower($medicamento->nombre)) }}</p>
     
 </td>
@@ -333,102 +335,102 @@
 </div>
 
 <script>
-  function configurarValidacionTexto(selector, errorSelector) {
-    $(selector).on('keypress', function(e) {
-      var char = String.fromCharCode(e.which);
-      if (e.which === 8 || e.which === 0 || e.which === 46) return true;
-      if (!/[A-Za-zÁÉÍÓÚáéíóúÑñ\s]/.test(char)) {
-        e.preventDefault();
-        $(errorSelector).show();
-        setTimeout(function() { $(errorSelector).hide(); }, 3000);
-        return false;
-      }
-    });
-    $(selector).on('input paste', function() {
-      var val = $(this).val();
-      var limpio = val.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, '');
-      if (val !== limpio) {
-        $(this).val(limpio);
-        $(errorSelector).show();
-        setTimeout(function() { $(errorSelector).hide(); }, 3000);
-      }
-    });
-  }
+    function configurarValidacionTexto(selector, errorSelector) {
+        $(selector).on('keypress', function(e) {
+        var char = String.fromCharCode(e.which);
+        if (e.which === 8 || e.which === 0 || e.which === 46) return true;
+        if (!/[A-Za-zÁÉÍÓÚáéíóúÑñ\s]/.test(char)) {
+            e.preventDefault();
+            $(errorSelector).show();
+            setTimeout(function() { $(errorSelector).hide(); }, 3000);
+            return false;
+        }
+        });
+        $(selector).on('input paste', function() {
+        var val = $(this).val();
+        var limpio = val.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, '');
+        if (val !== limpio) {
+            $(this).val(limpio);
+            $(errorSelector).show();
+            setTimeout(function() { $(errorSelector).hide(); }, 3000);
+        }
+        });
+    }
 
-  function configurarValidacionNumerica(selector, errorSelector) {
-    $(selector).on('keypress', function(e) {
-      var char = String.fromCharCode(e.which);
-      if (e.which === 8 || e.which === 0 || e.which === 46) return true;
-      if (!/[0-9]/.test(char)) {
-        e.preventDefault();
-        $(errorSelector).show();
-        setTimeout(function() { $(errorSelector).hide(); }, 3000);
-        return false;
-      }
-    });
-    $(selector).on('input paste', function() {
-      var val = $(this).val();
-      var limpio = val.replace(/[^0-9]/g, '');
-      if (val !== limpio) {
-        $(this).val(limpio);
-        $(errorSelector).show();
-        setTimeout(function() { $(errorSelector).hide(); }, 3000);
-      }
-    });
-  }
+    function configurarValidacionNumerica(selector, errorSelector) {
+        $(selector).on('keypress', function(e) {
+        var char = String.fromCharCode(e.which);
+        if (e.which === 8 || e.which === 0 || e.which === 46) return true;
+        if (!/[0-9]/.test(char)) {
+            e.preventDefault();
+            $(errorSelector).show();
+            setTimeout(function() { $(errorSelector).hide(); }, 3000);
+            return false;
+        }
+        });
+        $(selector).on('input paste', function() {
+        var val = $(this).val();
+        var limpio = val.replace(/[^0-9]/g, '');
+        if (val !== limpio) {
+            $(this).val(limpio);
+            $(errorSelector).show();
+            setTimeout(function() { $(errorSelector).hide(); }, 3000);
+        }
+        });
+    }
 
-  $(document).ready(function () {
-    $('.ejecutar').on('click', function () {
-      $('#miFormU')[0].reset();
-      let id = $(this).data('id');
-      let nombre = $(this).data('nombre');
-      let stock = $(this).data('stock');
-      $('#idMedicamentoU').val(id);
-      $('#nombreU').val(nombre);
-      $('#stockU').val(stock);
-      $('#miFormU').attr('action', '/medicamentos/edit/' + id);
-    });
+    $(document).ready(function () {
+        $('.ejecutar').on('click', function () {
+        $('#miFormU')[0].reset();
+        let id = $(this).data('id');
+        let nombre = $(this).data('nombre');
+        let stock = $(this).data('stock');
+        $('#idMedicamentoU').val(id);
+        $('#nombreU').val(nombre);
+        $('#stockU').val(stock);
+        $('#miFormU').attr('action', '/medicamentos/edit/' + id);
+        });
 
-    $('.eli').on('click', function () {
-      let ideli = $(this).data('ideli');
-      let nombreeli = $(this).data('nombreeli');
-      $('#idMedicamentoE').val(ideli);
-      $('#nombreE').val(nombreeli);
-      $('#miFormE').attr('action', '/medicamentos/delete/' + ideli);
-    });
+        $('.eli').on('click', function () {
+        let ideli = $(this).data('ideli');
+        let nombreeli = $(this).data('nombreeli');
+        $('#idMedicamentoE').val(ideli);
+        $('#nombreE').val(nombreeli);
+        $('#miFormE').attr('action', '/medicamentos/delete/' + ideli);
+        });
 
-    configurarValidacionTexto('#nombre', '#errorNombreCrear');
-    configurarValidacionNumerica('#stock', '#errorStockCrear');
-    configurarValidacionTexto('#nombreU', '#errorNombreEditar');
-    configurarValidacionNumerica('#stockU', '#errorStockEditar');
+        configurarValidacionTexto('#nombre', '#errorNombreCrear');
+        configurarValidacionNumerica('#stock', '#errorStockCrear');
+        configurarValidacionTexto('#nombreU', '#errorNombreEditar');
+        configurarValidacionNumerica('#stockU', '#errorStockEditar');
 
-    $('#cancelarCrear').on('click', function () {
-      $('#miForm')[0].reset();
-    });
+        $('#cancelarCrear').on('click', function () {
+        $('#miForm')[0].reset();
+        });
 
-    $('#cancelarEditar').on('click', function () {
-      $('#miFormU')[0].reset();
-    });
+        $('#cancelarEditar').on('click', function () {
+        $('#miFormU')[0].reset();
+        });
 
-    $('#miFormE').on('submit', function(e) {
-      if (!confirm('¿Estás seguro de que deseas eliminar este medicamento?')) {
-        e.preventDefault();
-      }
+        $('#miFormE').on('submit', function(e) {
+        if (!confirm('¿Estás seguro de que deseas eliminar este medicamento?')) {
+            e.preventDefault();
+        }
+        });
     });
-  });
 
   // Sidebar toggle funcional
-  document.addEventListener('DOMContentLoaded', function() {
-      const sidebar = document.getElementById('sidebar');
-      const main = document.getElementById('main-content');
-      const toggleBtn = document.getElementById('sidebarToggle');
-      if (sidebar && toggleBtn) {
-          toggleBtn.addEventListener('click', function() {
-              sidebar.classList.toggle('sidebar-collapsed');
-              main.classList.toggle('main-collapsed');
-          });
-      }
-  });
+    document.addEventListener('DOMContentLoaded', function() {
+        const sidebar = document.getElementById('sidebar');
+        const main = document.getElementById('main-content');
+        const toggleBtn = document.getElementById('sidebarToggle');
+        if (sidebar && toggleBtn) {
+            toggleBtn.addEventListener('click', function() {
+                sidebar.classList.toggle('sidebar-collapsed');
+                main.classList.toggle('main-collapsed');
+            });
+        }
+    });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 </body>

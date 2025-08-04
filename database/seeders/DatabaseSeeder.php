@@ -3,11 +3,14 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use App\Models\Paciente;
+use App\Models\Doctor;
+use App\Models\HistorialClinico;
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -31,6 +34,8 @@ class DatabaseSeeder extends Seeder
         Permission::create(['name' => 'Ver Enfermedades']);
         Permission::create(['name' => 'Ver Medicamentos']);
         Permission::create(['name' => 'Ver ConsultaMedicamentos']);
+        Permission::create(['name' => 'Agendar Cita']);
+        Permission::create(['name' => 'Cancelar Cita']);
 
         $AdminUser = User::create([
             'nombre' => 'Admin',
@@ -73,6 +78,8 @@ class DatabaseSeeder extends Seeder
             'Ver Citas',
             'Ver Consultas',
             'Ver Historiales',
+            'Agendar Cita',
+            'Cancelar Cita',
         ]);
         $roleDoctor->syncPermissions([
             'Ver Pacientes',
@@ -81,6 +88,33 @@ class DatabaseSeeder extends Seeder
             'Ver Historiales',
             'Ver Medicamentos',
             'Ver ConsultaMedicamentos',
+        ]);
+
+        $paciente = Paciente::create([
+            'idPaciente' => $PacienteUser->id,  
+            'fechaNacimiento' => '2000-01-01',
+            'genero' => 'No especificado'
+        ]);
+
+        HistorialClinico::create([
+            'idPaciente' => $PacienteUser->id,
+            'resumen' => 'Historial creado automáticamente por el seeder.'
+        ]);
+
+        $doctor = Doctor::create([
+            'idDoctor' => $DoctorUser->id, 
+            'especialidad' => 'GENERAL'
+        ]);
+
+        $pacienteD = Paciente::create([
+            'idPaciente' => $DoctorUser->id,  
+            'fechaNacimiento' => '2000-01-01',
+            'genero' => 'No especificado'
+        ]);
+
+        HistorialClinico::create([
+            'idPaciente' => $DoctorUser->id,
+            'resumen' => 'Historial creado automáticamente por el seeder.'
         ]);
     }
 }

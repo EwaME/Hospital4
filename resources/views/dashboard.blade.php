@@ -153,7 +153,7 @@
                                         </div>
                                     </div>
                                     <span class="badge rounded-pill
-                                        {{ $cita->estadoCita == 'Pendiente' ? 'bg-warning text-dark' : 'bg-success' }}">
+                                        {{ $cita->estadoCita == 'CONFIRMADA' ? 'bg-warning text-dark' : 'bg-success' }}">
                                         {{ $cita->estadoCita }}
                                     </span>
                                 </div>

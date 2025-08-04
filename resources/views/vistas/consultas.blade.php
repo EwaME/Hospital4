@@ -403,7 +403,6 @@
 </div>
 
 @role('Admin')
-{{-- Modal Eliminar Consulta --}}
 <div class="modal fade" id="modalEliminarConsulta" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <form action="/consultas/eliminar" method="POST" class="modal-content glass-bg">
@@ -454,7 +453,6 @@
         $('#selectCitaCrear').on('change', actualizarFechaDesdeCita);
     });
 
-    // Sidebar toggle funcional
     document.addEventListener('DOMContentLoaded', function() {
         const sidebar = document.getElementById('sidebar');
         const main = document.getElementById('main-content');

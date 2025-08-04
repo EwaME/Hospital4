@@ -197,7 +197,7 @@ Route::post('/citas/guardar', 'App\Http\Controllers\CitasController@store');
 Route::post('/citas/editar', 'App\Http\Controllers\CitasController@update');
 Route::post('/citas/eliminar', 'App\Http\Controllers\CitasController@destroy');
 Route::patch('/citas/{cita}/cambiar-estado', [CitasController::class, 'cambiarEstado'])
-    ->name('citas.cambiarEstado')->middleware(['auth', 'role:Doctor']);
+    ->name('citas.cambiarEstado')->middleware(['auth']);
 
 //consultas
 Route::resource('/consultas', 'App\Http\Controllers\ConsultasController');

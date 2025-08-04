@@ -210,7 +210,6 @@
     @include('components.layouts.sidebar')
     <main id="main-content" class="main-content flex-fill p-4">
         <div class="glass-bg mx-auto" style="max-width: 1050px;">
-            {{-- Mensajes flash --}}
             @if(session('success'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     {{ session('success') }}
@@ -243,10 +242,19 @@
             </div>
             @endrole
 
+            @role('Paciente')
+            <div class="d-flex justify-content-end">
+                <button class="btn btn-glass mb-3" data-bs-toggle="modal" data-bs-target="#modalCrearCitaPaciente">
+                    <i class="fas fa-plus-circle"></i> Agendar Nueva Cita
+                </button>
+            </div>
+            @endrole
+
             <div class="table-responsive">
                 <table class="table table-glass align-middle w-100">
                     <thead>
                         <tr>
+                            <tr>
                             <th>#</th>
                             <th>Paciente</th>
                             <th>Doctor</th>
@@ -274,6 +282,17 @@
                                 </span>
                             </td>
                             <td class="text-center">
+                                @role('Paciente')
+                                    @if($cita->estadoCita == 'Pendiente' && $cita->idPaciente == auth()->user()->id)
+                                        <button type="button" class="btn btn-ico del" title="Cancelar cita"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#modalCancelarCita"
+                                            data-id="{{ $cita->idCita }}">
+                                            <i class="fas fa-ban"></i>
+                                        </button>
+                                    @endif
+                                @endrole
+
                                 @role('Admin')
                                     <button class="btn btn-ico edit editar"
                                         data-bs-toggle="modal" data-bs-target="#modalEditarCita"
@@ -321,7 +340,51 @@
     </main>
 </div>
 
-{{-- Modal Crear (Admin) --}}
+@role('Paciente')
+<div class="modal fade" id="modalCrearCitaPaciente" tabindex="-1" aria-labelledby="modalCrearCitaPacienteLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content glass-bg">
+            <form action="/citas" method="POST" id="formCrearCitaPaciente">
+                @csrf
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalCrearCitaPacienteLabel">Agendar Nueva Cita</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="idPaciente" value="{{ auth()->user()->id }}">
+                    <div class="mb-3">
+                        <label class="form-label">Doctor</label>
+                        <select name="idDoctor" class="form-select" required>
+                            @foreach($doctores as $doctor)
+                                <option value="{{ $doctor->idDoctor }}">{{ ucwords(strtolower($doctor->usuario->nombre)) }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Fecha</label>
+                        <input type="date" name="fechaCita" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Hora</label>
+                        <select name="horaCita" class="form-select" required>
+                            <option value="">Selecciona una hora</option>
+                            @foreach(['07:30:00','08:00:00','08:30:00','09:00:00','09:30:00','10:00:00','10:30:00','11:00:00','11:30:00','13:00:00','13:30:00','14:00:00','14:30:00','15:00:00','15:30:00','16:00:00','16:30:00'] as $hora)
+                                <option value="{{ $hora }}">{{ \Carbon\Carbon::createFromFormat('H:i:s', $hora)->format('H:i') }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <input type="hidden" name="estadoCita" value="Pendiente">
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button class="btn btn-glass" type="submit">Agendar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endrole
+
 @role('Admin')
 <div class="modal fade" id="modalCrearCita" tabindex="-1" aria-labelledby="modalCrearCitaLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -382,7 +445,6 @@
 </div>
 @endrole
 
-{{-- Modal Editar (Admin) --}}
 @role('Admin')
 <div class="modal fade" id="modalEditarCita" tabindex="-1" aria-labelledby="modalEditarCitaLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -510,6 +572,33 @@
 </div>
 @endrole
 
+<div class="modal fade" id="modalCancelarCita" tabindex="-1" aria-labelledby="modalCancelarCitaLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content glass-bg">
+        <form method="POST" action="" id="formCancelarCita">
+            @csrf
+            @method('PATCH')
+            <input type="hidden" name="estadoCita" value="Cancelada">
+            <input type="hidden" name="idCita" id="cancelarIdCita">
+            <div class="modal-header">
+            <h5 class="modal-title" id="modalCancelarCitaLabel">Cancelar Cita</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+            <div class="alert alert-warning">
+                ¿Estás seguro que deseas <b>cancelar</b> esta cita?<br>
+                <small class="text-muted">Esta acción no se puede deshacer.</small>
+            </div>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No, mantener cita</button>
+            <button type="submit" class="btn btn-glass">Sí, cancelar</button>
+            </div>
+        </form>
+        </div>
+    </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 $(document).ready(function() {
@@ -543,6 +632,13 @@ $(document).ready(function() {
         $('#delete_cita_paciente').text($(this).data('paciente') || '');
         $('#delete_cita_doctor').text($(this).data('doctor') || '');
         $('#delete_cita_fecha').text($(this).data('fecha') || '');
+    });
+
+    $('#modalCancelarCita').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget);
+        var idCita = button.data('id');
+        $('#cancelarIdCita').val(idCita);
+        $('#formCancelarCita').attr('action', '/citas/' + idCita + '/cambiar-estado');
     });
 });
 </script>

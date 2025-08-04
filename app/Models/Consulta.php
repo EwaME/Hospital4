@@ -12,6 +12,12 @@ class Consulta extends Model
     protected $primaryKey = 'idConsulta';
     public $incrementing = true;
     protected $keyType = 'int';
+    protected $fillable = [
+        'idCita',
+        'idEnfermedad',
+        'diagnostico',
+        'fecha',
+    ];
 
     public function cita()
     {

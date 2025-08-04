@@ -15,6 +15,13 @@
             background: linear-gradient(120deg, #e9f3ff 0%, #d5f3ea 100%);
             min-height: 100vh;
         }
+        .with-sidebar {
+            padding-left: 220px;
+            transition: padding-left 0.23s;
+        }
+        @media (max-width: 991px) {
+            .with-sidebar { padding-left: 0 !important; }
+        }
         .glass-bg {
             background: linear-gradient(135deg, rgba(248,252,255,0.97) 0%, rgba(48,107,165,0.09) 100%);
             border-radius: 1.7rem;

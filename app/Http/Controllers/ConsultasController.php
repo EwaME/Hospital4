@@ -16,7 +16,6 @@ class ConsultasController extends Controller
     {
         $user = auth()->user();
 
-        // Paciente: solo sus consultas
         if ($user->hasRole('Paciente')) {
             $paciente = $user->paciente;
             $consultas = collect();
@@ -26,7 +25,7 @@ class ConsultasController extends Controller
                     ->join('users as usuarios_paciente', 'pacientes.idPaciente', '=', 'usuarios_paciente.id')
                     ->join('doctores', 'citas.idDoctor', '=', 'doctores.idDoctor')
                     ->join('users as usuarios_doctor', 'doctores.idDoctor', '=', 'usuarios_doctor.id')
-                    ->join('enfermedades', 'consultas.idEnfermedad', '=', 'enfermedades.idEnfermedad')
+                    ->leftJoin('enfermedades', 'consultas.idEnfermedad', '=', 'enfermedades.idEnfermedad')
                     ->where('citas.idPaciente', $paciente->idPaciente)
                     ->select(
                         'consultas.idConsulta',
@@ -40,12 +39,10 @@ class ConsultasController extends Controller
                     )
                     ->get();
             }
-            // Solo necesitas enfermedades para mostrar (NO citas)
             $enfermedades = \App\Models\Enfermedad::all();
             return view('vistas.consultas', compact('consultas', 'enfermedades'));
         }
 
-        // Doctor: solo consultas de SUS citas
         elseif ($user->hasRole('Doctor')) {
             $doctor = $user->doctor;
             $consultas = collect();
@@ -55,7 +52,7 @@ class ConsultasController extends Controller
                     ->join('users as usuarios_paciente', 'pacientes.idPaciente', '=', 'usuarios_paciente.id')
                     ->join('doctores', 'citas.idDoctor', '=', 'doctores.idDoctor')
                     ->join('users as usuarios_doctor', 'doctores.idDoctor', '=', 'usuarios_doctor.id')
-                    ->join('enfermedades', 'consultas.idEnfermedad', '=', 'enfermedades.idEnfermedad')
+                    ->leftJoin('enfermedades', 'consultas.idEnfermedad', '=', 'enfermedades.idEnfermedad')
                     ->where('citas.idDoctor', $doctor->idDoctor)
                     ->select(
                         'consultas.idConsulta',
@@ -83,7 +80,7 @@ class ConsultasController extends Controller
                 ->join('users as usuarios_paciente', 'pacientes.idPaciente', '=', 'usuarios_paciente.id')
                 ->join('doctores', 'citas.idDoctor', '=', 'doctores.idDoctor')
                 ->join('users as usuarios_doctor', 'doctores.idDoctor', '=', 'usuarios_doctor.id')
-                ->join('enfermedades', 'consultas.idEnfermedad', '=', 'enfermedades.idEnfermedad')
+                ->leftJoin('enfermedades', 'consultas.idEnfermedad', '=', 'enfermedades.idEnfermedad')
                 ->select(
                     'consultas.idConsulta',
                     'consultas.idCita',

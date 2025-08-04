@@ -22,7 +22,7 @@ class MedicamentosController extends Controller
         if ($request->ajax()) {
             return response()->json(['listaMedicamentos' => $listaMedicamentos]);
         }
-        return view('/vistas.Medicamentos')->with('listaMedicamentos', $listaMedicamentos);
+        return view('vistas.medicamentos')->with('listaMedicamentos', $listaMedicamentos);
     }
 
     public function store(Request $request)

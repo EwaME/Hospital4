@@ -43,6 +43,12 @@
         .main-collapsed {
             margin-left: 70px !important;
         }
+        @media (max-width: 991.98px) {
+            .glass-card, .glass-stats { padding: 1.2rem !important; }
+            .glass-title { font-size: 1.2rem !important;}
+        }
+        .glass-stats .border-bottom:last-child { border-bottom: none !important;}
+
     </style>
 </head>
 <body>
@@ -204,15 +210,34 @@
                                 <div class="glass-stats p-4 h-100">
                                     <h2 class="fs-5 fw-bold text-primary mb-3">📘 Bitácoras recientes</h2>
                                     @forelse($admin['bitacoras'] ?? [] as $b)
-                                        <div class="border-bottom py-2">
-                                            <span class="fw-semibold">
-                                                {{ $b->created_at ? $b->created_at->format('Y-m-d H:i') : '#' . $b->id }}
+                                        <div class="border-bottom py-2 d-flex align-items-center gap-2" style="font-size: 1.01em;">
+                                            <span class="text-muted small" style="min-width: 93px">
+                                                <i class="fa-regular fa-clock me-1"></i>
+                                                {{ $b->created_at ? $b->created_at->format('d/m H:i') : '#' . $b->idBitacora }}
                                             </span>
-                                            <span class="mx-2">—</span>
-                                            <span class="text-primary fw-bold">
-                                                {{ $b->usuario ?? '---' }}
+                                            <span class="fw-semibold text-primary">{{ $b->usuario->nombre ?? '---' }}</span>
+                                            <span class="badge
+                                                @switch(strtolower($b->accion))
+                                                    @case('delete') bg-danger @break
+                                                    @case('update') bg-warning text-dark @break
+                                                    @case('create') bg-success @break
+                                                    @case('login') bg-primary @break
+                                                    @case('logout') bg-secondary @break
+                                                    @default bg-info text-dark
+                                                @endswitch
+                                                text-uppercase"
+                                                style="font-size:0.92em;">
+                                                {{ ucfirst($b->accion) }}
                                             </span>
-                                            <span class="ms-2">{{ $b->accion ?? $b->descripcion ?? '' }}</span>
+                                            <span class="ms-2 text-break d-inline-block" style="max-width:170px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"
+                                                title="{{ $b->descripcion }}">
+                                                {{ Str::limit(strip_tags($b->descripcion), 45) }}
+                                            </span>
+                                            @if(strlen($b->descripcion) > 20)
+                                                <a tabindex="0" class="ms-2 text-decoration-none text-info" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $b->descripcion }}">
+                                                    <i class="fa-solid fa-circle-info"></i>
+                                                </a>
+                                            @endif
                                         </div>
                                     @empty
                                         <div class="text-muted">No hay movimientos recientes en bitácora.</div>
@@ -266,5 +291,13 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    });
+</script>
 </body>
 </html>

@@ -14,7 +14,6 @@ class BitacorasController extends Controller
      */
     public function index(Request $request)
     {
-        // Filtros básicos
         $query = Bitacora::with('usuario');
 
         if ($request->filled('usuario')) {
@@ -32,14 +31,11 @@ class BitacorasController extends Controller
 
         $bitacoras = $query->orderBy('created_at', 'desc')->paginate(20);
 
-        // Para filtros en la vista
         $usuarios = User::orderBy('nombre')->get();
         $modelos = Bitacora::select('modelo')->distinct()->pluck('modelo');
 
         return view('vistas.bitacoras', compact('bitacoras', 'usuarios', 'modelos'));
     }
-
-    // Métodos create/store/edit/update/destroy pueden quedar vacíos o ser eliminados si no usas ese CRUD
 
     /**
      * Registrar manualmente en la bitácora (si lo necesitas en código custom).
@@ -60,7 +56,6 @@ class BitacorasController extends Controller
     {
         $query = \App\Models\Bitacora::query();
 
-        // Aplica los mismos filtros de tu tabla
         if ($request->filled('usuario')) $query->where('idUsuario', $request->usuario);
         if ($request->filled('accion')) $query->where('accion', 'like', "%{$request->accion}%");
         if ($request->filled('modelo')) $query->where('modelo', $request->modelo);
@@ -76,7 +71,6 @@ class BitacorasController extends Controller
 
         $callback = function () use ($bitacoras) {
             $handle = fopen('php://output', 'w');
-            // Encabezados
             fputcsv($handle, ['#', 'Usuario', 'Acción', 'Descripción', 'Módulo', 'Fecha', 'IP']);
             foreach ($bitacoras as $bitacora) {
                 fputcsv($handle, [
@@ -99,7 +93,6 @@ class BitacorasController extends Controller
     {
         $query = \App\Models\Bitacora::query();
 
-        // Repite los filtros que ya tienes
         if ($request->filled('usuario')) $query->where('idUsuario', $request->usuario);
         if ($request->filled('accion')) $query->where('accion', 'like', "%{$request->accion}%");
         if ($request->filled('modelo')) $query->where('modelo', $request->modelo);

@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Consulta;
 use App\Models\Cita;
 use App\Models\Enfermedad;
+use App\Models\HistorialClinico;
+use App\Models\ConsultaMedicamento;
+use App\Models\Medicamento;
 
 class ConsultasController extends Controller
 {
@@ -66,14 +69,12 @@ class ConsultasController extends Controller
                     )
                     ->get();
             }
-            // También necesita enfermedades y las citas asignadas a este doctor (por si editas)
             $enfermedades = \App\Models\Enfermedad::all();
             $citas = \App\Models\Cita::with(['paciente.usuario', 'doctor.usuario'])
                         ->where('idDoctor', $doctor->idDoctor)->get();
             return view('vistas.consultas', compact('consultas', 'enfermedades', 'citas'));
         }
 
-        // Admin: ve TODO
         else if ($user->hasRole('Admin')) {
             $consultas = \App\Models\Consulta::join('citas', 'consultas.idCita', '=', 'citas.idCita')
                 ->join('pacientes', 'citas.idPaciente', '=', 'pacientes.idPaciente')
@@ -100,7 +101,6 @@ class ConsultasController extends Controller
             return view('vistas.consultas', compact('consultas', 'citas', 'enfermedades'));
         }
 
-        // Otros roles (vacío)
         else {
             $consultas = collect();
             $enfermedades = \App\Models\Enfermedad::all();
@@ -168,5 +168,58 @@ class ConsultasController extends Controller
         $consulta = Consulta::findOrFail($request->get('idConsulta'));
         $consulta->delete();
         return redirect('/consultas');
+    }
+
+    public function registrarCompleta(Request $request)
+    {
+        $request->validate([
+            'idCita' => 'required|exists:citas,idCita',
+            'idEnfermedad' => 'required|exists:enfermedades,idEnfermedad',
+            'diagnostico' => 'required',
+            'medicamentos' => 'array',
+            'resumen_historial' => 'nullable|string'
+        ]);
+
+        if ($request->has('medicamentos')) {
+            foreach ($request->medicamentos as $med) {
+                $medicamento = Medicamento::find($med['idMedicamento']);
+                if (!$medicamento) {
+                    return back()->with('error', 'El medicamento seleccionado no existe.');
+                }
+                if ($medicamento->stock < $med['cantidad']) {
+                    return back()->with('error', 'Stock insuficiente para el medicamento "' . $medicamento->nombre . '". Stock actual: ' . $medicamento->stock);
+                }
+            }
+        }
+
+        $cita = \App\Models\Cita::findOrFail($request->idCita);
+        $cita->estadoCita = 'Finalizada';
+        $cita->save();
+
+        $consulta = new \App\Models\Consulta();
+        $consulta->idCita = $request->idCita;
+        $consulta->idEnfermedad = $request->idEnfermedad;
+        $consulta->diagnostico = $request->diagnostico;
+        $consulta->fecha = now()->format('Y-m-d');
+        $consulta->save();
+
+        if ($request->has('medicamentos')) {
+            foreach ($request->medicamentos as $med) {
+                \App\Models\ConsultaMedicamento::create([
+                    'idConsulta' => $consulta->idConsulta,
+                    'idMedicamento' => $med['idMedicamento'],
+                    'cantidad' => $med['cantidad'],
+                ]);
+                $medicamento = Medicamento::find($med['idMedicamento']);
+                $medicamento->stock -= $med['cantidad'];
+                $medicamento->save();
+            }
+        }
+
+        $historial = \App\Models\HistorialClinico::firstOrNew(['idPaciente' => $cita->idPaciente]);
+        $historial->resumen = $request->resumen_historial;
+        $historial->save();
+
+        return redirect('/citas')->with('success', 'Consulta médica registrada y cita finalizada correctamente.');
     }
 }

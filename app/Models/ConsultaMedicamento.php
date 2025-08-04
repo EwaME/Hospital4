@@ -11,6 +11,11 @@ class ConsultaMedicamento extends Model
 {
     use SoftDeletes;
     protected $primaryKey = 'idCMedicamento';
+    protected $fillable = [
+        'idConsulta',
+        'idMedicamento',
+        'cantidad',
+    ];
     public function medicamento()
     {
         return $this->belongsTo(Medicamento::class, 'idMedicamento');

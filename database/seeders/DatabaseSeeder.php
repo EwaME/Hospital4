@@ -36,6 +36,7 @@ class DatabaseSeeder extends Seeder
         Permission::create(['name' => 'Ver ConsultaMedicamentos']);
         Permission::create(['name' => 'Agendar Cita']);
         Permission::create(['name' => 'Cancelar Cita']);
+        Permission::create(['name' => 'Ver Administradores']);
 
         $AdminUser = User::create([
             'nombre' => 'Admin',

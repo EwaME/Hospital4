@@ -7,6 +7,9 @@ use App\Models\Cita;
 use App\Models\Paciente;
 use App\Models\Doctor;
 use App\Models\Consulta;
+use App\Models\Medicamento;
+use App\Models\Enfermedad;
+use App\Models\HistorialClinico;
 use Illuminate\Support\Facades\Auth;
 
 class CitasController extends Controller
@@ -17,6 +20,9 @@ class CitasController extends Controller
 
         $doctores = Doctor::with('usuario')->get();
         $pacientes = Paciente::with('usuario')->get();
+        $medicamentos = Medicamento::all();
+        $enfermedades = Enfermedad::all();
+        $historialClinico = HistorialClinico::all();
 
         if ($user->hasRole('Paciente')) {
             $citas = Cita::with(['doctor.usuario'])
@@ -24,20 +30,19 @@ class CitasController extends Controller
                 ->orderByDesc('fechaCita')
                 ->get();
 
-            return view('vistas.citas', compact('citas', 'doctores'));
+            return view('vistas.citas', compact('citas', 'doctores', 'pacientes', 'medicamentos', 'enfermedades', 'historialClinico'));
         } elseif ($user->hasRole('Doctor')) {
             $citas = Cita::with(['paciente.usuario'])
                 ->where('idDoctor', $user->id)
                 ->orderByDesc('fechaCita')
                 ->get();
-
-            return view('vistas.citas', compact('citas', 'pacientes'));
+            return view('vistas.citas', compact('citas', 'pacientes', 'doctores', 'medicamentos', 'enfermedades', 'historialClinico'));
         } elseif ($user->hasRole('Admin')) {
             $citas = Cita::with(['paciente.usuario','doctor.usuario'])->orderByDesc('fechaCita')->get();
-            return view('vistas.citas', compact('citas', 'pacientes', 'doctores'));
+            return view('vistas.citas', compact('citas', 'pacientes', 'doctores', 'medicamentos', 'enfermedades', 'historialClinico'));
         } else {
             $citas = collect();
-            return view('vistas.citas', compact('citas'));
+            return view('vistas.citas', compact('citas', 'pacientes', 'doctores', 'medicamentos', 'enfermedades', 'historialClinico'));
         }
     }
 
@@ -139,9 +144,9 @@ class CitasController extends Controller
         $cita->save();
 
         if ($nuevoEstado == 'Finalizada') {
-            $existeConsulta = \App\Models\Consulta::where('idCita', $cita->idCita)->exists();
+            $existeConsulta = Consulta::where('idCita', $cita->idCita)->exists();
             if (!$existeConsulta) {
-                \App\Models\Consulta::create([
+                Consulta::create([
                     'idCita' => $cita->idCita,
                     'idEnfermedad' => null, 
                     'diagnostico' => '',

@@ -202,6 +202,40 @@
             .btn-glass, .btn-ico { font-size: 1em; padding: 0.37em 0.71em;}
             .modal-content.glass-bg { padding: 1.1rem 0.8rem 1.1rem 0.8rem !important;}
         }
+        #modalRegistrarConsulta .form-label i {
+            opacity: .7;
+            font-size: 1.03em;
+        }
+        #modalRegistrarConsulta .form-control, 
+        #modalRegistrarConsulta .form-select {
+            border-radius: 1.1em !important;
+            background: rgba(255,255,255,0.94) !important;
+            border: 1.2px solid #b8e7fa !important;
+            box-shadow: 0 1px 8px #1976d228;
+        }
+        #modalRegistrarConsulta .table th, 
+        #modalRegistrarConsulta .table td {
+            background: transparent !important;
+            border: none;
+            vertical-align: middle !important;
+        }
+        #modalRegistrarConsulta .table th {
+            color: #1976D2;
+            font-weight: 700;
+            font-size: 1.05em;
+            letter-spacing: .01em;
+        }
+        #modalRegistrarConsulta .table tr:not(:last-child) {
+            border-bottom: 1px solid #e8ecf7;
+        }
+        #modalRegistrarConsulta .btn-danger {
+            border-radius: 1em !important;
+            padding: 0.2em 0.7em !important;
+        }
+        #modalRegistrarConsulta .modal-content {
+            border-radius: 1.3rem !important;
+            box-shadow: 0 10px 36px 0 rgba(0,80,158,0.14), 0 2px 12px #00509e13;
+        }
     </style>
 </head>
 <body>
@@ -319,12 +353,15 @@
                                 @endrole
 
                                 @role('Doctor')
-                                    <button class="btn btn-ico estado cambiar-estado"
-                                        data-bs-toggle="modal" data-bs-target="#modalEstadoCita"
-                                        data-id="{{ $cita->idCita }}"
-                                        data-estado="{{ $cita->estadoCita }}">
-                                        <i class="fas fa-exchange-alt"></i>
-                                    </button>
+                                    @if(in_array($cita->estadoCita, ['Confirmada']))
+                                        <button class="btn btn-ico estado btn-finalizar-cita"
+                                            data-id="{{ $cita->idCita }}"
+                                            data-idpaciente="{{ $cita->idPaciente }}"
+                                            data-paciente="{{ ucwords(strtolower($cita->paciente->usuario->nombre ?? 'Desconocido')) }}"
+                                            data-doctor="{{ ucwords(strtolower($cita->doctor->usuario->nombre ?? 'Desconocido')) }}">
+                                            <i class="fas fa-check-circle"></i>
+                                        </button>
+                                    @endif
                                 @endrole
                             </td>
                         </tr>
@@ -572,6 +609,7 @@
 </div>
 @endrole
 
+@role('Paciente')
 <div class="modal fade" id="modalCancelarCita" tabindex="-1" aria-labelledby="modalCancelarCitaLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content glass-bg">
@@ -595,6 +633,152 @@
             <button type="submit" class="btn btn-glass">Sí, cancelar</button>
             </div>
         </form>
+        </div>
+    </div>
+</div>
+@endrole
+
+@role('Doctor')
+<div class="modal fade" id="modalRegistrarConsulta" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content glass-bg shadow-lg" style="border-radius:1.3rem;">
+            <form id="formRegistrarConsultaCompleta" method="POST" action="{{ route('consultas.registrarCompleta') }}">
+                @csrf
+                <input type="hidden" name="idCita" id="modal_idCita">
+                <input type="hidden" name="idPaciente" id="modal_idPaciente">
+                <div class="modal-header border-0 pb-0">
+                    <div>
+                        <div class="text-center">
+                            <span class="fs-2" style="color:#18b981;">
+                                <i class="fa-solid fa-user-doctor"></i>
+                            </span>
+                        </div>
+                        <h5 class="modal-title fw-bold text-center glass-title mt-2">Registrar Consulta Médica</h5>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body pt-1 px-2">
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label mb-1">
+                                <i class="fa-solid fa-virus-covid me-1 text-secondary"></i> Enfermedad
+                            </label>
+                            <select name="idEnfermedad" class="form-select" required>
+                                @foreach($enfermedades as $enf)
+                                <option value="{{ $enf->idEnfermedad }}">{{ $enf->nombre }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label mb-1">
+                                <i class="fa-solid fa-stethoscope me-1 text-info"></i> Diagnóstico
+                            </label>
+                            <textarea name="diagnostico" class="form-control" rows="1" required placeholder="Escribe el diagnóstico..."></textarea>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label mb-1">
+                            <i class="fa-solid fa-pills me-1 text-success"></i> Agregar Medicamentos
+                        </label>
+                        <input type="text" class="form-control mb-1" id="buscadorMedicamento" placeholder="Buscar medicamento..." autocomplete="off" style="background:rgba(248,252,255,0.92);">
+                        <div id="sugerenciasMedicamentos" class="list-group position-absolute" style="z-index:1000; width: 90%;"></div>
+                        <small class="text-muted">Escribe al menos 2 letras para buscar.</small>
+                        <div class="table-responsive mt-2">
+                            <table class="table table-borderless align-middle mb-1" id="tablaMedicamentosSeleccionados" style="background:transparent;">
+                                <thead>
+                                    <tr style="border-bottom:1px solid #e8ecf7;">
+                                        <th>Medicamento</th>
+                                        <th style="width:90px;">Cantidad</th>
+                                        <th style="width:45px;" class="text-end"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                        <small class="text-muted">Debes agregar al menos un medicamento.</small>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label mb-1">
+                            <i class="fa-solid fa-clipboard-list me-1 text-primary"></i> Resumen/Actualizar Historial Clínico
+                        </label>
+                        <textarea name="resumen_historial" class="form-control" rows="2" id="historialClinicoCampo" placeholder="Escribe el resumen o actualización..."></textarea>
+                        <small class="text-muted">Este resumen quedará registrado en el historial del paciente.</small>
+                    </div>
+                </div>
+                <div class="modal-footer pt-1 border-0">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i> Cancelar</button>
+                    <button class="btn btn-glass" type="submit"><i class="fa-solid fa-floppy-disk"></i> Guardar Consulta</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endrole
+
+<div class="modal fade" id="modalCantidadMedicamento" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content glass-bg" style="max-width:370px;margin:auto;">
+        <div class="modal-header border-0 pb-0">
+            <h5 class="modal-title fw-bold">
+            <i class="fa-solid fa-capsules me-2 text-success"></i>Asignar Cantidad
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body pt-1">
+            <form id="formCantidadMedicamento">
+            <input type="hidden" id="idMedicamentoCantidad">
+            <input type="hidden" id="nombreMedicamentoCantidad">
+            <div class="mb-3 text-center">
+                <span class="fw-bold" id="nombreMedicamentoDisplay"></span>
+            </div>
+            <div class="mb-2">
+                <input type="number" min="1" value="1" class="form-control text-center" id="inputCantidadMedicamento" placeholder="Cantidad a entregar" required style="font-size:1.2em;">
+            </div>
+            </form>
+        </div>
+        <div class="modal-footer pt-0 border-0 justify-content-center">
+            <button class="btn btn-glass" id="btnAsignarCantidad">Aceptar</button>
+        </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalStockInsuficiente" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content glass-bg" style="max-width:330px;margin:auto;">
+        <div class="modal-header border-0 pb-0">
+            <h6 class="modal-title fw-bold">
+            <i class="fa-solid fa-triangle-exclamation text-danger me-1"></i>Stock insuficiente
+            </h6>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body text-center pt-2 pb-1">
+            <div class="fs-5 text-danger" id="textoStockInsuficiente"></div>
+        </div>
+        <div class="modal-footer border-0 pt-0 justify-content-center">
+            <button class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalSinMedicamentos" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content glass-bg" style="max-width:330px;margin:auto;">
+            <div class="modal-header border-0 pb-0">
+                <h6 class="modal-title fw-bold">
+                    <i class="fa-solid fa-triangle-exclamation text-warning me-1"></i>
+                    Agrega medicamentos
+                </h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center pt-2 pb-1">
+                <div class="fs-5 text-warning">Debes agregar al menos un medicamento.</div>
+            </div>
+            <div class="modal-footer border-0 pt-0 justify-content-center">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
         </div>
     </div>
 </div>
@@ -640,7 +824,136 @@ $(document).ready(function() {
         $('#cancelarIdCita').val(idCita);
         $('#formCancelarCita').attr('action', '/citas/' + idCita + '/cambiar-estado');
     });
+
+    let listaMedicamentosSeleccionados = [];
+    let medicamentoPendiente = null;
+
+    $('#buscadorMedicamento').on('input', function() {
+        let query = $(this).val().trim();
+        if (query.length < 2) {
+            $('#sugerenciasMedicamentos').empty().hide();
+            return;
+        }
+        $.get('/medicamentos', { search: query }, function(res) {
+            let resultados = res.listaMedicamentos || res;
+            if (!Array.isArray(resultados)) return;
+
+            let html = '';
+            resultados.forEach(med => {
+                if (listaMedicamentosSeleccionados.find(x => x.idMedicamento == med.idMedicamento)) return;
+                html += `<button type="button" class="list-group-item list-group-item-action sugerencia-medicamento"
+                            data-id="${med.idMedicamento}" data-nombre="${med.nombre}">
+                            <i class="fas fa-plus me-1"></i> ${med.nombre}
+                        </button>`;
+            });
+            $('#sugerenciasMedicamentos').html(html).show();
+        });
+    });
+
+    $(document).on('click', '.sugerencia-medicamento', function() {
+        medicamentoPendiente = {
+            id: $(this).data('id'),
+            nombre: $(this).data('nombre')
+        };
+        $('#idMedicamentoCantidad').val(medicamentoPendiente.id);
+        $('#nombreMedicamentoCantidad').val(medicamentoPendiente.nombre);
+        $('#nombreMedicamentoDisplay').text(medicamentoPendiente.nombre);
+        $('#inputCantidadMedicamento').val(1);
+        $('#modalCantidadMedicamento').modal('show');
+        $('#sugerenciasMedicamentos').hide();
+    });
+    $('#modalCantidadMedicamento').on('shown.bs.modal', function () {
+        $('#inputCantidadMedicamento').focus();
+    });
+
+    $('#btnAsignarCantidad').on('click', function(e) {
+        e.preventDefault();
+        let cantidad = parseInt($('#inputCantidadMedicamento').val());
+        if (!cantidad || cantidad <= 0) return;
+
+        let idMedicamento = $('#idMedicamentoCantidad').val();
+        let nombre = $('#nombreMedicamentoCantidad').val();
+
+        $.get('/api/medicamentos/' + idMedicamento + '/stock', function(data) {
+            if (parseInt(cantidad) > parseInt(data.stock)) {
+                $('#textoStockInsuficiente').text('Stock disponible: ' + data.stock);
+                $('#modalCantidadMedicamento').modal('hide');
+                setTimeout(() => {
+                    $('#modalStockInsuficiente').modal('show');
+                }, 300);
+                return;
+            }
+            listaMedicamentosSeleccionados.push({
+                idMedicamento: idMedicamento,
+                nombre: nombre,
+                cantidad: cantidad
+            });
+            renderMedicamentosSeleccionados();
+            $('#buscadorMedicamento').val('');
+            $('#modalCantidadMedicamento').modal('hide');
+        });
+    });
+
+    function renderMedicamentosSeleccionados() {
+        let tbody = '';
+        listaMedicamentosSeleccionados.forEach((med, i) => {
+            tbody += `
+                <tr>
+                    <td>${med.nombre}</td>
+                    <td>
+                        <input type="number" class="form-control input-cantidad-medicamento" data-index="${i}" min="1" value="${med.cantidad}" style="width:80px;">
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-sm btn-danger eliminar-medicamento" data-index="${i}">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </td>
+                    <input type="hidden" name="medicamentos[${i}][idMedicamento]" value="${med.idMedicamento}">
+                    <input type="hidden" name="medicamentos[${i}][cantidad]" value="${med.cantidad}" class="input-hidden-cantidad">
+                </tr>
+            `;
+        });
+        $('#tablaMedicamentosSeleccionados tbody').html(tbody);
+    }
+
+    $(document).on('input', '.input-cantidad-medicamento', function() {
+        let i = $(this).data('index');
+        let val = parseInt($(this).val());
+        if (val > 0) {
+            listaMedicamentosSeleccionados[i].cantidad = val;
+            $(this).closest('tr').find('.input-hidden-cantidad').val(val);
+        }
+    });
+
+    $(document).on('click', '.eliminar-medicamento', function() {
+        let i = $(this).data('index');
+        listaMedicamentosSeleccionados.splice(i, 1);
+        renderMedicamentosSeleccionados();
+    });
+
+    $('#formRegistrarConsultaCompleta').on('submit', function() {
+        if (listaMedicamentosSeleccionados.length == 0) {
+            $('#modalSinMedicamentos').modal('show');
+            return false;
+        }
+    });
+
+    $(document).on('click', '.btn-finalizar-cita', function() {
+        const idCita = $(this).data('id');
+        const idPaciente = $(this).data('idpaciente');
+        $('#modal_idCita').val(idCita);
+        $('#modal_idPaciente').val(idPaciente);
+
+        $('#modalRegistrarConsulta').one('shown.bs.modal', function () {
+            $.get('/historialClinico/paciente/' + idPaciente, function(data) {
+                $('#historialClinicoCampo').val(data.resumen);
+            });
+        });
+
+        $('#modalRegistrarConsulta').modal('show');
+    });
 });
+
 </script>
 </body>
 </html>

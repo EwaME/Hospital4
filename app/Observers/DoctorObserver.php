@@ -13,7 +13,7 @@ class DoctorObserver
     {
         Bitacora::create([
             'idUsuario'      => Auth::id() ?? 1,
-            'accion'         => 'Alta de doctor',
+            'accion'         => 'Nuevo doctor registrado',
             'descripcion'    => "Se creó el doctor (ID: {$doctor->idDoctor}, Especialidad: {$doctor->especialidad})",
             'modelo'         => 'doctores',
             'id_relacionado' => $doctor->idDoctor,

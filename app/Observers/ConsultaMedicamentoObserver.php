@@ -13,7 +13,7 @@ class ConsultaMedicamentoObserver
     {
         Bitacora::create([
             'idUsuario'      => Auth::id() ?? 1,
-            'accion'         => 'Asignación de medicamento',
+            'accion'         => 'Entrega de medicamento',
             'descripcion'    => "Se asignó el medicamento (ID: {$cm->idMedicamento}) a la consulta (ID: {$cm->idConsulta}) en cantidad: {$cm->cantidad}",
             'modelo'         => 'consulta_medicamentos',
             'id_relacionado' => $cm->idCMedicamento,

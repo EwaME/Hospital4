@@ -10,14 +10,26 @@ use Illuminate\Routing\Controller;
 
 class MedicamentosController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $listaMedicamentos = Medicamento::all();
+        $query = Medicamento::query();
+        if ($request->has('search')) {
+            $busqueda = $request->get('search');
+            $query->where('nombre', 'LIKE', "%$busqueda%");
+        }
+        $listaMedicamentos = $query->get();
+
+        if ($request->ajax()) {
+            return response()->json(['listaMedicamentos' => $listaMedicamentos]);
+        }
         return view('/vistas.Medicamentos')->with('listaMedicamentos', $listaMedicamentos);
     }
 
     public function store(Request $request)
     {
+        if (!auth()->user()->hasRole('Admin')) {
+            abort(403, 'Acceso denegado');
+        }
         $medicamento = new Medicamento();
         $medicamento->nombre = strtoupper ($request->get('nombre'));
         $medicamento->stock = strtoupper ($request->get('stock'));
@@ -31,6 +43,9 @@ class MedicamentosController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if (!auth()->user()->hasRole('Admin')) {
+            abort(403, 'Acceso denegado');
+        }
         $medicamento = Medicamento::findOrFail($id);
         $medicamento->nombre = strtoupper ($request->get('nombreU'));
         $medicamento->stock = strtoupper ($request->get('stockU'));
@@ -44,6 +59,9 @@ class MedicamentosController extends Controller
      */
     public function destroy($id)
     {
+        if (!auth()->user()->hasRole('Admin')) {
+            abort(403, 'Acceso denegado');
+        }
         $medicamento = Medicamento::findOrFail($id);
         $medicamento->delete();
 

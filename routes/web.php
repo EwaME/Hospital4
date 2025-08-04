@@ -37,7 +37,6 @@ Route::get('/wel', function () {
 })->name('logeo');
 
 Route::get('/dashboard', function () {
-    // Calcula las estadísticas solo para la vista de estadísticas (dashboard)
     $estadisticas = [];
 
     if (Auth::user()->hasRole('Paciente')) {
@@ -65,11 +64,11 @@ Route::get('/dashboard', function () {
         $doctor = Auth::user()->doctor;
         if ($doctor) {
             $totalPacientes = Cita::where('idDoctor', $doctor->idDoctor)
-                ->where('estadoCita', 'Completada')
+                ->where('estadoCita', 'Finalizada')
                 ->distinct('idPaciente')->count('idPaciente');
             $citasPendientesHoy = Cita::where('idDoctor', $doctor->idDoctor)
                 ->whereDate('fechaCita', today())
-                ->where('estadoCita', 'Pendiente')
+                ->where('estadoCita', 'Confirmada')
                 ->count();
             $consultasSemana = Consulta::whereHas('cita', function ($q) use ($doctor) {
                 $q->where('idDoctor', $doctor->idDoctor)
@@ -204,6 +203,8 @@ Route::resource('/consultas', 'App\Http\Controllers\ConsultasController');
 Route::post('/consultas/guardar', 'App\Http\Controllers\ConsultasController@store');
 Route::post('/consultas/editar', 'App\Http\Controllers\ConsultasController@update');
 Route::post('/consultas/eliminar', 'App\Http\Controllers\ConsultasController@destroy');
+Route::post('/consultas/registrar-completa', [ConsultasController::class, 'registrarCompleta'])
+    ->name('consultas.registrarCompleta')->middleware(['auth']);
 
 //Historial Clinico
 Route::resource('/historialClinico', 'App\Http\Controllers\HistorialClinicoController');
@@ -216,6 +217,9 @@ Route::get('/historialClinico/paciente/{idPaciente}', [HistorialClinicoControlle
 
 // Bitácoras
 Route::resource('bitacoras', BitacorasController::class)->only(['index'])->middleware(['auth', 'can:Ver Bitacoras']);
+Route::get('/bitacoras/exportar-csv', [BitacorasController::class, 'exportarCsv'])->name('bitacoras.exportar-csv');
+Route::get('/bitacoras/exportar-pdf', [BitacorasController::class, 'exportarPdf'])->name('bitacoras.exportar-pdf');
+Route::get('/bitacoras/exportar-excel', [BitacorasController::class, 'exportarExcelBitacora'])->name('bitacoras.exportar-excel');
 
 Route::resource('roles', RolesController::class)->middleware(['auth', 'can:Ver Roles']);
 Route::resource('usuarios', UsuariosController::class)->middleware(['auth', 'can:Ver Usuarios']);
@@ -229,6 +233,9 @@ Route::resource('consultaMedicamentos', ConsultaMedicamentosController::class)->
 Route::resource('historialClinico', HistorialClinicoController::class)->middleware(['auth', 'can:Ver Historiales']);
 Route::resource('bitacoras', BitacorasController::class)->only(['index'])->middleware(['auth', 'can:Ver Bitacoras']);
 
-Route::get('/bitacoras/exportar-csv', [BitacorasController::class, 'exportarCsv'])->name('bitacoras.exportar-csv');
-Route::get('/bitacoras/exportar-pdf', [BitacorasController::class, 'exportarPdf'])->name('bitacoras.exportar-pdf');
-Route::get('/bitacoras/exportar-excel', [BitacorasController::class, 'exportarExcelBitacora'])->name('bitacoras.exportar-excel');
+Route::get('/api/medicamentos/{id}/stock', function($id){
+    $medicamento = \App\Models\Medicamento::find($id);
+    return ['stock' => $medicamento ? $medicamento->stock : 0];
+});
+
+

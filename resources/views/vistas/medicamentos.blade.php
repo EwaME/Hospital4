@@ -183,11 +183,16 @@
                 <i class="fas fa-capsules"></i>
                 Lista de Medicamentos
             </h1>
+            
+            <!-- SOLO ADMIN: Botón Agregar medicamento -->
+            @if(auth()->user()->hasRole('Admin'))
             <div class="d-flex justify-content-end mb-3">
                 <button class="btn btn-glass" data-bs-toggle="modal" data-bs-target="#mCrearMedicamento">
                     <i class="fa fa-plus"></i> Agregar medicamento
                 </button>
             </div>
+            @endif
+
             <div class="table-responsive">
                 <table class="table table-glass align-middle w-100">
                     <thead>
@@ -195,21 +200,19 @@
                             <th>ID Medicamento</th>
                             <th>Nombre</th>
                             <th>Stock</th>
-                            <th>Editar</th>
-                            <th>Eliminar</th>
+                            @if(auth()->user()->hasRole('Admin'))
+                                <th>Editar</th>
+                                <th>Eliminar</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($listaMedicamentos as $medicamento)
                         <tr>
                             <td class="fw-bold">{{ $medicamento->idMedicamento }}</td>
-                        <td>
-    <p><strong></strong> {{ ucwords(strtolower($medicamento->nombre)) }}</p>
-    
-</td>
-
-<td>{{ $medicamento->stock }}</td>
-
+                            <td>{{ ucwords(strtolower($medicamento->nombre)) }}</td>
+                            <td>{{ $medicamento->stock }}</td>
+                            @if(auth()->user()->hasRole('Admin'))
                             <td>
                                 <button class="btn btn-ico edit ejecutar"
                                     data-bs-toggle="modal" data-bs-target="#mEditarMedicamento"
@@ -229,6 +232,7 @@
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </td>
+                            @endif
                         </tr>
                         @endforeach
                     </tbody>
@@ -238,6 +242,8 @@
     </main>
 </div>
 
+<!-- SOLO ADMIN: Modales Crear/Editar/Eliminar -->
+@if(auth()->user()->hasRole('Admin'))
 <!-- Modal Crear -->
 <div class="modal" id="mCrearMedicamento" tabindex="-1">
     <div class="modal-dialog">
@@ -330,6 +336,7 @@
         </div>
     </div>
 </div>
+@endif
 
 <script>
     function configurarValidacionTexto(selector, errorSelector) {

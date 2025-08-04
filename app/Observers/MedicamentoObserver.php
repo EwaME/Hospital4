@@ -13,7 +13,7 @@ class MedicamentoObserver
     {
         Bitacora::create([
             'idUsuario'      => Auth::id() ?? 1,
-            'accion'         => 'Alta de medicamento',
+            'accion'         => 'Nuevo medicamento registrado',
             'descripcion'    => "Se creó el medicamento: {$medicamento->nombre} (ID: {$medicamento->idMedicamento}), stock inicial: {$medicamento->stock}",
             'modelo'         => 'medicamentos',
             'id_relacionado' => $medicamento->idMedicamento,

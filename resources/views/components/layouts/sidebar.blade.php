@@ -356,14 +356,6 @@
                     </a>
                 </li>
                 @endcan
-                @can('Ver ConsultaMedicamentos')
-                <li>
-                    <a href="{{ route('consultaMedicamentos.index') }}" class="nav-link d-flex align-items-center gap-2 @if(request()->routeIs('consultaMedicamentos.index')) active @endif" title="Consulta Medicamentos">
-                        <i class="fa-solid fa-vials text-primary"></i>
-                        <span class="sidebar-text">Consulta Medicamentos</span>
-                    </a>
-                </li>
-                @endcan
                 @can('Ver Historiales')
                     @if(Auth::user()->rol->name == 'Paciente' && Auth::user()->paciente)
                         <li>

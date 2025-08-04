@@ -13,7 +13,7 @@ class EnfermedadObserver
     {
         Bitacora::create([
             'idUsuario'      => Auth::id() ?? 1,
-            'accion'         => 'Alta de enfermedad',
+            'accion'         => 'Nueva enfermedad registrada',
             'descripcion'    => "Se creó la enfermedad: {$enfermedad->nombre} (ID: {$enfermedad->idEnfermedad})",
             'modelo'         => 'enfermedades',
             'id_relacionado' => $enfermedad->idEnfermedad,

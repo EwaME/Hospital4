@@ -9,6 +9,7 @@ use App\Models\Paciente;
 use Illuminate\Support\Facades\Auth;
 use App\Models\HistorialClinico;
 use Spatie\Permission\Models\Role;
+use App\Models\Administrador;
 
 class UsuariosController extends Controller
 {
@@ -51,6 +52,10 @@ class UsuariosController extends Controller
                 'idDoctor' => $usuario->id,
                 'especialidad' => $request->especialidad ?? 'General',
             ]);
+        }
+        if ($rolNombre === 'Admin') {
+            Administrador::create([
+                'idUsuario' => $usuario->id]);
         }
         return redirect('/usuarios');
     }

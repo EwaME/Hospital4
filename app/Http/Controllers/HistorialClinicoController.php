@@ -91,6 +91,12 @@ class HistorialClinicoController extends Controller
             ->select('historialclinico.*', 'users.nombre as nombrePaciente')
             ->first();
 
+        if (request()->ajax()) {
+            return response()->json([
+                'resumen' => $historial ? $historial->resumen : ''
+            ]);
+        }
+
         if (!$historial) {
             return back()->with('error', 'Historial clínico no encontrado.');
         }

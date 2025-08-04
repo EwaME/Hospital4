@@ -13,7 +13,7 @@ class HistorialClinicoObserver
     {
         Bitacora::create([
             'idUsuario'      => Auth::id() ?? 1,
-            'accion'         => 'Alta de historial clínico',
+            'accion'         => 'Nuevo historial registrado',
             'descripcion'    => "Se creó el historial clínico (ID: {$historial->idHistorial}) para paciente ID: {$historial->idPaciente}",
             'modelo'         => 'historialClinico',
             'id_relacionado' => $historial->idHistorial,
@@ -38,7 +38,7 @@ class HistorialClinicoObserver
         foreach ($eventos as $evento) {
             Bitacora::create([
                 'idUsuario'      => Auth::id() ?? 1,
-                'accion'         => 'Modificación de historial clínico',
+                'accion'         => 'Modificación de historial',
                 'descripcion'    => "{$evento} (ID: {$historial->idHistorial})",
                 'modelo'         => 'historialClinico',
                 'id_relacionado' => $historial->idHistorial,
@@ -51,7 +51,7 @@ class HistorialClinicoObserver
     {
         Bitacora::create([
             'idUsuario'      => Auth::id() ?? 1,
-            'accion'         => 'Eliminación de historial clínico',
+            'accion'         => 'Eliminación de historial',
             'descripcion'    => "Se eliminó (soft delete) el historial clínico (ID: {$historial->idHistorial}) para paciente ID: {$historial->idPaciente}",
             'modelo'         => 'historialClinico',
             'id_relacionado' => $historial->idHistorial,
@@ -63,7 +63,7 @@ class HistorialClinicoObserver
     {
         Bitacora::create([
             'idUsuario'      => Auth::id() ?? 1,
-            'accion'         => 'Restauración de historial clínico',
+            'accion'         => 'Restauración de historial',
             'descripcion'    => "Se restauró el historial clínico (ID: {$historial->idHistorial}) para paciente ID: {$historial->idPaciente}",
             'modelo'         => 'historialClinico',
             'id_relacionado' => $historial->idHistorial,
@@ -75,7 +75,7 @@ class HistorialClinicoObserver
     {
         Bitacora::create([
             'idUsuario'      => Auth::id() ?? 1,
-            'accion'         => 'Eliminación definitiva de historial clínico',
+            'accion'         => 'Eliminación definitiva de historial',
             'descripcion'    => "Se eliminó definitivamente el historial clínico (ID: {$historial->idHistorial}) para paciente ID: {$historial->idPaciente}",
             'modelo'         => 'historialClinico',
             'id_relacionado' => $historial->idHistorial,

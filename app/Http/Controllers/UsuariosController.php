@@ -42,6 +42,7 @@ class UsuariosController extends Controller
             'idPaciente' => $usuario->id,
             'fechaNacimiento' => $request->fechaNacimiento ?? '2000-01-01',
             'genero' => $request->genero ?? 'No especificado',
+            'activo' => true,
         ]);
         \App\Models\HistorialClinico::create([
             'idPaciente' => $usuario->id,
@@ -51,11 +52,14 @@ class UsuariosController extends Controller
             \App\Models\Doctor::create([
                 'idDoctor' => $usuario->id,
                 'especialidad' => $request->especialidad ?? 'General',
+                'activo' => true,
             ]);
         }
         if ($rolNombre === 'Admin') {
             Administrador::create([
-                'idUsuario' => $usuario->id]);
+                'idUsuario' => $usuario->id,
+                'activo' => true,
+            ]);
         }
         return redirect('/usuarios');
     }

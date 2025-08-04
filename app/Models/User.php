@@ -16,10 +16,15 @@ class User extends Authenticatable
     use HasFactory, Notifiable, HasRoles, SoftDeletes;
 
     protected $fillable = [
-        'name',
+        'nombre',
+        'usuario',
+        'telefono',
         'email',
         'password',
+        'idRol',
+        'activo',
     ];
+
 
     protected $hidden = [
         'password',

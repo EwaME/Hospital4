@@ -9,7 +9,9 @@ use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 
 new #[Layout('components.layouts.auth')] class extends Component {
-    public string $name = '';
+    public string $nombre = '';
+    public string $usuario = '';
+    public string $telefono = '';
     public string $email = '';
     public string $password = '';
     public string $password_confirmation = '';
@@ -17,23 +19,34 @@ new #[Layout('components.layouts.auth')] class extends Component {
     /**
      * Handle an incoming registration request.
      */
-    public function register(): void
+    public function register()
     {
         $validated = $this->validate([
-            'name' => ['required', 'string', 'max:255'],
+            'nombre' => ['required', 'string', 'max:100'],
+            'usuario' => ['required', 'string', 'max:50', 'unique:' . User::class . ',usuario'],
+            'telefono' => ['required', 'string', 'max:15'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        $validated['password'] = Hash::make($validated['password']);
+        $userData = [
+            'nombre' => $validated['nombre'],
+            'usuario' => $validated['usuario'],
+            'telefono' => $validated['telefono'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+            'idRol' => 4,
+            'activo' => true,
+        ];
 
-        event(new Registered(($user = User::create($validated))));
+        event(new Registered(($user = User::create($userData))));
 
-        Auth::login($user);
-
-        $this->redirectIntended(route('dashboard', absolute: false), navigate: true);
+        session()->flash('status', 'Registro exitoso. Debe esperar a que el administrador valide su usuario y le asigne un rol.');
+        return $this->redirect(route('login', absolute: false), navigate: true);
     }
-}; ?>
+
+}; 
+?>
 
 <div class="login-bg min-h-screen flex items-center justify-center">
     <style>
@@ -125,13 +138,33 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
         <form wire:submit.prevent="register" class="flex flex-col gap-6">
             <flux:input
-                wire:model.defer="name"
+                wire:model.defer="nombre"
                 :label="__('Nombre completo')"
                 type="text"
                 required
                 autofocus
                 autocomplete="name"
                 placeholder="Nombre y apellido"
+                label-classes="!text-[#003366] !font-semibold"
+                input-classes="!text-[#003366]"
+            />
+            <flux:input
+                wire:model.defer="usuario"
+                :label="__('Nombre de usuario')"
+                type="text"
+                required
+                autocomplete="username"
+                placeholder="Usuario único"
+                label-classes="!text-[#003366] !font-semibold"
+                input-classes="!text-[#003366]"
+            />
+            <flux:input
+                wire:model.defer="telefono"
+                :label="__('Teléfono')"
+                type="text"
+                required
+                autocomplete="tel"
+                placeholder="Ej: 9856-1122"
                 label-classes="!text-[#003366] !font-semibold"
                 input-classes="!text-[#003366]"
             />

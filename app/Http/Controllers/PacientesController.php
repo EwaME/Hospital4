@@ -57,6 +57,8 @@ class PacientesController extends Controller
         $paciente->idPaciente = $request->get('idPaciente');
         $paciente->fechaNacimiento = $request->get('fechaNacimiento');
         $paciente->genero = strtoupper ($request->get('genero'));
+        $paciente->activo = true;
+
         $paciente->save();
 
         return redirect('/pacientes');
@@ -85,7 +87,8 @@ class PacientesController extends Controller
     {
         $paciente = Paciente::findOrFail($request->get('idPaciente'));
         $paciente->fechaNacimiento = $request->get('fechaNacimiento');
-        $paciente->genero = strtoupper ($request->get('genero'));
+        $paciente->genero = strtoupper($request->get('genero'));
+        $paciente->activo = $request->get('activo') ? 1 : 0; // <-- añade esto
         $paciente->save();
 
         return redirect('/pacientes');

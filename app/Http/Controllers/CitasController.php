@@ -58,6 +58,11 @@ class CitasController extends Controller
         $fecha = $request->get('fechaCita');
         $hora = $request->get('horaCita');
 
+        // Verificar si la fecha es anterior a hoy
+        if ($fecha < now()->format('Y-m-d')) {
+            return redirect('/citas')->with('error', 'No se puede crear una cita con fecha anterior a hoy.');
+        }
+
         if (strlen($hora) == 5) {
             $hora .= ':00';
         }

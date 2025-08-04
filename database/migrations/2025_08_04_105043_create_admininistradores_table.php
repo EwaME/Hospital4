@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id('idAdministrador');
             $table->unsignedBigInteger('idUsuario')->unique();
             $table->string('cargo')->nullable();
+            $table->boolean('activo')->default(true);
             $table->timestamps();
             $table->softDeletes();
 

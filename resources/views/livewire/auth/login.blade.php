@@ -248,6 +248,22 @@ new #[Layout('components.layouts.auth')] class extends Component {
             color: #ffffffff !important;
         }
 
+        /* Animación sutil de entrada */
+        @keyframes pop-in {
+            0% { opacity: 0; transform: translateY(30px) scale(0.95);}
+            70% { opacity: 0.9; transform: translateY(-10px) scale(1.03);}
+            100% { opacity: 1; transform: translateY(0) scale(1);}
+        }
+        .animate-pop-in {
+            animation: pop-in .7s cubic-bezier(.39,.575,.565,1.000);
+        }
+        /* Responsive tipografía */
+        @media (max-width: 640px) {
+            .alert-success-custom {
+                font-size: 1rem !important;
+                padding: 1.2rem 1rem !important;
+            }
+        }
     </style>
     <div class="login-glass w-full max-w-md mx-auto rounded-2xl shadow-2xl p-8 flex flex-col gap-8 animate-fade-in-up">
         <div class="flex flex-col items-center gap-2 mb-6 animate-pop">
@@ -282,7 +298,21 @@ new #[Layout('components.layouts.auth')] class extends Component {
         </div>
 
         <!-- Session Status -->
-        <x-auth-session-status class="text-center" :status="session('status')" />
+        @if (session('status'))
+            <div class="alert-success-custom mx-auto my-8 max-w-xl flex items-center justify-center gap-4 px-6 py-5 rounded-2xl shadow-2xl border-2 border-emerald-400 animate-pop-in"
+                style="background: linear-gradient(104deg,#f0fff4 85%,#d0faf0 100%);
+                    color: #11806a;
+                    font-size: 1.25rem;
+                    font-weight: 700;
+                    letter-spacing: .02em;">
+                <span class="icon-check flex-shrink-0 text-3xl" style="color:#1bd8a6;">
+                    <i class="fas fa-check-circle"></i>
+                </span>
+                <span class="flex-1 text-center">
+                    {{ session('status') }}
+                </span>
+            </div>
+        @endif
 
         <form wire:submit.prevent="login" class="flex flex-col gap-6">
             <!-- Email Address -->

@@ -13,6 +13,9 @@ class Doctor extends Model
     protected $table = 'doctores';
     protected $primaryKey = 'idDoctor';
     protected $fillable = ['idDoctor', 'especialidad'];
+    protected $casts = [
+        'activo' => 'boolean',
+    ];
     
     public function usuario()
     {

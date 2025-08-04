@@ -15,8 +15,10 @@ class Administrador extends Model
         'idUsuario',
         'cargo'
     ];
+    protected $casts = [
+        'activo' => 'boolean',
+    ];
 
-    // Relación con User
     public function usuario()
     {
         return $this->belongsTo(User::class, 'idUsuario', 'id');

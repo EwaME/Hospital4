@@ -1,4 +1,6 @@
 <!-- SIDEBAR NAV - Hospital EKO -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
 <style>
     body {
         background: linear-gradient(120deg, #e9f3ff 0%, #d5f3ea 100%);
@@ -260,6 +262,61 @@
             pointer-events: none !important;
             transform: translateX(-20%);
         }
+
+        /* Siempre visibles, tamaño y color adecuado en sidebar colapsado */
+        .sidebar-collapsed .nav-link i,
+        .sidebar-collapsed .sidebar-toggle i {
+            color: #00509e !important;
+            font-size: 1.6rem !important;
+            display: inline-block !important;
+            width: 2.2rem;
+            min-width: 2.2rem;
+            text-align: center;
+            margin-right: 0 !important;
+            margin-left: 0 !important;
+            vertical-align: middle;
+        }
+
+        .sidebar-collapsed .nav-link.active i {
+            color: #6c40ba !important; /* O el color de active que quieras */
+        }
+
+        /* Opcional: centrar los íconos en el menú vertical */
+        .sidebar-collapsed .nav-link {
+            justify-content: center !important;
+            align-items: center !important;
+            padding-left: 0.4rem !important;
+            padding-right: 0.4rem !important;
+            min-height: 48px;
+            min-width: 48px;
+        }
+
+        .sidebar-collapsed .nav-link i,
+        .sidebar-collapsed .sidebar-toggle i {
+            color: #00509e !important;
+            font-size: 1.7rem !important;
+            display: inline-block !important;
+            width: 2.2rem !important;
+            min-width: 2.2rem !important;
+            text-align: center !important;
+            margin-right: 0 !important;
+            margin-left: 0 !important;
+            vertical-align: middle !important;
+        }
+
+        .sidebar-collapsed .nav-link.active i {
+            color: #6c40ba !important; /* color de ícono activo */
+        }
+
+        .sidebar-collapsed .nav-link {
+            justify-content: center !important;
+            align-items: center !important;
+            padding-left: 0.4rem !important;
+            padding-right: 0.4rem !important;
+            min-height: 48px;
+            min-width: 48px;
+        }
+
     }
 </style>
 
@@ -298,10 +355,18 @@
                     </a>
                 </li>
                 @endcan
+                @can('Ver Usuarios')
+                <li>
+                    <a href="{{ route('usuarios.index') }}" class="nav-link d-flex align-items-center gap-2 @if(request()->routeIs('usuarios.index')) active @endif" title="Usuarios">
+                        <i class="fa-solid fa-users text-danger"></i>
+                        <span class="sidebar-text">Usuarios</span>
+                    </a>
+                </li>
+                @endcan
                 @can('Ver Administradores')
                 <li>
                     <a href="{{ route('administradores.index') }}" class="nav-link d-flex align-items-center gap-2 @if(request()->routeIs('administradores.index')) active @endif" title="Roles">
-                        <i class="fa-solid fa-users-gear text-success"></i>
+                        <i class="fa-solid fa-user-shield text-primary"></i>
                         <span class="sidebar-text">Administradores</span>
                     </a>
                 </li>
@@ -319,14 +384,6 @@
                     <a href="{{ route('doctores.index') }}" class="nav-link d-flex align-items-center gap-2 @if(request()->routeIs('doctores.index')) active @endif" title="Doctores">
                         <i class="fa-solid fa-user-doctor text-warning"></i>
                         <span class="sidebar-text">Doctores</span>
-                    </a>
-                </li>
-                @endcan
-                @can('Ver Usuarios')
-                <li>
-                    <a href="{{ route('usuarios.index') }}" class="nav-link d-flex align-items-center gap-2 @if(request()->routeIs('usuarios.index')) active @endif" title="Usuarios">
-                        <i class="fa-solid fa-users text-danger"></i>
-                        <span class="sidebar-text">Usuarios</span>
                     </a>
                 </li>
                 @endcan
@@ -385,6 +442,12 @@
                         <span class="sidebar-text">Bitácoras</span>
                     </a>
                 </li>
+                @endcan
+                @can('Ver Reportes')
+                <a href="{{ route('reportes.menu') }}" class="nav-link {{ Request::routeIs('reportes.menu') ? 'active' : '' }}" title="Reportes">
+                    <i class="fa-solid fa-chart-bar"></i>
+                    <span class="sidebar-text">Reportes</span>
+                </a>
                 @endcan
             </ul>
             <div class="sidebar-footer mt-auto">

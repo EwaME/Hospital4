@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('doctores', function (Blueprint $table) {
             $table->unsignedBigInteger('idDoctor')->primary();
             $table->string('especialidad', 100);
+            $table->boolean('activo')->default(true);
             $table->foreign('idDoctor')->references('id')->on('users');
             $table->timestamps();
             $table->softDeletes();

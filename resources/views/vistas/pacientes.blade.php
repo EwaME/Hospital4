@@ -165,6 +165,16 @@
             .btn-glass, .btn-ico { font-size: 1em; padding: 0.37em 0.71em;}
             .modal-content.glass-bg { padding: 1.1rem 0.8rem 1.1rem 0.8rem !important;}
         }
+        .badge-eliminado {
+            background: linear-gradient(92deg,#ffe9e9 70%,#ffc1c1 100%);
+            color: #da3a38;
+            border-color: #ffbdbd;
+        }
+        .badge-activo {
+            background: linear-gradient(95deg,#eafff3 60%,#b7f9d3 100%);
+            color: #16a14a;
+            border-color: #bff5d2;
+        }
     </style>
 </head>
 
@@ -195,6 +205,7 @@
                             <th>Nombre</th>
                             <th>Fecha de Nacimiento</th>
                             <th>Género</th>
+                            <th>Estado</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -206,26 +217,28 @@
                             <td>{{ $paciente->fechaNacimiento }}</td>
                             <td>{{ $paciente->genero }}</td>
                             <td>
+                                @if($paciente->activo)
+                                    <span class="badge badge-activo">Activo</span>
+                                @else
+                                    <span class="badge badge-eliminado">Inactivo</span>
+                                @endif
+                            </td>
+                            <td>
                                 @role('Admin')
                                     <button class="btn btn-ico edit editar"
                                         data-bs-toggle="modal" data-bs-target="#modalEditarPaciente"
                                         data-id="{{ $paciente->idPaciente }}"
                                         data-fecha="{{ $paciente->fechaNacimiento }}"
                                         data-genero="{{ $paciente->genero }}"
+                                        data-activo="{{ $paciente->activo ? 1 : 0 }}"
                                         title="Editar">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <button class="btn btn-ico del eliminar"
-                                        data-bs-toggle="modal" data-bs-target="#modalEliminarPaciente"
-                                        data-id="{{ $paciente->idPaciente }}"
-                                        title="Eliminar">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
                                     <a href="{{ route('historialClinico.paciente', $paciente->idPaciente) }}" 
-                                    class="btn btn-info">Ver Historial</a>
+                                        class="btn btn-info">Ver Historial</a>
                                 @elserole('Doctor')
                                     <a href="{{ route('historialClinico.paciente', $paciente->idPaciente) }}" 
-                                    class="btn btn-info">Ver Historial</a>
+                                        class="btn btn-info">Ver Historial</a>
                                 @endrole
                             </td>
                         </tr>
@@ -238,7 +251,6 @@
 </div>
 
 @role('Admin')
-<!-- Modal Crear -->
 <div class="modal fade" id="modalCrearPaciente" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <form action="/pacientes/guardar" method="POST" class="modal-content glass-bg" id="formCrearPaciente">
@@ -298,6 +310,13 @@
                         <option value="Otro">Otro</option>
                     </select>
                 </div>
+                <div class="mb-3">
+                    <label>Estado</label>
+                    <select name="activo" id="edit_activo" class="form-control">
+                        <option value="1">Activo</option>
+                        <option value="0">Inactivo</option>
+                    </select>
+                </div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-primary" type="submit">Actualizar</button>
@@ -335,6 +354,7 @@
             $('#edit_idPaciente').val($(this).data('id'));
             $('#edit_fechaNacimiento').val($(this).data('fecha'));
             $('#edit_genero').val($(this).data('genero'));
+            $('#edit_activo').val($(this).data('activo'));
         });
 
         $('.eliminar').on('click', function () {

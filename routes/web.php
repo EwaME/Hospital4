@@ -28,7 +28,7 @@ use App\Models\Bitacora;
 use App\Models\HistorialClinico;
 use App\Models\ConsultaMedicamento;
 use App\Models\Administrador;
-
+use App\Http\Controllers\ReportesController;
 // Rutas del sistema
 Route::get('/', function () {
     return view('home');
@@ -253,4 +253,19 @@ Route::post('/administradores/{id}/restore', 'App\Http\Controllers\Administrador
 Route::resource('/administradores', 'App\Http\Controllers\AdministradorController')
     ->middleware(['auth', 'can:Ver Administradores']);
 
+// Ruta para menú de reportes
+Route::get('/reportes', function() {
+    return view('vistas.reportes'); // O el nombre de tu vista de menú
+})->name('reportes.menu')
+->middleware(['auth', 'can:Ver Reportes']);
+
+// Reporte PDF de citas
+Route::get('/reportes/citas/pdf', 'App\Http\Controllers\ReportesController@reporteCitasPdf')
+    ->name('reportes.citas.pdf')
+    ->middleware(['auth', 'can:Ver Reportes']);
+
+// Reporte PDF de consultas
+Route::get('/reportes/consultas/pdf', [ReportesController::class, 'reporteConsultasPdf'])
+    ->name('reportes.consultas.pdf')
+    ->middleware(['auth', 'can:Ver Reportes']);
 

@@ -21,9 +21,9 @@ class Consulta extends Model
         'fecha',
     ];
 
-    public function cita()
-    {
-        return $this->belongsTo(Cita::class, 'idCita');
+    public function cita() 
+    { 
+        return $this->belongsTo(Cita::class, 'idCita', 'idCita'); 
     }
 
     public function enfermedad()

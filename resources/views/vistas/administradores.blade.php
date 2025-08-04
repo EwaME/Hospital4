@@ -192,10 +192,10 @@
                             <td>{{ $admin->usuario->email ?? '-' }}</td>
                             <td>{{ $admin->cargo ?? '-' }}</td>
                             <td>
-                                @if($admin->trashed())
-                                    <span class="badge badge-admin badge-eliminado"><i class="fa fa-times-circle me-1"></i>Eliminado</span>
+                                @if($admin->activo)
+                                    <span class="badge badge-activo">Activo</span>
                                 @else
-                                    <span class="badge badge-admin badge-activo"><i class="fa fa-check-circle me-1"></i>Activo</span>
+                                    <span class="badge badge-eliminado">Inactivo</span>
                                 @endif
                             </td>
                             <td>
@@ -204,14 +204,9 @@
                                             data-bs-toggle="modal"
                                             data-bs-target="#modalEditar"
                                             data-id="{{ $admin->idAdministrador }}"
-                                            data-cargo="{{ $admin->cargo }}">
+                                            data-cargo="{{ $admin->cargo }}"
+                                            data-activo="{{ $admin->activo ?? 1 }}">
                                         <i class="fa fa-edit"></i> Editar
-                                    </button>
-                                    <button class="btn btn-danger btn-sm"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#modalEliminar"
-                                            data-id="{{ $admin->idAdministrador }}">
-                                        <i class="fa fa-trash"></i> Eliminar
                                     </button>
                                 @else
                                     <form action="{{ route('administradores.restore', $admin->idAdministrador) }}" method="POST" style="display:inline;">
@@ -279,6 +274,13 @@
                     <input type="text" name="cargo" class="form-control" id="editCargo">
                 </div>
             </div>
+            <div class="mb-2">
+                <label class="form-label">Estado:</label>
+                <select name="activo" class="form-select" id="editActivo">
+                    <option value="1">Activo</option>
+                    <option value="0">Inactivo</option>
+                </select>
+            </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                 <button class="btn btn-primary">Actualizar</button>
@@ -316,10 +318,12 @@ document.addEventListener('DOMContentLoaded', function() {
         var button = event.relatedTarget;
         var id = button.getAttribute('data-id');
         var cargo = button.getAttribute('data-cargo') || '';
+        var activo = button.getAttribute('data-activo') || '1';
         var form = document.getElementById('formEditar');
         form.action = '/administradores/' + id;
         document.getElementById('editId').value = id;
         document.getElementById('editCargo').value = cargo;
+        document.getElementById('editActivo').value = activo;
     });
 
     // Modal eliminar

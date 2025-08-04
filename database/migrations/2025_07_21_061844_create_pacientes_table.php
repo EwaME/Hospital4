@@ -15,6 +15,7 @@ return new class extends Migration
             $table->unsignedBigInteger('idPaciente')->primary();
             $table->date('fechaNacimiento');
             $table->string('genero', 20);
+            $table->boolean('activo')->default(true);
             $table->foreign('idPaciente')->references('id')->on('users');
             $table->timestamps();
             $table->softDeletes();

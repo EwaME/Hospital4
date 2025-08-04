@@ -22,9 +22,15 @@ class AdministradorController extends Controller
         $request->validate([
             'idUsuario' => 'required|unique:administradores,idUsuario',
             'cargo' => 'nullable|string|max:255',
+            // No pongas 'activo' aquí, si quieres siempre activo ponlo directo abajo.
         ]);
-        Administrador::create($request->only('idUsuario', 'cargo'));
-        return redirect()->route('administradores.index')->with('success', 'Administrador creado correctamente');
+
+        // Si quieres que siempre al crear sea activo:
+        Administrador::create([
+            'idUsuario' => $request->idUsuario,
+            'cargo' => $request->cargo,
+            'activo' => true, // O 1
+        ]);
     }
 
     public function update(Request $request, $id)
@@ -32,8 +38,9 @@ class AdministradorController extends Controller
         $admin = Administrador::withTrashed()->findOrFail($id);
         $request->validate([
             'cargo' => 'nullable|string|max:255',
+            'activo' => 'required|boolean',
         ]);
-        $admin->update($request->only('cargo'));
+        $admin->update($request->only('cargo', 'activo'));
         return redirect()->route('administradores.index')->with('success', 'Administrador actualizado');
     }
 

@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
         $roleAdmin = Role::create(['name' => 'Admin']);
         $rolePaciente = Role::create(['name' => 'Paciente']);
         $roleDoctor = Role::create(['name' => 'Doctor']);
+        $roleUsuario = Role::create(['name' => 'Usuario']);
 
         Permission::create(['name' => 'Ver Bitacoras']);
         Permission::create(['name' => 'Ver Citas']);
@@ -37,6 +38,7 @@ class DatabaseSeeder extends Seeder
         Permission::create(['name' => 'Agendar Cita']);
         Permission::create(['name' => 'Cancelar Cita']);
         Permission::create(['name' => 'Ver Administradores']);
+        Permission::create(['name' => 'Ver Reportes']);
 
         $AdminUser = User::create([
             'nombre' => 'Admin',
@@ -94,7 +96,8 @@ class DatabaseSeeder extends Seeder
         $paciente = Paciente::create([
             'idPaciente' => $PacienteUser->id,  
             'fechaNacimiento' => '2000-01-01',
-            'genero' => 'No especificado'
+            'genero' => 'No especificado',
+            'activo' => true
         ]);
 
         HistorialClinico::create([
@@ -104,7 +107,8 @@ class DatabaseSeeder extends Seeder
 
         $doctor = Doctor::create([
             'idDoctor' => $DoctorUser->id, 
-            'especialidad' => 'GENERAL'
+            'especialidad' => 'GENERAL',
+            'activo' => true            
         ]);
 
         $pacienteD = Paciente::create([
@@ -120,7 +124,8 @@ class DatabaseSeeder extends Seeder
         
         Administrador::create([
             'idUsuario' => $AdminUser->id,
-            'cargo' => 'SuperUsuario'
+            'cargo' => 'SuperUsuario',
+            'activo' => true
         ]);
     }
 }

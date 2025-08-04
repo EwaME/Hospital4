@@ -12,12 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('bitacoras', function (Blueprint $table) {
-            $table->id('idBitacora'); // Llave primaria
-            $table->foreignId('idUsuario')
-                ->constrained('users', 'id')
-                ->onDelete('cascade');
+            $table->id('idBitacora');
+            $table->foreignId('idUsuario')->constrained('users', 'id')->onDelete('cascade');
             $table->string('accion', 50);
             $table->string('descripcion', 255);
+            $table->string('modelo')->nullable();
+            $table->unsignedBigInteger('id_relacionado')->nullable();
+            $table->ipAddress('ip')->nullable();
             $table->timestamps();
         });
     }

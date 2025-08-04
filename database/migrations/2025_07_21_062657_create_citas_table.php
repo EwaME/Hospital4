@@ -22,6 +22,7 @@ return new class extends Migration
             $table->foreign('idDoctor')->references('idDoctor')->on('doctores');
             $table->unique(['idDoctor', 'fechaCita', 'horaCita']);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

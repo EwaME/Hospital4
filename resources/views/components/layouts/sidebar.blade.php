@@ -205,6 +205,64 @@
             display: none !important;
         }
     }
+    /* Sidebar - Animación de ancho y aparición suave */
+    .sidebar-fixed {
+        transition:
+            width 0.28s cubic-bezier(.77,0,.18,1.01),
+            min-width 0.28s cubic-bezier(.77,0,.18,1.01),
+            box-shadow 0.22s,
+            opacity 0.24s;
+        opacity: 1;
+    }
+    .sidebar-hide {
+        opacity: 0;
+        pointer-events: none;
+        transform: translateX(-25%);
+        transition:
+            opacity 0.22s cubic-bezier(.38,1.17,.42,.99),
+            transform 0.31s cubic-bezier(.68,0,.38,1.08);
+    }
+    .sidebar-show {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateX(0);
+    }
+    body.sidebar-animating #sidebar {
+        will-change: opacity, transform;
+    }
+    @media (max-width: 991.98px) {
+        .sidebar-fixed {
+            position: fixed !important;
+            left: 0;
+            top: 0;
+            z-index: 1010;
+            min-width: 0;
+            width: 0;
+            opacity: 0;
+            pointer-events: none;
+            transition:
+                width 0.22s cubic-bezier(.7,0,.3,1),
+                opacity 0.22s,
+                transform 0.29s;
+        }
+        .sidebar-fixed.sidebar-show {
+            width: 220px !important;
+            min-width: 220px !important;
+            opacity: 1 !important;
+            pointer-events: auto !important;
+            transform: translateX(0) !important;
+            box-shadow: 0 6px 40px #0041881a, 0 1.5px 9px #00509e17;
+        }
+        .sidebar-fixed.sidebar-hide {
+            width: 0 !important;
+            min-width: 0 !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+            transform: translateX(-20%);
+        }
+    }
+    #sidebarMobileToggle {
+    
 </style>
 
 <nav id="sidebar" class="sidebar-fixed d-none d-md-flex flex-column flex-shrink-0">
@@ -321,7 +379,10 @@
                 @endcan
                 @can('Ver Bitacoras')
                 <li>
-                    <a href="{{ route('bitacoras.index') }}" class="nav-link d-flex align-items-center gap-2 @if(request()->routeIs('bitacoras.index')) active @endif" title="Bitácoras">
+                    <a href="{{ route('bitacoras.index') }}"
+                    class="nav-link d-flex align-items-center gap-2
+                        {{ request()->routeIs('bitacoras.index') ? 'active' : '' }}"
+                    title="Bitácoras">
                         <i class="fa-solid fa-clipboard-list text-danger"></i>
                         <span class="sidebar-text">Bitácoras</span>
                     </a>
@@ -342,15 +403,83 @@
 </nav>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const sidebar = document.getElementById('sidebar');
-        const main = document.getElementById('main-content');
-        const toggleBtn = document.getElementById('sidebarToggle');
-        if (sidebar && toggleBtn) {
-            toggleBtn.addEventListener('click', function() {
-                sidebar.classList.toggle('sidebar-collapsed');
-                if(main) main.classList.toggle('main-collapsed');
-            });
+document.addEventListener('DOMContentLoaded', function() {
+    const sidebar = document.getElementById('sidebar');
+    const main = document.getElementById('main-content');
+    const toggleBtn = document.getElementById('sidebarToggle');
+    const mobileToggleBtn = document.getElementById('sidebarMobileToggle');
+    let collapsed = localStorage.getItem('sidebar-collapsed') === '1';
+
+    // --- Desktop collapse/expand ---
+    function setSidebarState(state) {
+        if(state === 'collapsed') {
+            sidebar.classList.add('sidebar-collapsed');
+            if(main) main.classList.add('main-collapsed');
+            localStorage.setItem('sidebar-collapsed', '1');
+        } else {
+            sidebar.classList.remove('sidebar-collapsed');
+            if(main) main.classList.remove('main-collapsed');
+            localStorage.setItem('sidebar-collapsed', '0');
+        }
+    }
+    if(collapsed) setSidebarState('collapsed');
+
+    if(toggleBtn) {
+        toggleBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            collapsed = !sidebar.classList.contains('sidebar-collapsed');
+            setSidebarState(collapsed ? 'collapsed' : 'expanded');
+        });
+    }
+
+    // --- MOBILE open/close animation ---
+    function showSidebarMobile() {
+        sidebar.classList.add('sidebar-show');
+        sidebar.classList.remove('sidebar-hide');
+        document.body.style.overflow = 'hidden'; // Prevent scroll under sidebar
+    }
+    function hideSidebarMobile() {
+        sidebar.classList.add('sidebar-hide');
+        sidebar.classList.remove('sidebar-show');
+        document.body.style.overflow = '';
+    }
+
+    if(mobileToggleBtn) {
+        mobileToggleBtn.addEventListener('click', function(e){
+            e.stopPropagation();
+            showSidebarMobile();
+        });
+    }
+    // Close on click outside
+    document.addEventListener('click', function(e){
+        if(window.innerWidth <= 991) {
+            if(sidebar.classList.contains('sidebar-show')) {
+                // click outside sidebar
+                if(!sidebar.contains(e.target) && e.target !== mobileToggleBtn) {
+                    hideSidebarMobile();
+                }
+            }
         }
     });
+    // Optionally close on esc key
+    document.addEventListener('keydown', function(e){
+        if(e.key === 'Escape' && sidebar.classList.contains('sidebar-show')){
+            hideSidebarMobile();
+        }
+    });
+
+    // Responsive: hide sidebar at start in mobile
+    function checkSidebarMobile() {
+        if(window.innerWidth <= 991) {
+            sidebar.classList.add('sidebar-hide');
+            sidebar.classList.remove('sidebar-show');
+        } else {
+            sidebar.classList.remove('sidebar-hide','sidebar-show');
+            document.body.style.overflow = '';
+        }
+    }
+    window.addEventListener('resize', checkSidebarMobile);
+    checkSidebarMobile();
+});
 </script>
+

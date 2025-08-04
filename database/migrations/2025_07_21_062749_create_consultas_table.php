@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreign('idCita')->references('idCita')->on('citas');
             $table->foreign('idEnfermedad')->references('idEnfermedad')->on('enfermedades');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

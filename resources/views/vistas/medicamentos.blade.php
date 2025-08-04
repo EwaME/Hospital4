@@ -187,9 +187,6 @@
                 <button class="btn btn-glass" data-bs-toggle="modal" data-bs-target="#mCrearMedicamento">
                     <i class="fa fa-plus"></i> Agregar medicamento
                 </button>
-                <button class="btn btn-glass" data-bs-toggle="modal" data-bs-target="#mCrearMedicamento">
-                    <i class="fa fa-plus"></i> Entregar medicamento
-                </button>
             </div>
             <div class="table-responsive">
                 <table class="table table-glass align-middle w-100">
@@ -417,19 +414,6 @@
             e.preventDefault();
         }
         });
-    });
-
-  // Sidebar toggle funcional
-    document.addEventListener('DOMContentLoaded', function() {
-        const sidebar = document.getElementById('sidebar');
-        const main = document.getElementById('main-content');
-        const toggleBtn = document.getElementById('sidebarToggle');
-        if (sidebar && toggleBtn) {
-            toggleBtn.addEventListener('click', function() {
-                sidebar.classList.toggle('sidebar-collapsed');
-                main.classList.toggle('main-collapsed');
-            });
-        }
     });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>

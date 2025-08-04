@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('genero', 20);
             $table->foreign('idPaciente')->references('id')->on('users');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

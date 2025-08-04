@@ -3,22 +3,25 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
 class Bitacora extends Model
 {
     protected $table = 'bitacoras';
     protected $primaryKey = 'idBitacora';
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $fillable = [
         'idUsuario',
         'accion',
         'descripcion',
-        'fechaRegistro',
+        'modelo',
+        'id_relacionado',
+        'ip',
     ];
 
     public function usuario()
     {
-        return $this->belongsTo(Usuario::class, 'idUsuario', 'idUsuario');
+        return $this->belongsTo(User::class, 'idUsuario', 'id');
     }
 }

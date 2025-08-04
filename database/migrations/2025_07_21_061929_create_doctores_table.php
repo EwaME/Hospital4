@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('especialidad', 100);
             $table->foreign('idDoctor')->references('id')->on('users');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

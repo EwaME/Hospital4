@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('resumen', 1000);
             $table->foreign('idPaciente')->references('idPaciente')->on('pacientes');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

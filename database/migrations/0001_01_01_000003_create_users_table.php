@@ -20,9 +20,11 @@ return new class extends Migration
             $table->string('password');
             $table->string('telefono', 15);
             $table->unsignedBigInteger('idRol');
+            $table->boolean('activo')->default(true);
             $table->foreign('idRol')->references('id')->on('roles');
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

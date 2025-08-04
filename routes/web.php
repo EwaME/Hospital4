@@ -215,7 +215,7 @@ Route::get('/historialClinico/paciente/{idPaciente}', [HistorialClinicoControlle
     ->middleware(['auth', 'can:Ver Historiales']);
 
 // Bitácoras
-Route::resource('/bitacoras', 'App\Http\Controllers\BitacorasController')->only(['index']);
+Route::resource('bitacoras', BitacorasController::class)->only(['index'])->middleware(['auth', 'can:Ver Bitacoras']);
 
 Route::resource('roles', RolesController::class)->middleware(['auth', 'can:Ver Roles']);
 Route::resource('usuarios', UsuariosController::class)->middleware(['auth', 'can:Ver Usuarios']);
@@ -228,3 +228,7 @@ Route::resource('consultas', ConsultasController::class)->middleware(['auth', 'c
 Route::resource('consultaMedicamentos', ConsultaMedicamentosController::class)->middleware(['auth', 'can:Ver ConsultaMedicamentos']);
 Route::resource('historialClinico', HistorialClinicoController::class)->middleware(['auth', 'can:Ver Historiales']);
 Route::resource('bitacoras', BitacorasController::class)->only(['index'])->middleware(['auth', 'can:Ver Bitacoras']);
+
+Route::get('/bitacoras/exportar-csv', [BitacorasController::class, 'exportarCsv'])->name('bitacoras.exportar-csv');
+Route::get('/bitacoras/exportar-pdf', [BitacorasController::class, 'exportarPdf'])->name('bitacoras.exportar-pdf');
+Route::get('/bitacoras/exportar-excel', [BitacorasController::class, 'exportarExcelBitacora'])->name('bitacoras.exportar-excel');

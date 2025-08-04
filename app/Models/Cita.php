@@ -5,9 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Paciente;
 use App\Models\Doctor;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Cita extends Model
 {
+    use SoftDeletes;
     protected $table = 'citas';
     protected $primaryKey = 'idCita';
     public $incrementing = true;

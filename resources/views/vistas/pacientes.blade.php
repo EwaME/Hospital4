@@ -345,19 +345,6 @@
             $('#formCrearPaciente')[0].reset();
         });
     });
-
-    // Sidebar toggle funcional
-    document.addEventListener('DOMContentLoaded', function() {
-        const sidebar = document.getElementById('sidebar');
-        const main = document.getElementById('main-content');
-        const toggleBtn = document.getElementById('sidebarToggle');
-        if (sidebar && toggleBtn) {
-            toggleBtn.addEventListener('click', function() {
-                sidebar.classList.toggle('sidebar-collapsed');
-                main.classList.toggle('main-collapsed');
-            });
-        }
-    });
 </script>
 </body>
 </html>

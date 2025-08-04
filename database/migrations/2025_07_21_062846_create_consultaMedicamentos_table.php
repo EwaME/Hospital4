@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreign('idConsulta')->references('idConsulta')->on('consultas');
             $table->foreign('idMedicamento')->references('idMedicamento')->on('medicamentos');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

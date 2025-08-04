@@ -4,9 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
+use App\Models\Cita;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Doctor extends Model
 {
+    use SoftDeletes;
     protected $table = 'doctores';
     protected $primaryKey = 'idDoctor';
     protected $fillable = ['idDoctor', 'especialidad'];

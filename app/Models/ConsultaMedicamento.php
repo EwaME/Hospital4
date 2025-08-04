@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Medicamento;
 use App\Models\Consulta;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ConsultaMedicamento extends Model
 {
-    //
+    use SoftDeletes;
     protected $primaryKey = 'idCMedicamento';
     public function medicamento()
     {

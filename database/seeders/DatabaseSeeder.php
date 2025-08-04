@@ -100,7 +100,7 @@ class DatabaseSeeder extends Seeder
             'activo' => true
         ]);
 
-        HistorialClinico::create([
+        historialclinico::create([
             'idPaciente' => $PacienteUser->id,
             'resumen' => 'Historial creado automáticamente.'
         ]);
@@ -117,7 +117,7 @@ class DatabaseSeeder extends Seeder
             'genero' => 'No especificado'
         ]);
 
-        HistorialClinico::create([
+        historialclinico::create([
             'idPaciente' => $DoctorUser->id,
             'resumen' => 'Historial creado automáticamente.'
         ]);

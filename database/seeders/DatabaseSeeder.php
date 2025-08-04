@@ -93,39 +93,6 @@ class DatabaseSeeder extends Seeder
             'Ver ConsultaMedicamentos',
         ]);
 
-        $paciente = Paciente::create([
-            'idPaciente' => $PacienteUser->id,  
-            'fechaNacimiento' => '2000-01-01',
-            'genero' => 'No especificado',
-            'activo' => true
-        ]);
-
-        historialclinico::create([
-            'idPaciente' => $PacienteUser->id,
-            'resumen' => 'Historial creado automáticamente.'
-        ]);
-
-        $doctor = Doctor::create([
-            'idDoctor' => $DoctorUser->id, 
-            'especialidad' => 'GENERAL',
-            'activo' => true            
-        ]);
-
-        $pacienteD = Paciente::create([
-            'idPaciente' => $DoctorUser->id,  
-            'fechaNacimiento' => '2000-01-01',
-            'genero' => 'No especificado'
-        ]);
-
-        historialclinico::create([
-            'idPaciente' => $DoctorUser->id,
-            'resumen' => 'Historial creado automáticamente.'
-        ]);
         
-        Administrador::create([
-            'idUsuario' => $AdminUser->id,
-            'cargo' => 'SuperUsuario',
-            'activo' => true
-        ]);
     }
 }

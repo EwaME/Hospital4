@@ -2,66 +2,52 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Administrador;
+use App\Models\User;
+use Illuminate\Http\Request;
 
 class AdministradorController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $administradores = \App\Models\Administrador::with('usuario')->get();
-        return view('admin.administradores.index', compact('administradores'));
+        $administradores = Administrador::withTrashed()->with('usuario')->get();
+        $usuarios = User::whereDoesntHave('administrador')->whereHas('roles', function($q){
+            $q->where('name', 'Admin');
+        })->get();
+        return view('vistas.administradores', compact('administradores', 'usuarios'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'idUsuario' => 'required|unique:administradores,idUsuario',
+            'cargo' => 'nullable|string|max:255',
+        ]);
+        Administrador::create($request->only('idUsuario', 'cargo'));
+        return redirect()->route('administradores.index')->with('success', 'Administrador creado correctamente');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $admin = Administrador::withTrashed()->findOrFail($id);
+        $request->validate([
+            'cargo' => 'nullable|string|max:255',
+        ]);
+        $admin->update($request->only('cargo'));
+        return redirect()->route('administradores.index')->with('success', 'Administrador actualizado');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function destroy($id)
     {
-        //
+        $admin = Administrador::findOrFail($id);
+        $admin->delete();
+        return redirect()->route('administradores.index')->with('success', 'Administrador eliminado (soft delete)');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function restore($id)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $admin = Administrador::withTrashed()->findOrFail($id);
+        $admin->restore();
+        return redirect()->route('administradores.index')->with('success', 'Administrador restaurado');
     }
 }

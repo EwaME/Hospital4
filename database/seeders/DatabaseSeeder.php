@@ -10,7 +10,7 @@ use Spatie\Permission\Models\Permission;
 use App\Models\Paciente;
 use App\Models\Doctor;
 use App\Models\HistorialClinico;
-
+use App\Models\Administrador;
 
 class DatabaseSeeder extends Seeder
 {
@@ -99,7 +99,7 @@ class DatabaseSeeder extends Seeder
 
         HistorialClinico::create([
             'idPaciente' => $PacienteUser->id,
-            'resumen' => 'Historial creado automáticamente por el seeder.'
+            'resumen' => 'Historial creado automáticamente.'
         ]);
 
         $doctor = Doctor::create([
@@ -115,7 +115,12 @@ class DatabaseSeeder extends Seeder
 
         HistorialClinico::create([
             'idPaciente' => $DoctorUser->id,
-            'resumen' => 'Historial creado automáticamente por el seeder.'
+            'resumen' => 'Historial creado automáticamente.'
+        ]);
+        
+        Administrador::create([
+            'idUsuario' => $AdminUser->id,
+            'cargo' => 'SuperUsuario'
         ]);
     }
 }

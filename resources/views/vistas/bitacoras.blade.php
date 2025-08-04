@@ -281,7 +281,6 @@
             </table>
         </div>
 
-        {{-- Paginación --}}
         <div class="d-flex justify-content-center mt-3">
             {{ $bitacoras->withQueryString()->links() }}
         </div>
@@ -290,7 +289,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // Bootstrap tooltip para los badge de acción
     document.addEventListener('DOMContentLoaded', function () {
         const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
         tooltipTriggerList.map(function (tooltipTriggerEl) {

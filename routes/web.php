@@ -14,6 +14,7 @@ use App\Http\Controllers\MedicamentosController;
 use App\Http\Controllers\PacientesController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\UsuariosController;
+use App\Http\Controllers\AdministradorController;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use App\Models\Paciente;
@@ -26,6 +27,7 @@ use App\Models\Consulta;
 use App\Models\Bitacora;
 use App\Models\HistorialClinico;
 use App\Models\ConsultaMedicamento;
+use App\Models\Administrador;
 
 // Rutas del sistema
 Route::get('/', function () {
@@ -237,5 +239,18 @@ Route::get('/api/medicamentos/{id}/stock', function($id){
     $medicamento = \App\Models\Medicamento::find($id);
     return ['stock' => $medicamento ? $medicamento->stock : 0];
 });
+
+Route::get('/administradores', 'App\Http\Controllers\AdministradorController@index')
+    ->middleware(['auth', 'can:Ver Administradores']);
+Route::post('/administradores/guardar', 'App\Http\Controllers\AdministradorController@store')
+    ->middleware(['auth', 'can:Crear Administradores']);
+Route::post('/administradores/editar', 'App\Http\Controllers\AdministradorController@update')
+    ->middleware(['auth', 'can:Editar Administradores']);
+Route::post('/administradores/eliminar', 'App\Http\Controllers\AdministradorController@destroy')
+    ->middleware(['auth', 'can:Eliminar Administradores']);
+Route::post('/administradores/{id}/restore', 'App\Http\Controllers\AdministradorController@restore')
+    ->middleware(['auth', 'can:Restaurar Administradores']);
+Route::resource('/administradores', 'App\Http\Controllers\AdministradorController')
+    ->middleware(['auth', 'can:Ver Administradores']);
 
 

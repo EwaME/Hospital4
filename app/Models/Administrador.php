@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\User;
 
-class Admininistradores extends Model
+class Administrador extends Model
 {
     use SoftDeletes;
     protected $table = 'administradores';

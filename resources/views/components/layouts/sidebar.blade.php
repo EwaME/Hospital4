@@ -261,8 +261,6 @@
             transform: translateX(-20%);
         }
     }
-    #sidebarMobileToggle {
-    
 </style>
 
 <nav id="sidebar" class="sidebar-fixed d-none d-md-flex flex-column flex-shrink-0">
@@ -297,6 +295,14 @@
                     <a href="{{ route('roles.index') }}" class="nav-link d-flex align-items-center gap-2 @if(request()->routeIs('roles.index')) active @endif" title="Roles">
                         <i class="fa-solid fa-users-gear text-success"></i>
                         <span class="sidebar-text">Roles</span>
+                    </a>
+                </li>
+                @endcan
+                @can('Ver Administradores')
+                <li>
+                    <a href="{{ route('administradores.index') }}" class="nav-link d-flex align-items-center gap-2 @if(request()->routeIs('administradores.index')) active @endif" title="Roles">
+                        <i class="fa-solid fa-users-gear text-success"></i>
+                        <span class="sidebar-text">Administradores</span>
                     </a>
                 </li>
                 @endcan
